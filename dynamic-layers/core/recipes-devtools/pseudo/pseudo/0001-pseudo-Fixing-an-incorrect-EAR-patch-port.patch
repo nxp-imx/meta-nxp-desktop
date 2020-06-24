@@ -1,0 +1,36 @@
+From d01cd44dd70581d3b6683fbf33f38277b05d638f Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 21 Dec 2018 17:16:42 +0200
+Subject: [PATCH] pseudo: Fixing an incorrect EAR patch port
+
+Signed-off-by: nxa15299 <Heinz.Wrobel@nxp.com>
+Signed-off-by: Costea Ciprian <ciprianmarian.costea@nxp.com>
+---
+ pseudo_client.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pseudo_client.c b/pseudo_client.c
+index bd244df..e4aaf13 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -2433,7 +2433,7 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+ 		pseudo_debug(PDBGF_CLIENT, "exec_path: checking %s for %s %s %s\n", path, filename, (forcechroot) ? "(chroot)" : "", (pforcechroot) ? "(pchroot)" : "");
+         if (!*path || (*path == '.' && path_lens[i] == 1)) {
+ 			/* empty path or . is cwd */
+-			if (forcechroot || pforcechroot)
++			if (forcechroot)
+                 candidate = pseudo_root_path(__func__, __LINE__, AT_FDCWD, filename, 0);
+ 			else
+                 candidate = pseudo_fix_path(pseudo_cwd, filename, 0, pseudo_cwd_len, NULL, 0, readlink_chroot);
+@@ -2455,7 +2455,7 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+ 			/* oh you jerk, making me do extra work */
+ 			size_t len;
+ 			char *dir;
+-			if (forcechroot) {
++			if (forcechroot || pforcechroot) {
+ 				dir = pseudo_root_path(__func__, __LINE__, AT_FDCWD, path, 0);
+ 				if (dir)
+ 					len = strlen(dir);
+-- 
+1.9.1
+

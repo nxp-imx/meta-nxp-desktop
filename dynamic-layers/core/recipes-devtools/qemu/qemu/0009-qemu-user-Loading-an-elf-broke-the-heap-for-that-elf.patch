@@ -1,0 +1,169 @@
+From 6e28e83a75012ec221b99a197c9692cd0952c51a Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 24 Jan 2020 14:56:05 +0100
+Subject: [PATCH 9/9] qemu-user: Loading an elf broke the heap for that elf
+
+This is a key fix to enable running more complex guest applications.
+The original method of using target_mmap just allocated to any address.
+This allocated stack and interpreter data just beyond the loaded image.
+As a result there was not brk() space left and the guest heap handling
+failed. The ugly part about this is that, depending on the guest, this
+could lead to all sorts of very weird effects, not obviously related
+to memory management at all.
+The fix is to ensure that there is plenty of space after the loaded
+relocatable image and to move stack and interpreter loads to the end
+of the memory map. This way, the image, the target_mmap space, and
+stack+interpreter are well separated and heap extension via brk()
+works again for the guest.
+
+There also was a really ugly problem hidden in loading the elf.
+When trying to find a space to mmap, it started early on,
+independent of the sbrk(0) of the host process. If the heap
+had a sufficiently large free element in it, the elf would
+be loaded into the heap of the host process. If really large
+and complex executables were loaded (emacs byte compiling for
+example), then the host process heap malloc would fail because
+suddenly something already mmap'ed the elf in there.
+For executables that are not loaded to a fixed location, the
+code will now ensure that any mmap'ed segment is a certain
+distance away from the sbrk(0) boundary. This keeps the heap
+alive. The distance is currently hardcoded to 16MB.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ linux-user/elfload.c | 77 +++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 73 insertions(+), 4 deletions(-)
+
+diff --git a/linux-user/elfload.c b/linux-user/elfload.c
+index bd43c481..a209f17d 100644
+--- a/linux-user/elfload.c
++++ b/linux-user/elfload.c
+@@ -1741,6 +1741,26 @@ static abi_ulong copy_elf_strings(int argc, char **argv, char *scratch,
+     return p;
+ }
+ 
++static abi_long elf_target_mmap(struct image_info *info,
++                                abi_ulong len, int prot, int flags)
++{
++    abi_long addr;
++
++    /* We don't want to allocate to just any address even for
++     * relocatable code because it might break the order of
++     * code/data/heap/free/mmap/other stuff and break heap extension.
++     * So we are a bit create and allocate sequentially from start_mmap
++     * when loading the original elf image.
++     */
++    addr = target_mmap(info->start_mmap, len, prot, flags, -1, 0);
++    if (addr == info->start_mmap) {
++        len = ROUND_UP(len, MAX(qemu_host_page_size, TARGET_PAGE_SIZE));
++        info->start_mmap += len;
++    }
++
++    return addr;
++}
++
+ /* Older linux kernels provide up to MAX_ARG_PAGES (default: 32) of
+  * argument/environment space. Newer kernels (>2.6.33) allow more,
+  * dependent on stack size, but guarantee at least 32 pages for
+@@ -1762,7 +1782,20 @@ static abi_ulong setup_arg_pages(struct linux_binprm *bprm,
+         guard = qemu_real_host_page_size;
+     }
+ 
+-    error = target_mmap(0, size + guard, PROT_READ | PROT_WRITE,
++    /* We cannot just allocate to any address because we might
++     * allocate right after the brk of the just loaded image.
++     * This then breaks heap allocation because there is no heap
++     * of any reasonable size then. So as a consequence, the loaded
++     * application will fail. So we need to figure out how to
++     * allocate the stack to the end of the memory map. But what is
++     * that?! Hmm. Well, we can try a magic hack that gives us plenty
++     * of heap hopefully by allocating in a space that should be
++     * available and not conflicting with the brk of the loaded image.
++     * The hack is to allocate to the address known to be already
++     * allocated. Then target_mmap and the kernel allocates to the end.
++     */
++    error = target_mmap((abi_ulong)ELF_START_MMAP, size + guard,
++                        PROT_READ | PROT_WRITE,
+                         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+     if (error == -1) {
+         perror("mmap stack");
+@@ -2042,6 +2075,9 @@ static abi_ulong create_elf_tables(abi_ulong p, int argc, int envc,
+     return sp;
+ }
+ 
++#ifndef QEMU_SBRK_DISTANCE
++#define QEMU_SBRK_DISTANCE (16*1024*1024)
++#endif
+ unsigned long init_guest_space(unsigned long host_start,
+                                unsigned long host_size,
+                                unsigned long guest_start,
+@@ -2054,6 +2090,25 @@ unsigned long init_guest_space(unsigned long host_start,
+ 
+     assert(host_start || host_size);
+ 
++    if (!fixed) {
++        unsigned long real_start;
++        /* We need to make sure that we do not map our guest inside
++         * the heap of our process itself. This can happen and if qemu then
++         * needs to allocate from its heap and fails, the emulation
++         * won't last long anymore.
++         */
++        real_start = (unsigned long)sbrk(0);
++
++        /* In terms of virtual space, we want qemu to retain some
++         * brk() capability, so we "round" up. This should likely
++         * be configurable somehow
++         */
++        real_start += QEMU_SBRK_DISTANCE;
++        if (host_start < real_start) {
++            host_start = real_start;
++        }
++    }
++
+     /* If just a starting address is given, then just verify that
+      * address.  */
+     if (host_start && !host_size) {
+@@ -2292,6 +2347,8 @@ static void load_elf_image(const char *image_name, int image_fd,
+     int i, retval;
+     const char *errmsg;
+ 
++    qemu_log_mask(CPU_LOG_PAGE, "loading elf image '%s'\n", image_name);
++
+     /* First of all, some simple consistency checks */
+     errmsg = "Invalid ELF image for this architecture";
+     if (!elf_check_ident(ehdr)) {
+@@ -2345,9 +2402,8 @@ static void load_elf_image(const char *image_name, int image_fd,
+            image is pre-linked, LOADDR will be non-zero.  Since we do
+            not supply MAP_FIXED here we'll use that address if and
+            only if it remains available.  */
+-        load_addr = target_mmap(loaddr, hiaddr - loaddr, PROT_NONE,
+-                                MAP_PRIVATE | MAP_ANON | MAP_NORESERVE,
+-                                -1, 0);
++        load_addr = elf_target_mmap(info, hiaddr - loaddr, PROT_NONE,
++                                MAP_PRIVATE | MAP_ANON | MAP_NORESERVE);
+         if (load_addr == -1) {
+             goto exit_perror;
+         }
+@@ -2793,6 +2849,19 @@ int load_elf_binary(struct linux_binprm *bprm, struct image_info *info)
+     }
+ 
+     if (elf_interpreter) {
++        /* This is a bit of an ugly trick. We again want to avoid
++         * allocating right after the brk of the initial image to
++         * keep heap management alive. So we define the same start
++         * address as the initial image. This means that going through
++         * the kernel mmap mechanism in the end we will get a result
++         * at the end of the memory map which is well out of the way
++         * and doesn't cause conflicts with either heap or the normal
++         * target_mmap allocation addresses. This is a bit empirical
++         * though in real life. I am not sure if you can depend on the
++         * kernel to allocate top down if you force a conflict.
++         */
++        interp_info.start_mmap = (abi_ulong)ELF_START_MMAP;
++
+         load_elf_interp(elf_interpreter, &interp_info, bprm->buf);
+ 
+         /* If the program interpreter is one of these two, then assume
+-- 
+2.17.1
+

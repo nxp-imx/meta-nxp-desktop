@@ -1,0 +1,37 @@
+From b50dd941cb0e4c4ac2298ff71930c2be927b7902 Mon Sep 17 00:00:00 2001
+From: nxa15299 <Heinz.Wrobel@nxp.com>
+Date: Wed, 24 Jan 2018 07:13:56 +0100
+Subject: [PATCH] pseudo: Diagnostic cleanup for utimensat()
+
+For utimensat() calls, NULL paths are ok under Linux. The pseudo
+diagnostics were a bit weird on that. This patch attempts to
+generate a bit more useful output
+
+Signed-off-by: nxa15299 <Heinz.Wrobel@nxp.com>
+---
+ pseudo_client.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/pseudo_client.c b/pseudo_client.c
+index 7550360..8850285 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -843,12 +843,12 @@ pseudo_root_path(const char *func, int line, int dirfd, const char *path, int le
+ 	pseudo_antimagic();
+ 	rc = base_path(dirfd, path, leave_last);
+ 	pseudo_magic();
+-	if (!rc) {
++	if (!rc && path) {
+ 		pseudo_diag("couldn't allocate absolute path for '%s'.\n",
+ 			path);
+ 	}
+-	pseudo_debug(PDBGF_CHROOT, "root_path [%s, %d]: '%s' from '%s'\n",
+-		func, line,
++	pseudo_debug(PDBGF_CHROOT, "root_path [%s, %d]: dirfd %d, '%s' from '%s'\n",
++		func, line, dirfd,
+ 		rc ? rc : "<nil>",
+ 		path ? path : "<nil>");
+ 	return rc;
+-- 
+2.15.1
+

@@ -1,0 +1,129 @@
+From 3969a052315404c467a54111849e13fc2357cb56 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 24 Jan 2020 13:17:38 +0100
+Subject: [PATCH 5/9] qemu-user: SO_PEERGROUPS was not emulated, breaking tgt
+ code
+
+As this fairly new socket option was not handled, the default
+drop resulted in ERANGE being returned which caused the caller to
+go into an endless loop. This happened on a sufficiently enabled
+Desktop 16.04.5 host. If SO_PEERGROUPS is not known, we just
+silently report it as unsupported. If it is known on the host at
+build time, we try a translation.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ linux-user/alpha/sockbits.h   |  2 ++
+ linux-user/generic/sockbits.h |  2 ++
+ linux-user/hppa/sockbits.h    |  2 ++
+ linux-user/mips/sockbits.h    |  2 ++
+ linux-user/syscall.c          | 41 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 49 insertions(+)
+
+diff --git a/linux-user/alpha/sockbits.h b/linux-user/alpha/sockbits.h
+index d54dc98c..4c10fa63 100644
+--- a/linux-user/alpha/sockbits.h
++++ b/linux-user/alpha/sockbits.h
+@@ -75,6 +75,8 @@
+ /* Instruct lower device to use last 4-bytes of skb data as FCS */
+ #define TARGET_SO_NOFCS     43
+ 
++#define TARGET_SO_PEERGROUPS   59
++
+ /* TARGET_O_NONBLOCK clashes with the bits used for socket types.  Therefore we
+  * have to define SOCK_NONBLOCK to a different value here.
+  */
+diff --git a/linux-user/generic/sockbits.h b/linux-user/generic/sockbits.h
+index e44733c6..af146f4d 100644
+--- a/linux-user/generic/sockbits.h
++++ b/linux-user/generic/sockbits.h
+@@ -9,6 +9,8 @@
+ #define GENERIC_SOCKBITS_H
+ 
+ #define TARGET_SO_PASSSEC        34
++#define TARGET_SO_PEERGROUPS   59
++
+ 
+ /* For setsockopt(2) */
+ #define TARGET_SOL_SOCKET      1
+diff --git a/linux-user/hppa/sockbits.h b/linux-user/hppa/sockbits.h
+index 23f69a32..df7c62c0 100644
+--- a/linux-user/hppa/sockbits.h
++++ b/linux-user/hppa/sockbits.h
+@@ -67,6 +67,8 @@
+ 
+ #define TARGET_SO_CNX_ADVICE           0x402E
+ 
++#define TARGET_SO_PEERGROUPS           0x4034
++
+ /* TARGET_O_NONBLOCK clashes with the bits used for socket types.  Therefore we
+  * have to define SOCK_NONBLOCK to a different value here.
+  */
+diff --git a/linux-user/mips/sockbits.h b/linux-user/mips/sockbits.h
+index 0f022cd5..21a3c1bf 100644
+--- a/linux-user/mips/sockbits.h
++++ b/linux-user/mips/sockbits.h
+@@ -69,6 +69,8 @@
+ #define TARGET_SO_RCVBUFFORCE          33
+ #define TARGET_SO_PASSSEC              34
+ 
++#define TARGET_SO_PEERGROUPS   59
++
+ /** sock_type - Socket types
+  *
+  * Please notice that for binary compat reasons MIPS has to
+diff --git a/linux-user/syscall.c b/linux-user/syscall.c
+index 57debf3e..3bbcc7e8 100644
+--- a/linux-user/syscall.c
++++ b/linux-user/syscall.c
+@@ -2319,6 +2319,47 @@ static abi_long do_getsockopt(int sockfd, int level, int optname,
+         case TARGET_SO_SNDTIMEO:
+         case TARGET_SO_PEERNAME:
+             goto unimplemented;
++        case TARGET_SO_PEERGROUPS: {
++#ifdef SO_PEERGROUPS
++                int n, i;
++                socklen_t hlen, alen;
++                uint32_t *tgroups;
++                gid_t *hgroups;
++
++                if (get_user_u32(len, optlen)) {
++                return -TARGET_EFAULT;
++            }
++            if (len < 0) {
++                return -TARGET_EINVAL;
++            }
++            n = len / sizeof(uint32_t);
++            hlen = sizeof(gid_t) * n;
++            hgroups = alloca(hlen);
++            alen = hlen;
++            ret = get_errno(getsockopt(sockfd, level, SO_PEERGROUPS,
++                                       hgroups, &alen));
++            if (hlen != alen) {
++                n = alen / sizeof(gid_t);
++                len = n * sizeof(uint32_t);
++                if (put_user_u32(len, optlen)) {
++                    return -TARGET_EFAULT;
++                }
++            }
++            if (ret < 0) {
++                return ret;
++            }
++            if (!(tgroups = lock_user(VERIFY_WRITE, optval_addr, len, 0))) {
++                return -TARGET_EFAULT;
++            }
++            for (i = 0; i < n; i++) {
++                    __put_user(hgroups[i], &tgroups[i]);
++            }
++            unlock_user(tgroups, optval_addr, len);
++#else
++            ret = -TARGET_EOPNOTSUPP;
++#endif
++            break;
++        }
+         case TARGET_SO_PEERCRED: {
+             struct ucred cr;
+             socklen_t crlen;
+-- 
+2.17.1
+

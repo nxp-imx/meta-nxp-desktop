@@ -1,0 +1,49 @@
+From 55b6d0da6bc13986bd33b64dee4b813e692a11ec Mon Sep 17 00:00:00 2001
+From: r39252 <Heinz.Wrobel@freescale.com>
+Date: Thu, 19 Oct 2017 07:22:08 +0200
+Subject: [PATCH 10/15] pseudo: Unified and added debug messages for exec_path
+ handling
+
+---
+ pseudo_client.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/pseudo_client.c b/pseudo_client.c
+index 416aa67..dcd1c3f 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -2005,6 +2005,7 @@ pseudo_exec_path(const char *filename, int search_path) {
+ 	/* absolute paths just get canonicalized. */
+ 	if (*filename == '/') {
+ 		candidate = pseudo_fix_path(NULL, filename, 0, 0, NULL, 0);
++		pseudo_debug(PDBGF_CLIENT, "exec_path absolute: %s => %s\n", filename, candidate);
+ 		pseudo_magic();
+ 		return candidate;
+ 	}
+@@ -2012,6 +2013,7 @@ pseudo_exec_path(const char *filename, int search_path) {
+ 	if (!search_path || !path_segs || strchr(filename, '/')) {
+ 		candidate = pseudo_fix_path(pseudo_cwd, filename, 0, pseudo_cwd_len, NULL, 0);
+ 		/* executable or not, it's the only thing we can try */
++		pseudo_debug(PDBGF_CLIENT, "exec_path no PATH: %s => %s\n", filename, candidate);
+ 		pseudo_magic();
+ 		return candidate;
+ 	}
+@@ -2039,13 +2041,14 @@ pseudo_exec_path(const char *filename, int search_path) {
+ 			}
+ 		}
+ 		if (candidate && !stat(candidate, &buf) && !S_ISDIR(buf.st_mode) && (buf.st_mode & 0111)) {
+-			pseudo_debug(PDBGF_CLIENT | PDBGF_VERBOSE, "exec_path: %s => %s\n", filename, candidate);
++			pseudo_debug(PDBGF_CLIENT, "exec_path: %s => %s\n", filename, candidate);
+ 			pseudo_magic();
+ 			return candidate;
+ 		}
+ 	}
+ 	/* blind guess being as good as anything */
+ 	candidate = filename;
++	pseudo_debug(PDBGF_CLIENT, "exec_path guessed: %s => %s\n", filename, candidate);
+ 	pseudo_magic();
+ 	return candidate;
+ }
+-- 
+1.8.3.1
+

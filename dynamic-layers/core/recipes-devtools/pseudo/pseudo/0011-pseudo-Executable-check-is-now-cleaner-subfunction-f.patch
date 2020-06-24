@@ -1,0 +1,67 @@
+From ef08bb56d1bc275d437472693baf2e7c3179c403 Mon Sep 17 00:00:00 2001
+From: r39252 <Heinz.Wrobel@freescale.com>
+Date: Thu, 19 Oct 2017 07:23:49 +0200
+Subject: [PATCH 11/15] pseudo: Executable check is now cleaner subfunction for
+ later use
+
+---
+ pseudo_client.c | 36 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
+
+diff --git a/pseudo_client.c b/pseudo_client.c
+index dcd1c3f..1036e57 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -1967,6 +1967,40 @@ populate_path_segs(void) {
+ 	path_lens[c] = 0;
+ }
+ 
++/* A straightforward check if a file is likely an executable. We do not
++ * check if we can handle it with our architecture though, but that is
++ * not (or should not be) our problem.
++ * To permit script checks this function also can pull in the first <x>
++ * bytes of a file and returns how much it pulled in if so asked.
++ */
++static ssize_t isexecutable(const char *filename, char *buf, ssize_t bufsize)
++{
++	ssize_t foundexecutable = 0;
++	int fd;
++
++	fd = open(filename, O_RDONLY);
++	if (fd >= 0) {
++		struct stat filestat;
++
++		if (!fstat(fd, &filestat)) {
++			if (!S_ISDIR(filestat.st_mode) && filestat.st_mode & (S_IXUSR|S_IXGRP|S_IXOTH)) {
++				foundexecutable = 1;
++				if(buf) {
++					ssize_t readsize = read(fd, &buf[0], bufsize);
++
++					foundexecutable = (readsize < 0) ? 0 : readsize;
++
++					if (foundexecutable && foundexecutable < bufsize)
++						buf[foundexecutable] = '\0';
++				}
++			}
++		}
++		close(fd);
++	}
++
++	return foundexecutable;
++}
++
+ const char *
+ pseudo_exec_path(const char *filename, int search_path) {
+     char *s;
+@@ -2040,7 +2074,7 @@ pseudo_exec_path(const char *filename, int search_path) {
+ 				candidate = NULL;
+ 			}
+ 		}
+-		if (candidate && !stat(candidate, &buf) && !S_ISDIR(buf.st_mode) && (buf.st_mode & 0111)) {
++		if (candidate && isexecutable(candidate, NULL, 0)) {
+ 			pseudo_debug(PDBGF_CLIENT, "exec_path: %s => %s\n", filename, candidate);
+ 			pseudo_magic();
+ 			return candidate;
+-- 
+1.8.3.1
+

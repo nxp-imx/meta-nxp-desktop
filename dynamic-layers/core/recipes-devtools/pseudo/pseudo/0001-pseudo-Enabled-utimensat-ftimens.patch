@@ -1,0 +1,82 @@
+From cd0f63efbef2f79c032abbee0dc8db84e46cb1d8 Mon Sep 17 00:00:00 2001
+From: r39252 <Heinz.Wrobel@freescale.com>
+Date: Thu, 19 Oct 2017 07:02:06 +0200
+Subject: [PATCH 01/15] pseudo: Enabled utimensat/ftimens
+
+This required a makewrappers change to permit array arguments to wrappers
+---
+ makewrappers            | 18 ++++++++++--------
+ ports/unix/wrapfuncs.in |  2 ++
+ 2 files changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/makewrappers b/makewrappers
+index e9191ed..d149b17 100755
+--- a/makewrappers
++++ b/makewrappers
+@@ -131,27 +131,28 @@ class Argument:
+             else:
+                 # nothing to do.
+                 self.vararg_wraps = None
+-                self.type, self.name = None, None
++                self.type, self.name, self.array = None, None, None
+                 return
+         else:
+             self.vararg = False
+ 
+         # try for a function pointer
+-        match = re.match('(.*)\(\*([a-zA-Z0-9$_]*)\)\((.*)\)', text)
++        match = re.match('(.*)\(\*([a-zA-Z0-9$_]*)\)\((.*)\)(\[[0-9]+\])?', text)
+         if match:
+             self.function_pointer = True
+             self.args = match.group(3)
+             self.type = match.group(1)
+             self.name = match.group(2).rstrip()
++            self.array = match.group(4)
+         else:
+             # plain declaration
+-            match = re.match('(.*[ *])\(?\*?([a-zA-Z0-9$_]*)\)?', text)
++            match = re.match('(.*[ *])\(?\*?([a-zA-Z0-9$_]*)(\[[0-9]+\])?\)?', text)
+             # there may not be a match, say in the special case
+             # where an arg is '...'
+             if match:
+-                self.type, self.name = match.group(1).rstrip(), match.group(2)
++                self.type, self.name, self.array = match.group(1).rstrip(), match.group(2), match.group(3) 
+             else:
+-                self.type, self.name = None, None
++                self.type, self.name, self.array = None, None, None
+ 
+         # spacing between type and name, needed if type ends with a character
+         # which could be part of an identifier
+@@ -159,12 +160,13 @@ class Argument:
+             self.spacer = ' '
+ 
+     def decl(self, comment=False, wrap=False):
++        xstr = lambda s: s or ""
+         """Produce the declaration form of this argument."""
+         if self.function_pointer:
+-            decl = "%s%s(*%s)(%s)" % \
+-                   (self.type, self.spacer, self.name, self.args)
++            decl = "%s%s(*%s)(%s)%s" % \
++                   (self.type, self.spacer, self.name, self.args, xstr(self.array))
+         else:
+-            decl = "%s%s%s" % (self.type, self.spacer, self.name)
++            decl = "%s%s%s%s" % (self.type, self.spacer, self.name, xstr(self.array))
+ 
+         if self.vararg:
+             if self.vararg_wraps:
+diff --git a/ports/unix/wrapfuncs.in b/ports/unix/wrapfuncs.in
+index 5f30ae6..78fa855 100644
+--- a/ports/unix/wrapfuncs.in
++++ b/ports/unix/wrapfuncs.in
+@@ -27,6 +27,8 @@ char *tmpnam(char *s);
+ int truncate(const char *path, off_t length);
+ int utime(const char *path, const struct utimbuf *buf);
+ int utimes(const char *path, const struct timeval *times);
++int utimensat(int dirfd, const char *path, const struct timespec times[2], int flags);
++int futimens(int fd, const struct timespec times[2]);
+ # needed because libc stdio does horrible things with inline asm syscalls
+ FILE *fopen(const char *path, const char *mode);
+ int fclose(FILE *fp);
+-- 
+1.8.3.1
+

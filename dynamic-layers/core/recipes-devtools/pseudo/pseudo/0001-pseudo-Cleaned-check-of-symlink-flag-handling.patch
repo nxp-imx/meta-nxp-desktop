@@ -1,0 +1,27 @@
+From 4d58c1efb4a4e59e9af16241614daca17b7d270b Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 21 Dec 2018 17:56:04 +0200
+Subject: [PATCH] pseudo: Cleaned check of symlink flag handling
+
+Signed-off-by: nxa15299 <Heinz.Wrobel@nxp.com>
+Signed-off-by: Costea Ciprian <ciprianmarian.costea@nxp.com>
+---
+ pseudo_util.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pseudo_util.c b/pseudo_util.c
+index 12ff969..c2df2e7 100644
+--- a/pseudo_util.c
++++ b/pseudo_util.c
+@@ -691,7 +691,7 @@ pseudo_append_element(char *newpath, char *root, size_t allocated, char **pcurre
+ 	 * were appending to. we don't want to actually try to do this when
+ 	 * we're appending names to a regular file.
+ 	 */
+-	if (!leave_this && is_dir) {
++	if ( (!(leave_this & AT_SYMLINK_NOFOLLOW)) && is_dir) {
+ 		int is_link = S_ISLNK(buf->st_mode);
+ 		if (link_recursion >= PSEUDO_MAX_LINK_RECURSION && is_link) {
+ 			pseudo_diag("link recursion too deep, not expanding path '%s'.\n", newpath);
+-- 
+1.9.1
+

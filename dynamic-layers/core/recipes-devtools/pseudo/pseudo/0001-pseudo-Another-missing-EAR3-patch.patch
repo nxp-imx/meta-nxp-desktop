@@ -1,0 +1,28 @@
+From 86c1efd2c5b66a89905b44a2ffc53896e0ad6081 Mon Sep 17 00:00:00 2001
+From: nxa15299 <Heinz.Wrobel@nxp.com>
+Date: Tue, 23 Jan 2018 08:33:06 +0100
+Subject: [PATCH] pseudo: Another missing EAR3 patch
+
+Signed-off-by: nxa15299 <Heinz.Wrobel@nxp.com>
+---
+ pseudo_util.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/pseudo_util.c b/pseudo_util.c
+index 64cc549..f6fda46 100644
+--- a/pseudo_util.c
++++ b/pseudo_util.c
+@@ -771,7 +771,9 @@ pseudo_fix_path(const char *base, const char *path, size_t rootlen, size_t basel
+ 	char *current;
+ 	char *effective_root;
+ 	int trailing_slash = 0;
+-	
++
++	if (!readlinkp)
++		readlinkp = readlink;
+ 	if (!path) {
+ 		pseudo_diag("can't fix empty path.\n");
+ 		return 0;
+-- 
+2.15.1
+

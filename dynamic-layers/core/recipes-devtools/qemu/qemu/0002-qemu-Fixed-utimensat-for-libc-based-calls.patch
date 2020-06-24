@@ -1,0 +1,78 @@
+From 4972cc25f5998c4396e12789e09979d8111c846a Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 24 Jan 2020 11:52:26 +0100
+Subject: [PATCH 2/9] qemu: Fixed utimensat() for libc based calls
+
+Turns out that "touch" on Linux ends up with all NULL path for
+utimensat(). The std libc does not translate this into
+futimens() as the Linux syscall would do, so we need to translate
+manually.
+The utimensat patch itself is also easier now.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ linux-user/syscall.c | 34 +++++++++++++++++++++-------------
+ 1 file changed, 21 insertions(+), 13 deletions(-)
+
+diff --git a/linux-user/syscall.c b/linux-user/syscall.c
+index 2afc661c..9f96553d 100644
+--- a/linux-user/syscall.c
++++ b/linux-user/syscall.c
+@@ -245,6 +245,14 @@ static type name (type1 arg1,type2 arg2,type3 arg3)				\
+  return syscall(__NR_##name, arg1, arg2, arg3);        \
+ }
+ 
++#define _libc_syscall4(type,name,namelibc,type1,arg1,type2,arg2,type3,arg3,type4,arg4)	\
++static type name (type1 arg1,type2 arg2,type3 arg3,type4 arg4)				\
++{										\
++	if (do_libcsyscall)							\
++		return namelibc(arg1, arg2, arg3, arg4);				\
++	return syscall(__NR_##name, arg1, arg2, arg3, arg4);				\
++}
++
+ #define __NR_sys_uname __NR_uname
+ #define __NR_sys_getcwd1 __NR_getcwd
+ #define __NR_sys_getdents __NR_getdents
+@@ -391,17 +399,8 @@ static int sys_getcwd1(char *buf, size_t size)
+ 
+ #ifdef TARGET_NR_utimensat
+ #if defined(__NR_utimensat)
+-/* utimensat has an awful prototype that passes a structure.
+- * This complicates life if you want to use either libc or the syscall.
+- * We can't use _syscall4() here.
+- */
+-static int sys_utimensat(int dirfd, const char *pathname,
+-                         const struct timespec times[2], int flags)
+-{
+- if (do_libcsyscall)
+-   return utimensat(dirfd, pathname, times, flags);
+- return syscall(__NR_utimensat, dirfd, pathname, &times[0], flags);
+-}
++#define __NR_sys_utimensat __NR_utimensat
++_libc_syscall4(int,sys_utimensat,utimensat,int,dirfd,const char*,pathname,const struct timespec *,times,int,flags);
+ #else
+ static int sys_utimensat(int dirfd, const char *pathname,
+                          const struct timespec times[2], int flags)
+@@ -11345,8 +11344,17 @@ static abi_long do_syscall1(void *cpu_env, int num, abi_long arg1,
+                 target_to_host_timespec(ts+1, arg3+sizeof(struct target_timespec));
+                 tsp = ts;
+             }
+-            if (!arg2)
+-                ret = get_errno(sys_utimensat(arg1, NULL, tsp, arg4));
++            if (!arg2) {
++                /* Special solution to overcome a problem for the libc
++                 * based implementation, so that we don't get EINVAL.
++                 * libc is a bit restrictive there and non-Linux'ish.
++                 * The need is a Linux'ism as it seems.
++                 */
++                if (do_libcsyscall)
++                    ret = get_errno(futimens(arg1, tsp));
++                else
++                    ret = get_errno(sys_utimensat(arg1, NULL, tsp, arg4));
++            }
+             else {
+                 if (!(p = lock_user_string(arg2))) {
+                     return -TARGET_EFAULT;
+-- 
+2.17.1
+

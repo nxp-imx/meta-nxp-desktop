@@ -1,0 +1,31 @@
+From f458df3ad7ee04a7e4e722b39b1f7f7d1bd92d1a Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 24 Jan 2020 13:22:17 +0100
+Subject: [PATCH 6/9] qemu-user: syscall.c/target_mmap was called with bad fd
+
+While this is not a functional delta, it is defensive as
+the mmap implementation should ignore fd. If it doesn't in the future
+due to some bug during development, at least stdin is not messed with.
+This should help to avoid obscure bugs and side effects.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ linux-user/syscall.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/linux-user/syscall.c b/linux-user/syscall.c
+index 3bbcc7e8..596a4786 100644
+--- a/linux-user/syscall.c
++++ b/linux-user/syscall.c
+@@ -946,7 +946,7 @@ abi_long do_brk(abi_ulong new_brk)
+     new_alloc_size = HOST_PAGE_ALIGN(new_brk - brk_page);
+     mapped_addr = get_errno(target_mmap(brk_page, new_alloc_size,
+                                         PROT_READ|PROT_WRITE,
+-                                        MAP_ANON|MAP_PRIVATE, 0, 0));
++                                        MAP_ANON|MAP_PRIVATE, -1, 0));
+ 
+     if (mapped_addr == brk_page) {
+         /* Heap contents are initialized to zero, as for anonymous
+-- 
+2.17.1
+

@@ -1,0 +1,154 @@
+From bfded6f9a64857b55e8bf521d02f01b351434aed Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 24 Jan 2020 12:47:50 +0100
+Subject: [PATCH 3/9] qemu-user: corrected getsockopt implementation
+
+There was one formal type sizeof mixup and depending on what the caller
+passed in, innocent memory could have been overwritten.
+When SO_PEERSEC failed to work properly it turned out that
+the length arg/result method was not properly implemented.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ linux-user/syscall.c | 79 ++++++++++++++++++++++++++++++--------------
+ 1 file changed, 54 insertions(+), 25 deletions(-)
+
+diff --git a/linux-user/syscall.c b/linux-user/syscall.c
+index 9f96553d..dcf3519c 100644
+--- a/linux-user/syscall.c
++++ b/linux-user/syscall.c
+@@ -2307,6 +2307,7 @@ static abi_long do_getsockopt(int sockfd, int level, int optname,
+     abi_long ret;
+     int len, val;
+     socklen_t lv;
++    void *addr;
+ 
+     switch(level) {
+     case TARGET_SOL_SOCKET:
+@@ -2332,22 +2333,25 @@ static abi_long do_getsockopt(int sockfd, int level, int optname,
+             crlen = sizeof(cr);
+             ret = get_errno(getsockopt(sockfd, level, SO_PEERCRED,
+                                        &cr, &crlen));
++            if (len != crlen) {
++                len = crlen;
++                if (put_user_u32(len, optlen)) {
++                    return -TARGET_EFAULT;
++                }
++            }
+             if (ret < 0) {
+                 return ret;
+             }
+-            if (len > crlen) {
+-                len = crlen;
+-            }
+             if (!lock_user_struct(VERIFY_WRITE, tcr, optval_addr, 0)) {
+                 return -TARGET_EFAULT;
+             }
+-            __put_user(cr.pid, &tcr->pid);
+-            __put_user(cr.uid, &tcr->uid);
+-            __put_user(cr.gid, &tcr->gid);
++            if (len >= offsetof(struct ucred, pid) + sizeof(cr.pid))
++                __put_user(cr.pid, &tcr->pid);
++            if (len >= offsetof(struct ucred, uid) + sizeof(cr.uid))
++                __put_user(cr.uid, &tcr->uid);
++            if (len >= offsetof(struct ucred, gid) + sizeof(cr.gid))
++                __put_user(cr.gid, &tcr->gid);
+             unlock_user_struct(tcr, optval_addr, 1);
+-            if (put_user_u32(len, optlen)) {
+-                return -TARGET_EFAULT;
+-            }
+             break;
+         }
+         case TARGET_SO_LINGER:
+@@ -2442,6 +2446,15 @@ static abi_long do_getsockopt(int sockfd, int level, int optname,
+         case TARGET_SO_ACCEPTCONN:
+             optname = SO_ACCEPTCONN;
+             goto int_case;
++        case TARGET_SO_PEERSEC:
++            optname = SO_PEERSEC;
++            if (get_user_u32(len, optlen))
++                return -TARGET_EFAULT;
++            if (len < 0)
++                return -TARGET_EINVAL;
++            addr = alloca(len);
++            lv = len;
++            goto generic_case;
+         default:
+             goto int_case;
+         }
+@@ -2453,24 +2466,40 @@ static abi_long do_getsockopt(int sockfd, int level, int optname,
+             return -TARGET_EFAULT;
+         if (len < 0)
+             return -TARGET_EINVAL;
+-        lv = sizeof(lv);
+-        ret = get_errno(getsockopt(sockfd, level, optname, &val, &lv));
++        if (len < sizeof(val))
++            return -TARGET_ERANGE;
++        addr = &val;
++        lv = sizeof(val);
++    generic_case:
++        ret = get_errno(getsockopt(sockfd, level, optname, addr, &lv));
++        if (lv != len) {
++            len = lv;
++            if (put_user_u32(len, optlen))
++                return -TARGET_EFAULT;
++        }
+         if (ret < 0)
+             return ret;
+-        if (optname == SO_TYPE) {
+-            val = host_to_target_sock_type(val);
++        if (addr == &val) {
++            if (optname == SO_TYPE) {
++                val = host_to_target_sock_type(val);
++            }
++            if (len == 4) {
++                if (put_user_u32(val, optval_addr))
++                    return -TARGET_EFAULT;
++            } else if (len == 1) {
++                if (put_user_u8(val, optval_addr))
++                    return -TARGET_EFAULT;
++            } else
++                return -TARGET_ERANGE;
+         }
+-        if (len > lv)
+-            len = lv;
+-        if (len == 4) {
+-            if (put_user_u32(val, optval_addr))
+-                return -TARGET_EFAULT;
+-        } else {
+-            if (put_user_u8(val, optval_addr))
+-                return -TARGET_EFAULT;
++        else {
++            int i;
++            uint8_t *p = (uint8_t *)addr;
++            for (i = 0; i < len; i++) {
++                if (put_user_u8(p[i], optval_addr + i))
++                    return -TARGET_EFAULT;
++            }
+         }
+-        if (put_user_u32(len, optlen))
+-            return -TARGET_EFAULT;
+         break;
+     case SOL_IP:
+         switch(optname) {
+@@ -2493,7 +2522,7 @@ static abi_long do_getsockopt(int sockfd, int level, int optname,
+                 return -TARGET_EFAULT;
+             if (len < 0)
+                 return -TARGET_EINVAL;
+-            lv = sizeof(lv);
++            lv = sizeof(val);
+             ret = get_errno(getsockopt(sockfd, level, optname, &val, &lv));
+             if (ret < 0)
+                 return ret;
+@@ -2554,7 +2583,7 @@ static abi_long do_getsockopt(int sockfd, int level, int optname,
+                 return -TARGET_EFAULT;
+             if (len < 0)
+                 return -TARGET_EINVAL;
+-            lv = sizeof(lv);
++            lv = sizeof(val);
+             ret = get_errno(getsockopt(sockfd, level, optname, &val, &lv));
+             if (ret < 0)
+                 return ret;
+-- 
+2.17.1
+

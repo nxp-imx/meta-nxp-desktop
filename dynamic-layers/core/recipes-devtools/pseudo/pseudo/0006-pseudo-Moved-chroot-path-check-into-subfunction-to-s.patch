@@ -1,0 +1,49 @@
+From 82600c680fce1cb04680f51167bbf976340d1bad Mon Sep 17 00:00:00 2001
+From: r39252 <Heinz.Wrobel@freescale.com>
+Date: Thu, 19 Oct 2017 07:13:15 +0200
+Subject: [PATCH 06/15] pseudo: Moved chroot path check into subfunction to
+ support subsequent changes
+
+---
+ pseudo_client.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/pseudo_client.c b/pseudo_client.c
+index 674d61c..86ee5d2 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -1398,6 +1398,17 @@ static char *patternlistmatchespath(const char *patternlist, const char *path, c
+ 	return foundpath;
+ }
+ 
++static int ischrootpath(const char *basepath) {
++	if (pseudo_chroot_len && basepath &&
++		strlen(basepath) >= pseudo_chroot_len &&
++		!memcmp(basepath, pseudo_chroot, pseudo_chroot_len) &&
++		(basepath[pseudo_chroot_len] == '\0' || basepath[pseudo_chroot_len] == '/')) {
++		return 1;
++	}
++
++	return 0;
++}
++
+ static char *
+ base_path(int dirfd, const char *path, int leave_last) {
+ 	char *basepath = 0;
+@@ -1431,12 +1442,8 @@ base_path(int dirfd, const char *path, int leave_last) {
+ 		/* if there's a chroot path, and it's the start of basepath,
+ 		 * flag it for pseudo_fix_path
+ 		 */
+-		if (pseudo_chroot_len && baselen >= pseudo_chroot_len &&
+-			!memcmp(basepath, pseudo_chroot, pseudo_chroot_len) &&
+-			(basepath[pseudo_chroot_len] == '\0' || basepath[pseudo_chroot_len] == '/')) {
+-
++		if (ischrootpath(basepath))
+ 			minlen = pseudo_chroot_len;
+-		}
+ 	} else if (pseudo_chroot_len) {
+ 		/* "absolute" is really relative to chroot path */
+ 		basepath = pseudo_chroot;
+-- 
+1.8.3.1
+

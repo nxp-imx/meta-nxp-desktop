@@ -1,0 +1,38 @@
+From a6879015d55da1d1650a56fca0d8773e3871cc93 Mon Sep 17 00:00:00 2001
+From: r39252 <Heinz.Wrobel@freescale.com>
+Date: Thu, 19 Oct 2017 07:19:40 +0200
+Subject: [PATCH 09/15] pseudo: Oops. Forgot to add variable cleanup to support
+ prior filename translation commit
+
+---
+ pseudo_client.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/pseudo_client.c b/pseudo_client.c
+index 83749cd..416aa67 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -1969,8 +1969,9 @@ populate_path_segs(void) {
+ 
+ const char *
+ pseudo_exec_path(const char *filename, int search_path) {
++    char *s;
+ 	char *path = getenv("PATH");
+-	char *candidate;
++	const char *candidate;
+ 	int i;
+ 	struct stat buf;
+ 	char aliasbuf[NAME_MAX];
+@@ -2044,7 +2045,8 @@ pseudo_exec_path(const char *filename, int search_path) {
+ 		}
+ 	}
+ 	/* blind guess being as good as anything */
++	candidate = filename;
+ 	pseudo_magic();
+-	return filename;
++	return candidate;
+ }
+ 
+-- 
+1.8.3.1
+

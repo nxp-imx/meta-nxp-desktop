@@ -1,0 +1,31 @@
+From 898fe66b6b016b3c94e98de64a3abf8649edae25 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 24 Jan 2020 13:34:01 +0100
+Subject: [PATCH 7/9] qemu-user: Subject: [PATCH] qemu-user: Improved
+ diagnostic output for unexpected signals
+
+The original message did not make it easy at all to diagnose any issues
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ accel/tcg/user-exec.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/accel/tcg/user-exec.c b/accel/tcg/user-exec.c
+index 897d1571..e495c976 100644
+--- a/accel/tcg/user-exec.c
++++ b/accel/tcg/user-exec.c
+@@ -125,7 +125,9 @@ static inline int handle_cpu_signal(uintptr_t pc, siginfo_t *info,
+      */
+     if (!cpu || !cpu->running) {
+         printf("qemu:%s received signal outside vCPU context @ pc=0x%"
+-               PRIxPTR "\n",  __func__, pc);
++               PRIxPTR ", getpid %d, signal %d/%d, cpu %x, cpu->running %d\n",
++               __func__, pc, getpid(), info->si_signo, info->si_code,
++               cpu, (cpu) ? cpu->running : 0);
+         abort();
+     }
+ 
+-- 
+2.17.1
+

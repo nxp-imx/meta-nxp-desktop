@@ -1,0 +1,359 @@
+From 3d18975e6264a0267176dc61a9bc94bf29c9edd6 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 21 Dec 2018 16:20:43 +0200
+Subject: [PATCH] pseudo: Now handles chroot scripts and executables
+
+We rewrite paths and arguments as needed to enable chroot execution.
+The problem is that argv0 needs to be rewritten properly for chroot
+environments so that the file is found by any interpreter, even if
+that interpreter is not searching PATH ... which most don't.
+
+This patch also adds in a buffer size correction and check that
+Catalin provided.
+
+Signed-off-by: nxa15299 <Heinz.Wrobel@nxp.com>
+Signed-off-by: Catalin Udma <catalin-dan.udma@nxp.com>
+Signed-off-by: Costea Ciprian <ciprianmarian.costea@nxp.com>
+---
+ pseudo_client.c | 265 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ pseudo_util.c   |   1 +
+ 2 files changed, 261 insertions(+), 5 deletions(-)
+
+diff --git a/pseudo_client.c b/pseudo_client.c
+index 3939c9b..adaa75d 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -2092,13 +2092,219 @@ static ssize_t isexecutable(const char *filename, char *buf, ssize_t bufsize)
+ 	return foundexecutable;
+ }
+ 
++static int reallocargs(char * const**argvp, int extraargs) {
++	char * const*argv;
++	char **newargv;
++	int i, argc, newargc = 0;
++
++	if (!argvp)
++		return -1;
++
++	argv = *argvp;
++
++	/* We know that we need to shuffle the args
++	 * to change argv[0++] properly, so we just
++	 * realloc with sufficient empty slots
++	 */
++	for(argc = 0; argv && argv[argc]; argc++)
++		;
++	newargv = malloc((extraargs + argc + 1) * sizeof(char *));
++	if (!newargv) {
++		pseudo_diag("couldn't allocate new argv\n");
++		return -1;
++	}
++
++	for (newargc = 0; newargc < extraargs;)
++		newargv[newargc++] = NULL;
++	for(i = 0; argv && i < argc; i++)
++		newargv[newargc++] = argv[i];
++	newargv[newargc] = NULL;
++
++	*argvp = (char * const *)newargv;
++
++	return 0;
++}
++
++static int exec_chroot_scriptcheck(const char **filenamep, char * const**argvp, const char *origfullpath, const char *chrootfile)
++{
++	/* We have a problem for pseudo chroot environments when executing
++	 * scripts. The filename gets extended by the chroot path and
++	 * passed to the exec function. The kernel detects through
++	 * binfmt_script.c that it is a "#!" script and rewrites the
++	 * arguments. Now the interpreter gets executed, but arg0 is now
++	 * the full file path, not the chroot path. Net result is that
++	 * the interpreter, running inside pseudo chroot, can't find the
++	 * script anymore. Duh.
++	 * The workaround is to second guess the kernel. If it seems
++	 * that we need to execute a script, do the interpreter and
++	 * arg twizzle locally here.
++	 */
++
++	/* scriptcheck size is NOT BINPRM_BUF_SIZE anymore to be able to
++	 * accomodate the exec prefix
++	 */
++	char scriptcheck[1024];
++	char *interpreter = NULL, *iarg = NULL;
++	int foundscript = 0;
++	int splitargs = 0;
++	int extraargc = 0;
++	int changeargv0 = 0;
++	char *s;
++
++	foundscript = isexecutable(chrootfile, &scriptcheck[0], sizeof(scriptcheck));
++	if (foundscript) {
++		pseudo_debug(PDBGF_CLIENT, "exec path chroot checking for script in %s (argv[0]='%s')\n", chrootfile, (*argvp)[0]);
++		foundscript = 0;
++		if (scriptcheck[0] == '#' && scriptcheck[1] == '!') {
++			pseudo_debug(PDBGF_CLIENT, "exec path chroot script found\n");
++
++			/* parse out the interpreter and arg as
++			 * the kernel does it in binfmt_script.c
++			 */
++            scriptcheck[sizeof(scriptcheck) - 1] = '\0';
++			s = strchr(scriptcheck, '\n');
++			if (s)
++				*s = 0;
++			s = &scriptcheck[2];
++			while (*s == ' ' || *s == '\t')
++				s++;
++			if (*s)
++				interpreter = s;
++			if (interpreter) {
++				foundscript = 1;
++				changeargv0 = 1;
++			}
++		}
++		else if(ischrootpath(chrootfile)) {
++			char *xprefix = getenv("PSEUDO_CHROOT_XPREFIX");
++
++			/* We found what should be a regular executable
++			 * within the chroot space. This means that we
++			 * may want to run it inside, e.g., a qemu user
++			 * environment. This means we need to set an
++			 * interpreter for the executable.
++			 */
++			if (xprefix && *xprefix) {
++				pseudo_debug(PDBGF_CLIENT, "exec path chroot adding prefix %s to %s\n", xprefix, chrootfile);
++				if (strlen(xprefix) > sizeof(scriptcheck) - 1) {
++					pseudo_diag("error: xprefix path is too long\n");
++					return -1;
++				}
++				strncpy(scriptcheck, xprefix, sizeof(scriptcheck) - 1);
++				scriptcheck[sizeof(scriptcheck) - 1] = '\0';
++				s = &scriptcheck[0];
++				while (*s == ' ' || *s == '\t')
++					s++;
++				if (*s) {
++					interpreter = s;
++
++					foundscript = 1;
++					changeargv0 = 1;
++					splitargs = 1;
++				}
++			}
++		}
++	}
++
++	if (foundscript) {
++		/* Now check args. Std shell scripts don't expand */
++		interpreter = strdup(interpreter);
++		if (!interpreter) {
++			pseudo_debug(PDBGF_CLIENT, "exec path chroot script does not have interpreter\n");
++			return -1;
++		}
++
++		s = interpreter;
++		while (*s && *s != ' ' && *s != '\t')
++			s++;
++		while (*s == ' ' || *s == '\t')
++			*s++ = '\0';
++
++		if (*s)
++			iarg = s;
++		while (*s) {
++			extraargc++;
++			while (*s && *s != ' ' && *s != '\t')
++				s++;
++			while (*s == ' ' || *s == '\t')
++				s++;
++
++			/* Classic shell behavior stops early */
++			if(!splitargs)
++				break;
++		}
++	}
++
++	if (foundscript) {
++		int newargc = 0;
++		char **argv;
++		char *arg0;
++
++		/* We know that we need to shuffle the args
++		 * to change argv[0] properly, so we just
++		 * realloc with sufficient empty slots.
++		 * We also need to acommodate any args.
++		 */
++
++		if (reallocargs(argvp, 1 + extraargc) < 0) {
++			pseudo_diag("couldn't allocate new argv\n");
++			return -1;
++		}
++
++		argv = *argvp;
++		argv[newargc++] = interpreter;
++		if (iarg) {
++			s = iarg;
++			while (*s) {
++				argv[newargc++] = s;
++				while (*s && *s != ' ' && *s != '\t')
++					s++;
++				while (*s == ' ' || *s == '\t')
++					*s++ = '\0';
++
++				/* Classic shell behavior stops early */
++				if(!splitargs)
++					break;
++			}
++		}
++
++		if (changeargv0) {
++			/* Dechroot the script name as needed */
++			arg0 = strdup(origfullpath);
++			if (!arg0) {
++				pseudo_diag("couldn't allocate new arg0 string\n");
++				return -1;
++			}
++			if (ischrootpath(arg0)) {
++				arg0 += pseudo_cwd_rel - pseudo_cwd;
++			}
++
++			pseudo_debug(PDBGF_CLIENT, "exec path chroot changing argv[0] to %s\n", arg0);
++			argv[newargc] = arg0;
++		}
++
++		/* We are executing the interpreter now with
++		 * the suitable arg set!
++		 */
++		*filenamep = interpreter;
++
++		/* Ask caller to recheck the path now */
++		return 1;
++    }
++
++    return 0;
++}
++
++
+ const char *
+ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+     const char *filename = *filenamep;
+     char *path = getenv("PATH");
+ 	const char *candidate;
+ 	int i;
++    int checkscript;
+ 	int forcechroot = 0;
++    int pforcechroot = 0;
+ 	char aliasbuf[NAME_MAX];
+ 	char *xtranslation = getenv("PSEUDO_CHROOT_XTRANSLATION");
+ 
+@@ -2147,6 +2353,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+ 		else
+ 			candidate = pseudo_fix_path(NULL, filename, 0, 0, NULL, 0);
+ 
++        if (pseudo_chroot_len) {
++			checkscript = exec_chroot_scriptcheck(filenamep, argvp, filename, candidate);
++			if (checkscript) {
++				pseudo_magic();
++				return (checkscript < 0) ? NULL : pseudo_exec_path(filenamep, search_path, argvp);
++			}
++		}
+ 		pseudo_debug(PDBGF_CLIENT, "exec_path absolute: %s => %s\n", filename, candidate);
+ 		pseudo_magic();
+ 		return candidate;
+@@ -2158,6 +2371,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+ 		else
+ 			candidate = pseudo_fix_path(pseudo_cwd, filename, 0, pseudo_cwd_len, NULL, 0);
+ 
++        if (pseudo_chroot_len) {
++			checkscript = exec_chroot_scriptcheck(filenamep, argvp, filename, candidate);
++			if (checkscript) {
++				pseudo_magic();
++				return (checkscript < 0) ? NULL : pseudo_exec_path(filenamep, search_path, argvp);
++			}
++		}
+ 		/* executable or not, it's the only thing we can try */
+ 		pseudo_debug(PDBGF_CLIENT, "exec_path no PATH: %s => %s\n", filename, candidate);
+ 		pseudo_magic();
+@@ -2166,16 +2386,27 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+ 
+ 	for (i = 0; path_segs[i]; ++i) {
+ 		path = path_segs[i];
+-		pseudo_debug(PDBGF_CLIENT, "exec_path: checking %s for %s\n", path, filename);
+-		if (!*path || (*path == '.' && path_lens[i] == 1)) {
++		/* The following logic is equivalent to the initial check
++		 * above. Here we check the path segments though because
++		 * rather than what the user specified. This way, we can
++		 * also force specific paths into the chroot but still
++		 * have the user just specify the basename on invocation
++		 */
++		pforcechroot = 0;
++		if (pseudo_chroot_len &&
++		    (patternlistmatchespath(getenv("PSEUDO_CHROOT_FORCED"), path, NULL, 0, 0) &&
++		     !patternlistmatchespath(getenv("PSEUDO_CHROOT_EXCEPTIONS"), path, NULL, 0, 0)))
++			pforcechroot = 1;
++		pseudo_debug(PDBGF_CLIENT, "exec_path: checking %s for %s %s %s\n", path, filename, (forcechroot) ? "(chroot)" : "", (pforcechroot) ? "(pchroot)" : "");
++        if (!*path || (*path == '.' && path_lens[i] == 1)) {
+ 			/* empty path or . is cwd */
+-			if (forcechroot)
+-				candidate = pseudo_root_path(__func__, __LINE__, AT_FDCWD, filename, 0);
++			if (forcechroot || pforcechroot)
++                candidate = pseudo_root_path(__func__, __LINE__, AT_FDCWD, filename, 0);
+ 			else
+ 				candidate = pseudo_fix_path(pseudo_cwd, filename, 0, pseudo_cwd_len, NULL, 0);
+ 			pseudo_debug(PDBGF_CLIENT, "exec_path: in cwd, got %s\n", candidate);
+ 		} else if (*path == '/') {
+-			if (forcechroot) {
++			if (forcechroot || pforcechroot) {
+ 				char *dir = pseudo_root_path(__func__, __LINE__, AT_FDCWD, path, 0);
+ 				if (dir)
+ 					candidate = pseudo_fix_path(dir, filename, 0, strlen(dir), NULL, 0);
+@@ -2206,6 +2437,23 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+ 				candidate = NULL;
+ 			}
+ 		}
++        if (pseudo_chroot_len) {
++			char *fullpath = malloc(strlen(path) + 1 + strlen(filename) + 1);
++			
++			if(!fullpath) {
++				pseudo_diag("couldn't allocate intermediate full path.\n");
++				return -1;
++			}
++			strcpy(fullpath, path);
++			strcat(fullpath, "/");
++			strcat(fullpath, filename);
++			checkscript = exec_chroot_scriptcheck(filenamep, argvp, fullpath, candidate);
++			free(fullpath);
++			if (checkscript) {
++				pseudo_magic();
++				return (checkscript < 0) ? NULL : pseudo_exec_path(filenamep, search_path, argvp);
++			}
++		}
+ 		if (candidate && isexecutable(candidate, NULL, 0)) {
+ 			pseudo_debug(PDBGF_CLIENT, "exec_path: %s => %s\n", filename, candidate);
+ 			pseudo_magic();
+@@ -2216,6 +2464,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+ 	candidate = filename;
+ 	if (candidate && forcechroot)
+ 		candidate = pseudo_root_path(__func__, __LINE__, AT_FDCWD, candidate, 0);
++    if (pseudo_chroot_len) {
++		checkscript = exec_chroot_scriptcheck(filenamep, argvp, filename, candidate);
++		if (checkscript) {
++			pseudo_magic();
++			return (checkscript < 0) ? NULL : pseudo_exec_path(filenamep, search_path, argvp);
++		}
++	}
+ 	pseudo_debug(PDBGF_CLIENT, "exec_path guessed: %s => %s\n", filename, candidate);
+ 	pseudo_magic();
+ 	return candidate;
+diff --git a/pseudo_util.c b/pseudo_util.c
+index 74d1d33..5efa64d 100644
+--- a/pseudo_util.c
++++ b/pseudo_util.c
+@@ -59,6 +59,7 @@ static struct pseudo_variables pseudo_env[] = {
+ 	{ "PSEUDO_CHROOT_EXCEPTIONS", 24, NULL },
+ 	{ "PSEUDO_CHROOT_FORCED", 20, NULL },
+ 	{ "PSEUDO_CHROOT_XTRANSLATION", 26, NULL },
++    { "PSEUDO_CHROOT_XPREFIX", 21, NULL },
+ 	{ "PSEUDO_UIDS", 11, NULL },
+ 	{ "PSEUDO_GIDS", 11, NULL },
+ 	{ "PSEUDO_OPTS", 11, NULL },
+-- 
+1.9.1
+

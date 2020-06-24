@@ -1,0 +1,58 @@
+From 50b7eb01c3b8a8ff3f2d1b05006e2bc4a06c173a Mon Sep 17 00:00:00 2001
+From: r39252 <Heinz.Wrobel@freescale.com>
+Date: Thu, 19 Oct 2017 07:15:47 +0200
+Subject: [PATCH 07/15] pseudo: Added filename translation to exec path
+ handling
+
+This is required to map between host and chroot exe paths in somewhat
+arbitrary ways.
+---
+ pseudo_client.c | 12 ++++++++++++
+ pseudo_util.c   |  1 +
+ 2 files changed, 13 insertions(+)
+
+diff --git a/pseudo_client.c b/pseudo_client.c
+index 86ee5d2..dcdbdb6 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -1973,6 +1973,8 @@ pseudo_exec_path(const char *filename, int search_path) {
+ 	char *candidate;
+ 	int i;
+ 	struct stat buf;
++	char aliasbuf[NAME_MAX];
++	char *xtranslation = getenv("PSEUDO_CHROOT_XTRANSLATION");
+ 
+ 	if (!filename)
+ 		return NULL;
+@@ -1989,6 +1991,16 @@ pseudo_exec_path(const char *filename, int search_path) {
+ 		populate_path_segs();
+ 	}
+ 
++	/* We check a precise path translation first and fall back to
++	 * the base name only. This permits generic aliasing of basenames
++	 */
++	s = patternlistmatchespath(xtranslation, filename, &aliasbuf[0], sizeof(aliasbuf), 1);
++	if (!s)
++		s = patternlistmatchespath(xtranslation, basename(filename), &aliasbuf[0], sizeof(aliasbuf), 1);
++	if (s) {
++		filename = s;
++	}
++
+ 	/* absolute paths just get canonicalized. */
+ 	if (*filename == '/') {
+ 		candidate = pseudo_fix_path(NULL, filename, 0, 0, NULL, 0);
+diff --git a/pseudo_util.c b/pseudo_util.c
+index c81df5a..51ff456 100644
+--- a/pseudo_util.c
++++ b/pseudo_util.c
+@@ -55,6 +55,7 @@ static struct pseudo_variables pseudo_env[] = {
+ 	{ "PSEUDO_LOCALSTATEDIR", 20, NULL },
+ 	{ "PSEUDO_PASSWD", 13, NULL },
+ 	{ "PSEUDO_CHROOT", 13, NULL },
++	{ "PSEUDO_CHROOT_XTRANSLATION", 26, NULL },
+ 	{ "PSEUDO_UIDS", 11, NULL },
+ 	{ "PSEUDO_GIDS", 11, NULL },
+ 	{ "PSEUDO_OPTS", 11, NULL },
+-- 
+1.8.3.1
+

@@ -1,0 +1,37 @@
+From 710d36f1c724e7e906e849b319f7820a592a4aea Mon Sep 17 00:00:00 2001
+From: r39252 <Heinz.Wrobel@freescale.com>
+Date: Thu, 19 Oct 2017 07:06:31 +0200
+Subject: [PATCH 03/15] pseudo: The stat[v]fs() functions were not wrapped
+ properly
+
+---
+ ports/linux/wrapfuncs.in | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/ports/linux/wrapfuncs.in b/ports/linux/wrapfuncs.in
+index c5ea7c3..a05de68 100644
+--- a/ports/linux/wrapfuncs.in
++++ b/ports/linux/wrapfuncs.in
+@@ -21,11 +21,19 @@ int openat64(int dirfd, const char *path, int flags, ...{mode_t mode}); /* flags=flags&O_NOFOLLOW */
+ int __openat64_2(int dirfd, const char *path, int flags); /* flags=flags&O_NOFOLLOW */
+ int creat64(const char *path, mode_t mode);
+ int stat(const char *path, struct stat *buf); /* real_func=pseudo_stat */
++int statfs(const char *path, struct statfs *buf);
++int statvfs(const char *path, struct statvfs *buf);
+ int lstat(const char *path, struct stat *buf); /* real_func=pseudo_lstat, flags=AT_SYMLINK_NOFOLLOW */
+ int fstat(int fd, struct stat *buf); /* real_func=pseudo_fstat */
++int fstatfs(int fd, struct statfs *buf);
++int fstatvfs(int fd, struct statvfs *buf);
+ int stat64(const char *path, struct stat64 *buf); /* real_func=pseudo_stat64 */
++int statfs64(const char *path, struct statfs64 *buf);
++int statvfs64(const char *path, struct statvfs64 *buf);
+ int lstat64(const char *path, struct stat64 *buf); /* real_func=pseudo_lstat64, flags=AT_SYMLINK_NOFOLLOW */
+ int fstat64(int fd, struct stat64 *buf); /* real_func=pseudo_fstat64 */
++int fstatfs64(int fd, struct statfs64 *buf);
++int fstatvfs64(int fd, struct statvfs64 *buf);
+ int __xstat64(int ver, const char *path, struct stat64 *buf);
+ int __lxstat64(int ver, const char *path, struct stat64 *buf); /* flags=AT_SYMLINK_NOFOLLOW */
+ int __fxstat64(int ver, int fd, struct stat64 *buf);
+-- 
+2.7.4
+

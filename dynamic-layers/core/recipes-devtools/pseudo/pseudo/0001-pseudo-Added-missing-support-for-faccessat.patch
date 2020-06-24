@@ -1,0 +1,63 @@
+From 0092e2ce18354eadf170119643845afb61e919db Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Sat, 25 Jan 2020 15:32:30 +0100
+Subject: [PATCH] pseudo: Added missing support for faccessat()
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ ports/linux/linux/guts/faccessat.c | 30 ++++++++++++++++++++++++++++++
+ ports/linux/wrapfuncs.in           |  1 +
+ 2 files changed, 31 insertions(+)
+ create mode 100644 ports/linux/linux/guts/faccessat.c
+
+diff --git a/ports/linux/linux/guts/faccessat.c b/ports/linux/linux/guts/faccessat.c
+new file mode 100644
+index 0000000..0ba30e7
+--- /dev/null
++++ b/ports/linux/linux/guts/faccessat.c
+@@ -0,0 +1,30 @@
++/*
++ * Copyright (c) 2017 Wind River Systems; see
++ * guts/COPYRIGHT for information.
++ *
++ * int faccessat(int ver, int dirfd, const char *path, int mode, int flags)
++ *	int rc = -1;
++ */
++	PSEUDO_STATBUF buf;
++
++	/* note:  no attempt to handle the case where user isn't
++	 * root.
++	 */
++	rc = base_fstatat(dirfd, path, &buf, flags & AT_SYMLINK_NOFOLLOW);
++	if (rc == -1)
++		return rc;
++
++	if (mode & X_OK) {
++		if (buf.st_mode & 0111) {
++            return 0;
++		} else {
++			errno = EPERM;
++			return -1;
++		}
++	} else {
++		return 0;
++	}
++
++/*	return rc;
++ * }
++ */
+diff --git a/ports/linux/wrapfuncs.in b/ports/linux/wrapfuncs.in
+index a05de68..58f6a82 100644
+--- a/ports/linux/wrapfuncs.in
++++ b/ports/linux/wrapfuncs.in
+@@ -5,6 +5,7 @@ int __lxstat(int ver, const char *path, struct stat *buf); /* flags=AT_SYMLINK_N
+ int __fxstat(int ver, int fd, struct stat *buf);
+ int lchown(const char *path, uid_t owner, gid_t group); /* flags=AT_SYMLINK_NOFOLLOW */
+ int __fxstatat(int ver, int dirfd, const char *path, struct stat *buf, int flags);
++int faccessat(int dirfd, const char *path, int mode, int flags);
+ int openat(int dirfd, const char *path, int flags, ...{mode_t mode}); /* flags=flags&O_NOFOLLOW */
+ int __openat_2(int dirfd, const char *path, int flags); /* flags=flags&O_NOFOLLOW */
+ int mknod(const char *path, mode_t mode, dev_t dev); /* real_func=pseudo_mknod */
+-- 
+2.17.1
+

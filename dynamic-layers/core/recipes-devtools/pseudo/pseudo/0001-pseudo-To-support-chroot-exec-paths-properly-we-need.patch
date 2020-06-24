@@ -1,0 +1,199 @@
+From 538a6240e92ea24ce259385ab9e208adf7971c2b Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 21 Dec 2018 15:35:09 +0200
+Subject: [PATCH] pseudo: To support chroot exec paths properly, we need to
+ change the usage of pseudo_exec_path()
+
+Signed-off-by: nxa15299 <Heinz.Wrobel@nxp.com>
+Signed-off-by: Costea Ciprian <ciprianmarian.costea@nxp.com>
+---
+ ports/common/guts/execv.c  | 39 +++++++++++++++++++--------------------
+ ports/common/guts/execve.c | 35 ++++++++++++++++-------------------
+ ports/common/guts/execvp.c | 37 +++++++++++++++++--------------------
+ pseudo_client.c            |  6 +++---
+ pseudo_client.h            |  2 +-
+ 5 files changed, 56 insertions(+), 63 deletions(-)
+
+diff --git a/ports/common/guts/execv.c b/ports/common/guts/execv.c
+index c071626..6a2df49 100644
+--- a/ports/common/guts/execv.c
++++ b/ports/common/guts/execv.c
+@@ -6,27 +6,26 @@
+  * wrap_execv(const char *file, char *const *argv) {
+  *	int rc = -1;
+  */
+-	/* note:  we don't canonicalize this, because we are intentionally
+-	 * NOT redirecting execs into the chroot environment.  If you try
+-	 * to execute /bin/sh, you get the actual /bin/sh, not
+-	 * <CHROOT>/bin/sh.  This allows use of basic utilities.  This
+-	 * design will likely be revisited.
+-	 */
+-	if (antimagic == 0) {
+-		const char *path_guess = pseudo_exec_path(file, 0);
+-                pseudo_client_op(OP_EXEC, PSA_EXEC, -1, -1, path_guess, 0);
+-	}
++	const char *path_guess = file;
++    if (antimagic == 0) {
++	    path_guess = pseudo_exec_path(&file, 0, &argv);
++        pseudo_client_op(OP_EXEC, PSA_EXEC, -1, -1, path_guess, 0);
++    }
+ 
+-	pseudo_setupenv();
+-	if (pseudo_has_unload(NULL)) {
+-		/* and here we attach */
+-		pseudo_dropenv();
+-	}
+-	/* if exec() fails, we may end up taking signals unexpectedly...
+-	 * not much we can do about that.
+-	 */
+-	sigprocmask(SIG_SETMASK, &pseudo_saved_sigmask, NULL);
+-	rc = real_execv(file, argv);
++	if (path_guess) {
++        pseudo_setupenv();
++        if (pseudo_has_unload(NULL))
++            pseudo_dropenv();
++
++        /* if exec() fails, we may end up taking signals unexpectedly...
++         * not much we can do about that.
++         */
++
++        sigprocmask(SIG_SETMASK, &pseudo_saved_sigmask, NULL);
++        rc = real_execv(path_guess, argv);
++    }
++    else
++        errno = ENOENT;
+ 
+ /*	return rc;
+  * }
+diff --git a/ports/common/guts/execve.c b/ports/common/guts/execve.c
+index 24cc177..94ea931 100644
+--- a/ports/common/guts/execve.c
++++ b/ports/common/guts/execve.c
+@@ -6,28 +6,25 @@
+  * wrap_execve(const char *file, char *const *argv, char *const *envp) {
+  *	int rc = -1;
+  */
+-	char * const *new_environ;
+-	/* note:  we don't canonicalize this, because we are intentionally
+-	 * NOT redirecting execs into the chroot environment.  If you try
+-	 * to execute /bin/sh, you get the actual /bin/sh, not
+-	 * <CHROOT>/bin/sh.  This allows use of basic utilities.  This
+-	 * design will likely be revisited.
+-	 */
++    const char *path_guess = file;
+         if (antimagic == 0) {
+-		const char *path_guess = pseudo_exec_path(file, 0);
+-                pseudo_client_op(OP_EXEC, PSA_EXEC, -1, -1, path_guess, 0);
+-        }
++            path_guess = pseudo_exec_path(&file, 0, &argv);
++            pseudo_client_op(OP_EXEC, PSA_EXEC, -1, -1, path_guess, 0);
++        }        
+ 
+-	new_environ = pseudo_setupenvp(envp);
+-	if (pseudo_has_unload(new_environ))
+-		new_environ = pseudo_dropenvp(new_environ);
+-
+-	/* if exec() fails, we may end up taking signals unexpectedly...
+-	 * not much we can do about that.
+-	 */
+-	sigprocmask(SIG_SETMASK, &pseudo_saved_sigmask, NULL);
+-	rc = real_execve(file, argv, new_environ);
++    if (path_guess) {
++        char * const *new_environ = pseudo_setupenvp(envp);
++        if (pseudo_has_unload(new_environ))
++            new_environ = pseudo_dropenvp(new_environ);    
+ 
++        /* if exec() fails, we may end up taking signals unexpectedly...
++         * not much we can do about that.
++         */
++        sigprocmask(SIG_SETMASK, &pseudo_saved_sigmask, NULL);
++        rc = real_execve(path_guess, argv, new_environ);
++    }
++    else
++        errno = ENOENT;
+ /*	return rc;
+  * }
+  */
+diff --git a/ports/common/guts/execvp.c b/ports/common/guts/execvp.c
+index e6bf09f..dc6e5ed 100644
+--- a/ports/common/guts/execvp.c
++++ b/ports/common/guts/execvp.c
+@@ -6,28 +6,25 @@
+  * wrap_execvp(const char *file, char *const *argv) {
+  *	int rc = -1;
+  */
+-
+-	/* note:  we don't canonicalize this, because we are intentionally
+-	 * NOT redirecting execs into the chroot environment.  If you try
+-	 * to execute /bin/sh, you get the actual /bin/sh, not
+-	 * <CHROOT>/bin/sh.  This allows use of basic utilities.  This
+-	 * design will likely be revisited.
+-	 */
++    const char *path_guess = file;
+         if (antimagic == 0) {
+-		const char *path_guess = pseudo_exec_path(file, 1);
+-                pseudo_client_op(OP_EXEC, PSA_EXEC, -1, -1, path_guess, 0);
+-        }
+-
+-	pseudo_setupenv();
+-	if (pseudo_has_unload(NULL))
+-		pseudo_dropenv();
+-
+-	/* if exec() fails, we may end up taking signals unexpectedly...
+-	 * not much we can do about that.
+-	 */
+-	sigprocmask(SIG_SETMASK, &pseudo_saved_sigmask, NULL);
+-	rc = real_execvp(file, argv);
++            path_guess = pseudo_exec_path(&file, 1, &argv);
++            pseudo_client_op(OP_EXEC, PSA_EXEC, -1, -1, path_guess, 0);
++    }
+ 
++    if (path_guess) {
++        pseudo_setupenv();
++        if (pseudo_has_unload(NULL))
++            pseudo_dropenv();        
++    
++        /* if exec() fails, we may end up taking signals unexpectedly...
++         * not much we can do about that.
++         */
++        sigprocmask(SIG_SETMASK, &pseudo_saved_sigmask, NULL);
++        rc = real_execvp(path_guess, argv);
++    }
++    else
++        errno = ENOENT;
+ /*	return rc;
+  * }
+  */
+diff --git a/pseudo_client.c b/pseudo_client.c
+index 30f9cb6..3939c9b 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -2093,9 +2093,9 @@ static ssize_t isexecutable(const char *filename, char *buf, ssize_t bufsize)
+ }
+ 
+ const char *
+-pseudo_exec_path(const char *filename, int search_path) {
+-    char *s;
+-	char *path = getenv("PATH");
++pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
++    const char *filename = *filenamep;
++    char *path = getenv("PATH");
+ 	const char *candidate;
+ 	int i;
+ 	int forcechroot = 0;
+diff --git a/pseudo_client.h b/pseudo_client.h
+index 28b23dc..c9f6b1a 100644
+--- a/pseudo_client.h
++++ b/pseudo_client.h
+@@ -70,7 +70,7 @@ extern int (*pseudo_real_execv)(const char *, char * const *);
+ extern int pseudo_client_getcwd(void);
+ extern int pseudo_client_chroot(const char *);
+ extern char *pseudo_root_path(const char *, int, int, const char *, int);
+-extern const char *pseudo_exec_path(const char *filename, int);
++extern const char *pseudo_exec_path(const char **filenamep, int, char * const**argvp);
+ #define PSEUDO_ROOT_PATH(x, y, z) pseudo_root_path(__func__, __LINE__, (x), (y), (z));
+ extern char *pseudo_cwd;
+ extern size_t pseudo_cwd_len;
+-- 
+1.9.1
+
