@@ -19,6 +19,8 @@
 #                           installed over the existing root filesystem, after all packages
 #                           in APTGET_EXTRA_PACKAGES is installed and all operations in
 #                           'do_aptget_update' have been executed
+#   APTGET_EXTRA_PACKAGES_RECONFIGURABLE - the list of debian packages (space separated) to be
+#                           installed over the existing root filesystem, skip configuration error
 #   APTGET_EXTRA_SOURCE_PACKAGES - the list of debian source packages (space separated)
 #                                  to be installed over the existing root filesystem
 #   APTGET_EXTRA_PACKAGES_SERVICES_DISABLED - the list of debian packages (space separated)
@@ -72,6 +74,7 @@ APTGET_EXTRA_PACKAGES ?= ""
 APTGET_EXTRA_PACKAGES_LAST ?= ""
 APTGET_EXTRA_SOURCE_PACKAGES ?= ""
 APTGET_EXTRA_PACKAGES_SERVICES_DISABLED ?= ""
+APTGET_EXTRA_PACKAGES_RECONFIGURABLE ?= ""
 
 # Parent recipes must define the path to the root filesystem to be updated
 APTGET_CHROOT_DIR ?= "${D}"
@@ -754,6 +757,10 @@ END_PPA
 		bberror "${APTGET_EXECUTABLE} failed to execute as expected!"
 		return $aptgetfailure
 	fi
+
+	# Skip apt-get failure check for reconfigurable packages
+	aptget_run_aptget install ${APTGET_EXTRA_PACKAGES_RECONFIGURABLE}
+	aptgetfailure=0
 
 	# The list of installed packages goes into the log
 	echo "Installed packages:"
