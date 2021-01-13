@@ -17,9 +17,6 @@ ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_aptget_update; do_updat
 IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_bluetooth;"
 
 REQUIRED_DISTRO_FEATURES = "wayland"
-CORE_IMAGE_BASE_INSTALL += "weston weston-init"
-CORE_IMAGE_BASE_INSTALL += \
-    "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'weston-xwayland matchbox-terminal', '', d)}"
 
 # This must be added first as it provides the foundation for
 # subsequent modifications to the rootfs
@@ -448,8 +445,6 @@ IMAGE_INSTALL += " \
 IMAGE_INSTALL += " \
     imx-gpu-viv \
     libdrm-vivante \
-    weston \
-    weston-xwayland \
 "
 
 # Minimum support for LS2 and S32V specific elements.
