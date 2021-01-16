@@ -55,7 +55,9 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      libavahi-core7 libavahi-glib1 libavahi-gobject0 libblkid1 \
                      libcairo-gobject2 libcairo-script-interpreter2 libcairo2 libcap-ng0 \
                      libcap2 libcrypt2 libdaemon0 libdbus-1-3 libdbus-glib-1-2 \
-                     libdrm libexpat1 libfdisk1 libffi7 libflac++6 libflac8 libfontconfig1 \
+                     libdrm-radeon libdrm-nouveau libdrm-omap \
+                     libdrm-intel libdrm-exynos libdrm-freedreno libdrm-amdgpu libdrm-etnaviv \
+                     libexpat1 libfdisk1 libffi7 libflac libflac++6 libflac8 libfontconfig1 \
                      libfreetype6 libfribidi0 libgcc1 libgdk-pixbuf-2.0-0 libgdk-pixbuf-xlib-2.0-0 \
                      libgmp10 libgmpxx4 libgnutls-openssl27 libgnutls30 libgnutlsxx28 libgudev-1.0-0 \
                      libharfbuzz0 libical libice6 libicudata64 libicui18n64 libicuio64 libicutu64 \
