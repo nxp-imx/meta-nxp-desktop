@@ -14,7 +14,7 @@ APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
 ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_aptget_update; do_update_host; do_update_dns;"
-IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_bluetooth;"
+IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_bluetooth; do_enable_graphics;"
 
 REQUIRED_DISTRO_FEATURES = "wayland"
 
@@ -518,6 +518,18 @@ do_fix_connman_conflict() {
 	#rm ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/NetworkManager.service
 	rm ${IMAGE_ROOTFS}/etc/systemd/system/dbus-org.freedesktop.resolve1.service
 	rm ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/systemd-resolved.service
+
+	set +x
+}
+
+do_enable_graphics() {
+	set -x
+
+	rm -f ${IMAGE_ROOTFS}/usr/lib/systemd/system/default.target
+	ln graphical.target -s ${IMAGE_ROOTFS}/usr/lib/systemd/system/default.target
+
+	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/default.target
+	ln /usr/lib/systemd/system/graphical.target -s ${IMAGE_ROOTFS}/etc/systemd/system/default.target
 
 	set +x
 }
