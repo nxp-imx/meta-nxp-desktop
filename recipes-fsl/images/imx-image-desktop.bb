@@ -59,6 +59,14 @@ IMAGE_FEATURES += " \
 
 #######
 
+APTGET_EXTRA_PACKAGES_RECONFIGURABLE += " \
+    gnome-terminal \
+    gnome-shell \
+    gdm3 \
+    adwaita-icon-theme \
+    totem \
+"
+
 APTGET_EXTRA_PACKAGES_SERVICES_DISABLED += "\
 	network-manager \
 "
