@@ -87,10 +87,11 @@ APTGET_EXTRA_SOURCE_PACKAGES += "\
 	iproute2 \
 "
 
-# Add user navq with password navq and default shell bash
+# Add user with password user and default shell bash
 USER_SHELL_BASH = "/bin/bash"
-USER_PASSWD_NAVQ = "\$5\$nEa6qsZxa\$YepRevGzGA375yrEUvZgoeXnFGEgfFrOrFeGyi.Gp09"
-APTGET_ADD_USERS = "navq:${USER_PASSWD_NAVQ}:${USER_SHELL_BASH}"
+# Password: user
+USER_PASSWD_USER = "zHipsIr46vtZk"
+APTGET_ADD_USERS ?= "user:${USER_PASSWD_USER}:${USER_SHELL_BASH}"
 
 HOST_NAME = "${MACHINE_ARCH}"
 
