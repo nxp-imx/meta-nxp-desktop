@@ -64,7 +64,7 @@ APTGET_EXTRA_PACKAGES_RECONFIGURABLE += " \
     gnome-shell \
     gdm3 \
     adwaita-icon-theme \
-    totem \
+    totem libtotem0 \
 "
 
 APTGET_EXTRA_PACKAGES_SERVICES_DISABLED += "\
