@@ -12,6 +12,14 @@ require ubuntu-base.inc
 # We try not to address them in the generic recipe
 APTGET_EXTRA_PACKAGES += ""
 
+APTGET_EXTRA_PACKAGES_RECONFIGURABLE += " \
+    gnome-terminal \
+    gnome-shell \
+    gdm3 \
+    adwaita-icon-theme \
+    totem libtotem0 \
+"
+
 # Desktop 20 unifies things and turns some things into symlinks. We
 # solve this with Yocto "usrmerge" but that isn't quite enough.
 # We still need to ship the symlinks.
