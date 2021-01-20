@@ -567,6 +567,7 @@ ExecStart=-/usr/bin/hciattach /dev/ttymxc0 qualcomm -t120 115200 flow \n
 WantedBy=multi-user.target \n
 " 
 
+    rm -f ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/hciattach.service
     ln -s /lib/systemd/system/hciattach.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/hciattach.service
     
     set +x
