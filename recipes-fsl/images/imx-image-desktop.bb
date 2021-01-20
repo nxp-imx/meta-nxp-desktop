@@ -534,15 +534,15 @@ fakeroot do_fix_ldconfig() {
 
 	echo >>"${APTGET_CHROOT_DIR}/etc/ld.so.conf.d/01-yocto.conf" "/usr/lib"
 #	chroot "${APTGET_CHROOT_DIR}" /sbin/ldconfig
-    rm ${IMAGE_ROOTFS}/usr/lib/libgudev*
-    rm ${IMAGE_ROOTFS}/usr/lib/libgdk*
-    rm -rf ${IMAGE_ROOTFS}/usr/lib/gdk-pixbuf*
-    rm ${IMAGE_ROOTFS}/usr/lib/libcairo*
-    rm ${IMAGE_ROOTFS}/usr/lib/libpango*
-    rm ${IMAGE_ROOTFS}/usr/lib/libpixman*
-    rm ${IMAGE_ROOTFS}/usr/lib/libpng*
-    rm ${IMAGE_ROOTFS}/usr/lib/libfontconfig*
-    rm ${IMAGE_ROOTFS}/etc/fonts/fonts.conf
+#    rm ${IMAGE_ROOTFS}/usr/lib/libgudev*
+#    rm ${IMAGE_ROOTFS}/usr/lib/libgdk*
+#    rm -rf ${IMAGE_ROOTFS}/usr/lib/gdk-pixbuf*
+#    rm ${IMAGE_ROOTFS}/usr/lib/libcairo*
+#    rm ${IMAGE_ROOTFS}/usr/lib/libpango*
+#    rm ${IMAGE_ROOTFS}/usr/lib/libpixman*
+#    rm ${IMAGE_ROOTFS}/usr/lib/libpng*
+#    rm ${IMAGE_ROOTFS}/usr/lib/libfontconfig*
+#    rm ${IMAGE_ROOTFS}/etc/fonts/fonts.conf
 
 	set +x
 }
