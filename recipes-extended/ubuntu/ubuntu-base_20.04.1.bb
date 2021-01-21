@@ -20,6 +20,10 @@ APTGET_EXTRA_PACKAGES_RECONFIGURABLE += " \
     totem libtotem0 \
 "
 
+APTGET_EXTRA_PACKAGES_REMOVE += " \
+    xwayland \
+"
+
 # Desktop 20 unifies things and turns some things into symlinks. We
 # solve this with Yocto "usrmerge" but that isn't quite enough.
 # We still need to ship the symlinks.

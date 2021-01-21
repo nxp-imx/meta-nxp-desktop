@@ -34,6 +34,10 @@ IMAGE_INSTALL += "\
 	${MACHINE_EXTRA_RRECOMMENDS} \
 "
 
+IMAGE_INSTALL += "\
+	xserver-xorg-xwayland \
+"
+
 # We want to have an itb to boot from in the /boot directory to be flexible
 # about U-Boot behavior
 #IMAGE_INSTALL += "\
