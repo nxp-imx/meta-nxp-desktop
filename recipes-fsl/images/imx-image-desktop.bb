@@ -517,6 +517,9 @@ do_fix_connman_conflict() {
 do_enable_graphics() {
 	set -x
 
+	# set gles2 for gnome/mutter compositor
+	echo >>"${IMAGE_ROOTFS}/etc/environment" "COGL_DRIVER=gles2"
+
 	rm -f ${IMAGE_ROOTFS}/usr/lib/systemd/system/default.target
 	ln graphical.target -s ${IMAGE_ROOTFS}/usr/lib/systemd/system/default.target
 
