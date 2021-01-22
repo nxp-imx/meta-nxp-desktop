@@ -19,6 +19,8 @@
 #                           installed over the existing root filesystem, after all packages
 #                           in APTGET_EXTRA_PACKAGES is installed and all operations in
 #                           'do_aptget_update' have been executed
+#   APTGET_EXTRA_PACKAGES_REMOVE - the list of debian packages (space separated) to be
+#                           removed from the existing root filesystem, after all packages
 #   APTGET_EXTRA_PACKAGES_RECONFIGURABLE - the list of debian packages (space separated) to be
 #                           installed over the existing root filesystem, skip configuration error
 #   APTGET_EXTRA_SOURCE_PACKAGES - the list of debian source packages (space separated)
@@ -75,6 +77,7 @@ APTGET_EXTRA_PACKAGES_LAST ?= ""
 APTGET_EXTRA_SOURCE_PACKAGES ?= ""
 APTGET_EXTRA_PACKAGES_SERVICES_DISABLED ?= ""
 APTGET_EXTRA_PACKAGES_RECONFIGURABLE ?= ""
+APTGET_EXTRA_PACKAGES_REMOVE ?= ""
 
 # Parent recipes must define the path to the root filesystem to be updated
 APTGET_CHROOT_DIR ?= "${D}"
@@ -590,6 +593,8 @@ END_USER
 	# Prepare apt to be generically usable
 	chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} update
 
+	chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} --fix-broken install
+
         # See that everything is downloaded first. This is an
         # optimization which will help to avoid failures late in the
         # game due to bad intenet connections and helps the user.
@@ -812,6 +817,10 @@ fakeroot aptget_update_end() {
 	if [ $aptgetfailure -ne 0 ]; then
 		bberror "${APTGET_EXECUTABLE} failed to execute as expected!"
 		return $aptgetfailure
+	fi
+
+	if [ -n "${APTGET_EXTRA_PACKAGES_REMOVE}" ]; then
+	    chroot "${APTGET_CHROOT_DIR}" /usr/bin/dpkg --force-all -P ${APTGET_EXTRA_PACKAGES_REMOVE}
 	fi
 }
 
