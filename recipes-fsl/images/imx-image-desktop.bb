@@ -13,7 +13,7 @@ export PACKAGE_INSTALL = "${IMAGE_INSTALL}"
 APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
-ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_aptget_update; do_update_host; do_update_dns;"
+ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_save_graphics;  do_aptget_update; do_update_host; do_update_dns;"
 IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_bluetooth; do_enable_graphics;"
 
 REQUIRED_DISTRO_FEATURES = "wayland"
@@ -518,11 +518,22 @@ do_fix_connman_conflict() {
 	set +x
 }
 
+fakeroot do_save_graphics() {
+	set -x
+
+	# backup graphics components
+	mv ${IMAGE_ROOTFS}/usr/bin/Xwayland ${IMAGE_ROOTFS}/usr/bin/Xwayland_imx
+
+	set +x
+}
+
 do_enable_graphics() {
 	set -x
 
 	# set gles2 for gnome/mutter compositor
 	echo >>"${IMAGE_ROOTFS}/etc/environment" "COGL_DRIVER=gles2"
+
+	cp -f ${IMAGE_ROOTFS}/usr/bin/Xwayland_imx ${IMAGE_ROOTFS}/usr/bin/Xwayland
 
 	rm -f ${IMAGE_ROOTFS}/usr/lib/systemd/system/default.target
 	ln graphical.target -s ${IMAGE_ROOTFS}/usr/lib/systemd/system/default.target
