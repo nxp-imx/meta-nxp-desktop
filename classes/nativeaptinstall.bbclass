@@ -564,11 +564,6 @@ END_USER
         # good things about our rootfs
         aptget_install_fakeproc
 
-	# Yocto environment. If we kept apt packages privately from
-	# a prior run, prepopulate the package cache locally to avoid
-	# costly downloads
-	aptget_populate_cache_from_sstate
-
         # From this point on, we may need network access
         aptget_setup_proxies
 
@@ -594,6 +589,11 @@ END_USER
 	chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} update
 
 	chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} --fix-broken install
+
+	# Yocto environment. If we kept apt packages privately from
+	# a prior run, prepopulate the package cache locally to avoid
+	# costly downloads
+	aptget_populate_cache_from_sstate
 
         # See that everything is downloaded first. This is an
         # optimization which will help to avoid failures late in the
