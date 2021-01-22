@@ -120,6 +120,11 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       python3-dbus-dev python3-pycairo-dev python3-pygobject-dev shadow-dev \
                       util-linux-dev util-macros-dev valgrind-dev wayland-dbg wayland-dev \
                       wireless-tools xcb-proto-dev xorgproto-dev xtrans-dev \
+                     rgb xkeyboard-config xf86-input-libinput libinput10 xserver-xorg \
+                     xkbcomp xserver-xf86-config mkfontdir mkfontscale font-util \
+                     mkfontdir-dev mkfontscale-dev xkeyboard-config-dev encodings-dev \
+                     font-util-dev libxkbfile-dev libfontenc-dev libxfont2-dev \
+                     libxkbfile1 libcairo-dev \
 "
 
 RCONFLICTS_${PN} += " ${YOCTO-DEPENDS-LIST} "
