@@ -36,6 +36,8 @@ IMAGE_INSTALL += "\
 
 IMAGE_INSTALL += "\
 	xserver-xorg-xwayland \
+	tensorflow-lite \
+	armnn \
 "
 
 # We want to have an itb to boot from in the /boot directory to be flexible
