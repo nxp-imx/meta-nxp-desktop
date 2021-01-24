@@ -14,7 +14,7 @@ APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
 ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_save_graphics;  do_aptget_update; do_update_host; do_update_dns;"
-IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_bluetooth; do_enable_graphics;"
+IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_bluetooth; do_enable_graphics; do_cleanup_rootfs"
 
 REQUIRED_DISTRO_FEATURES = "wayland"
 
@@ -549,6 +549,14 @@ do_enable_graphics() {
 	set +x
 }
 
+do_cleanup_rootfs() {
+	set -x
+
+	# remove apt-get source list, apt-get update can download them
+	rm -rf ${IMAGE_ROOTFS}/var/lib/apt/lists/*
+
+	set +x
+}
 
 #We need to add Yocto libraries to LD path and remove conflicting libraries
 fakeroot do_fix_ldconfig() {
