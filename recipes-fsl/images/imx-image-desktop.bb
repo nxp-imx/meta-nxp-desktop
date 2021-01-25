@@ -538,6 +538,9 @@ do_enable_graphics() {
 	# disable GL/GLX for vivante GPU temporally
 	rm -f ${IMAGE_ROOTFS}/usr/lib/libGL.so*
 
+	# disable xsession startup
+	rm -f ${IMAGE_ROOTFS}/usr/share/xsessions/*
+
 	cp -f ${IMAGE_ROOTFS}/usr/bin/Xwayland_imx ${IMAGE_ROOTFS}/usr/bin/Xwayland
 
 	rm -f ${IMAGE_ROOTFS}/usr/lib/systemd/system/default.target
