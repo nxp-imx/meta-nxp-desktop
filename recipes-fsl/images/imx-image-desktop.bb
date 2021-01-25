@@ -532,7 +532,8 @@ fakeroot do_save_graphics() {
 do_enable_graphics() {
 	set -x
 
-	# set gles2 for gnome/mutter compositor
+	# set egl/gles2 for gnome/mutter compositor
+	echo >>"${IMAGE_ROOTFS}/etc/environment" "COGL_RENDERER=egl_wayland"
 	echo >>"${IMAGE_ROOTFS}/etc/environment" "COGL_DRIVER=gles2"
 
 	# disable GL/GLX for vivante GPU temporally
