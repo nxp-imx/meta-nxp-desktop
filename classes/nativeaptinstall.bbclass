@@ -153,14 +153,8 @@ ${PSEUDO_PREFIX}/*:\
 ${PSEUDO_LIBDIR}*/*:\
 ${PSEUDO_LOCALSTATEDIR}*:\
 ${PSEUDO_LOCALSTATEDIR}:\
-/dev/null:\
-/dev/zero:\
-/dev/random:\
-/dev/urandom:\
-/dev/tty:\
-/dev/pts:\
+/dev/*:\
 /dev/pts/*:\
-/dev/ptmx:\
 ${DPKG_NATIVE}:\
 "
 
