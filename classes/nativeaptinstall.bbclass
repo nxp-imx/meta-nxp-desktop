@@ -752,14 +752,12 @@ END_PPA
 	# to avoid downloads on a subsequent attempt
 	aptget_save_cache_into_sstate
 
+	aptget_run_aptget install ${APTGET_EXTRA_PACKAGES_RECONFIGURABLE}
+
 	if [ $aptgetfailure -ne 0 ]; then
 		bberror "${APTGET_EXECUTABLE} failed to execute as expected!"
 		return $aptgetfailure
 	fi
-
-	# Skip apt-get failure check for reconfigurable packages
-	aptget_run_aptget install ${APTGET_EXTRA_PACKAGES_RECONFIGURABLE}
-	aptgetfailure=0
 
 	# The list of installed packages goes into the log
 	echo "Installed packages:"
