@@ -537,7 +537,7 @@ do_enable_graphics() {
 	set -x
 
 	# set egl/gles2 for gnome/mutter compositor
-	echo >>"${IMAGE_ROOTFS}/etc/environment" "LD_PRELOAD=/usr/lib/libGLESv2.so.2"
+#	echo >>"${IMAGE_ROOTFS}/etc/environment" "LD_PRELOAD=/usr/lib/libGLESv2.so.2"
 	echo >>"${IMAGE_ROOTFS}/etc/environment" "COGL_RENDERER=egl_wayland"
 	echo >>"${IMAGE_ROOTFS}/etc/environment" "COGL_DRIVER=gles2"
 	echo >>"${IMAGE_ROOTFS}/etc/environment" "CLUTTER_BACKEND=eglnative"
