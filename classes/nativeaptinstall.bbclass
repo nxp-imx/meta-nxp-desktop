@@ -792,6 +792,7 @@ fakeroot aptget_update_end() {
 
 	if [ "${APTGET_SKIP_CACHECLEAN}" = "0" ]; then
 		aptget_run_aptget clean
+		aptget_run_aptget autoremove
 	fi
 
         # Remove any proxy instrumentation
