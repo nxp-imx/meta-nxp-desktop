@@ -17,6 +17,7 @@ APTGET_EXTRA_PACKAGES_RECONFIGURABLE += " \
     gnome-shell \
     gdm3 \
     adwaita-icon-theme \
+    dmz-cursor-theme \
     totem libtotem0 \
 "
 
