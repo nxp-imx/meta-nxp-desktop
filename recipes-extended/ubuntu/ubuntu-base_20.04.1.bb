@@ -22,7 +22,7 @@ APTGET_EXTRA_PACKAGES_RECONFIGURABLE += " \
     gnome-backgrounds \
     gnome-calculator gnome-calendar \
     gnome-clocks gnome-color-manager \
-    gnome-core gnome-contacts \
+    gnome-contacts \
     gnome-control-center \
     gnome-disk-utility \
     gnome-screenshot gnome-session \
