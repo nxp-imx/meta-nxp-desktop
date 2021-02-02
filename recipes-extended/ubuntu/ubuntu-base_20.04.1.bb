@@ -17,6 +17,22 @@ APTGET_EXTRA_PACKAGES_RECONFIGURABLE += " \
     gnome-shell \
     gdm3 \
     adwaita-icon-theme \
+    adwaita-icon-theme-full \
+    gnome-accessibility-themes \
+    gnome-backgrounds \
+    gnome-calculator gnome-calendar \
+    gnome-clocks gnome-color-manager \
+    gnome-core gnome-contacts \
+    gnome-control-center \
+    gnome-disk-utility \
+    gnome-screenshot gnome-session \
+    gnome-themes-extra gnome-tweaks \
+    gnome-sound-recorder \
+    gnome-startup-applications \
+    gnome-video-effects \
+    media-player-info \
+    ubuntu-wallpapers \
+    ubuntu-wallpapers-focal \
     dmz-cursor-theme \
     totem libtotem0 \
 "
