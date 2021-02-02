@@ -95,7 +95,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      libpcre1 libpcrecpp0 libpcreposix0 libpixman-1-0 libpng16-16 libpsl5 \
                      libreadline8 libsbc1 libsm6 libsmartcols1 libsoup-2.4 libspeex1 \
                      libspeexdsp1 libsqlite3-0 libstdc++6 libsystemd0 libtag-c0 libtag1 \
-                     libtheora libticw5 libtinfo5 libtool libturbojpeg0 libudev1 \
+                     libtheora libticw5 libtool libturbojpeg0 libudev1 \
                      libunistring2 libusb-1.0-0 libuuid1 libvorbis libpulse0 \
                      libpulse-mainloop-glib0 libpulse-simple0 pulseaudio-dev \
                      libx11-6 libx11-xcb1 libxau6 libxcb-composite0 libxcb-damage0 \
