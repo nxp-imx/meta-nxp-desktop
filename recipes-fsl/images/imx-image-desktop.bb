@@ -36,6 +36,7 @@ IMAGE_INSTALL += "\
 
 IMAGE_INSTALL += "\
 	alsa-state \
+        libcogl \
 	xserver-xorg-xwayland \
 	tensorflow-lite \
 	armnn \
