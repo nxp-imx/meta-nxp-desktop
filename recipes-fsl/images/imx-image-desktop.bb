@@ -7,7 +7,7 @@ PV = "${@d.getVar('PREFERRED_VERSION_ubuntu-base', True) or '1.0'}"
 
 IMAGE_LINGUAS = ""
 IMAGE_INSTALL = ""
-inherit core-image image nativeaptinstall distro_features_check
+inherit core-image image nativeaptinstall features_check
 export PACKAGE_INSTALL = "${IMAGE_INSTALL}"
 
 APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
