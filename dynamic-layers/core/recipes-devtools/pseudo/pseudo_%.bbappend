@@ -27,5 +27,7 @@ SRC_URI += " \
     file://0001-pseudo-Cleaned-check-of-symlink-flag-handling.patch \
     file://0001-pseudo-Another-missing-EAR3-patch.patch \
     file://0001-pseudo-Diagnostic-cleanup-for-utimensat.patch \
+\
+    file://0001-xattr-adjust-for-attr-2.4.48-release.patch \
 "
 
