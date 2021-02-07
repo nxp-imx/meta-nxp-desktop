@@ -35,6 +35,7 @@ APTGET_EXTRA_PACKAGES_RECONFIGURABLE += " \
     ubuntu-wallpapers-focal \
     dmz-cursor-theme \
     totem libtotem0 \
+    alsa-base alsa-utils \
 "
 
 APTGET_EXTRA_PACKAGES_REMOVE += " \
@@ -141,7 +142,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      xkbcomp xserver-xf86-config mkfontdir mkfontscale font-util \
                      mkfontdir-dev mkfontscale-dev xkeyboard-config-dev encodings-dev \
                      font-util-dev libxkbfile-dev libfontenc-dev libxfont2-dev \
-                     libxkbfile1 libcairo-dev \
+                     libxkbfile1 libcairo-dev alsa-utils-alsactl \
 "
 
 RCONFLICTS_${PN} += " ${YOCTO-DEPENDS-LIST} "

@@ -35,7 +35,7 @@ IMAGE_INSTALL += "\
 "
 
 IMAGE_INSTALL += "\
-	alsa-utils alsa-state \
+	alsa-state \
 	xserver-xorg-xwayland \
 	tensorflow-lite \
 	armnn \
