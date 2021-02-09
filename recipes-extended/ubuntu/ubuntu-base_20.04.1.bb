@@ -36,6 +36,8 @@ APTGET_EXTRA_PACKAGES_RECONFIGURABLE += " \
     dmz-cursor-theme \
     totem libtotem0 \
     alsa-base alsa-utils \
+    rhythmbox \
+    cheese \
 "
 
 APTGET_EXTRA_PACKAGES_REMOVE += " \
