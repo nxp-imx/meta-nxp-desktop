@@ -153,3 +153,7 @@ RREPLACES_${PN} += " ${YOCTO-DEPENDS-LIST} "
 RPROVIDES_${PN} += " ${YOCTO-DEPENDS-LIST} "
 
 RPROVIDES_${PN}_ubuntu += " libglib-2.0 "
+
+python do_package_append() {
+    os.environ['PSEUDO_DISABLED'] = '1'
+}
