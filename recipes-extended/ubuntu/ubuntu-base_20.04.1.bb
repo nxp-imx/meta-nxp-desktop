@@ -108,7 +108,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      libxcb-xinerama0 libxcb-xinput0 libxcb-xkb1 libxcb-xtest0 libxcb-xv0 \
                      libxcb-xvmc0 libxcb1 libxdamage1 libxdmcp6 libxext6 libxfixes3 libxft2 \
                      libxi6 libxml2 libxrender1 libxtst6 libxv1 libz1 \
-                     mozjs mpg123 nettle nspr orc linux-libc-headers-dev pango pulseaudio \
+                     mozjs mpg123 nspr orc linux-libc-headers-dev pango pulseaudio \
                      python3-pycairo python3-pkgutil python3-dbus python3-pygobject \
                      systemd-gpuconfig valgrind wayland attr-dev avahi-dev \
                      base-files-dev base-passwd-dev bash-completion-dev \
