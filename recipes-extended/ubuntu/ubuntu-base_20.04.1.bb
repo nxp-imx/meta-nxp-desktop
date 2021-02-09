@@ -142,7 +142,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      xkbcomp xserver-xf86-config mkfontdir mkfontscale font-util \
                      mkfontdir-dev mkfontscale-dev xkeyboard-config-dev encodings-dev \
                      font-util-dev libxkbfile-dev libfontenc-dev libxfont2-dev \
-                     libxkbfile1 libcairo-dev alsa-utils-alsactl \
+                     libxkbfile1 libcairo-dev alsa-utils-alsactl libasound2 \
                      libx11-locale libclutter-1.0-0 libatk-1.0-0 \
 "
 
