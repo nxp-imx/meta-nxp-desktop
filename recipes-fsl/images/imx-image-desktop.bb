@@ -324,7 +324,6 @@ IMAGE_INSTALL += " \
     gstreamer1.0-plugins-bad-dvb                      \
     gstreamer1.0-plugins-bad-closedcaption            \
     gstreamer1.0-plugins-bad-netsim                   \
-    gstreamer1.0-plugins-bad-dashdemux                \
     gstreamer1.0-plugins-bad-staticdev                \
     gstreamer1.0-plugins-bad-legacyrawparse           \
     gstreamer1.0-plugins-bad-adpcmenc                 \
@@ -338,7 +337,6 @@ IMAGE_INSTALL += " \
     gstreamer1.0-plugins-bad-hls                      \
     gstreamer1.0-plugins-bad-geometrictransform       \
     gstreamer1.0-plugins-bad-webp                     \
-    gstreamer1.0-plugins-bad-yadif                    \
     gstreamer1.0-plugins-bad-sdpelem                  \
     gstreamer1.0-plugins-bad-pnm                      \
     gstreamer1.0-plugins-bad-bz2                      \
