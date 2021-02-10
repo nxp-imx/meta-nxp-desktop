@@ -146,7 +146,11 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      font-util-dev libxkbfile-dev libfontenc-dev libxfont2-dev \
                      libxkbfile1 libcairo-dev alsa-utils-alsactl libasound2 \
                      libx11-locale libclutter-1.0-0 libatk-1.0-0 \
-                      alsa-topology-conf alsa-ucm-conf \
+                      alsa-topology-conf alsa-ucm-conf libatopology2 libepoxy0 \
+                      libicudata67 libicui18n67 libicuuc67 librsvg-2-2 libsndfile1 \
+                      libxshmfence1 python3-nose python3-numpy libcairo-dbg \
+                      libharfbuzz-dev libharfbuzz-dbg libpciaccess-dbg pango-dbg pango-dev \
+                      librsvg-2-dbg librsvg-2-dev libsndfile-dbg libsndfile-dev \
 "
 
 RCONFLICTS_${PN} += " ${YOCTO-DEPENDS-LIST} "
