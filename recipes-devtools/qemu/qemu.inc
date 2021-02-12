@@ -19,26 +19,12 @@ SRC_URI = "https://download.qemu.org/${BPN}-${PV}.tar.xz \
            file://run-ptest \
            file://0001-qemu-Add-missing-wacom-HID-descriptor.patch \
            file://0002-Add-subpackage-ptest-which-runs-all-unit-test-cases-.patch \
-           file://0003-qemu-Add-addition-environment-space-to-boot-loader-q.patch \
            file://0004-qemu-disable-Valgrind.patch \
            file://0005-qemu-native-set-ld.bfd-fix-cflags-and-set-some-envir.patch \
            file://0006-chardev-connect-socket-to-a-spawned-command.patch \
            file://0007-apic-fixup-fallthrough-to-PIC.patch \
-           file://0008-linux-user-Fix-webkitgtk-hangs-on-32-bit-x86-target.patch \
            file://0009-Fix-webkitgtk-builds.patch \
            file://0010-configure-Add-pkg-config-handling-for-libgcrypt.patch \
-           file://0011-linux-user-remove-host-stime-syscall.patch \
-           file://CVE-2019-15890.patch \
-           file://CVE-2019-12068.patch \
-           file://CVE-2020-1711.patch \
-           file://CVE-2019-20382.patch \
-           file://CVE-2020-7039-1.patch \
-           file://CVE-2020-7039-2.patch \
-           file://CVE-2020-7039-3.patch \
-	   file://CVE-2020-7211.patch \
-	   file://CVE-2020-11869.patch \
-           file://CVE-2020-13765.patch \
-           file://CVE-2020-10702.patch \
            file://CVE-2020-16092.patch \
            file://CVE-2020-10756.patch \
            file://CVE-2020-15863.patch \
@@ -46,8 +32,8 @@ SRC_URI = "https://download.qemu.org/${BPN}-${PV}.tar.xz \
 	   "
 UPSTREAM_CHECK_REGEX = "qemu-(?P<pver>\d+(\.\d+)+)\.tar"
 
-SRC_URI[md5sum] = "cdf2b5ca52b9abac9bacb5842fa420f8"
-SRC_URI[sha256sum] = "656e60218689bdeec69903087fd7582d5d3e72238d02f4481d8dc6d79fd909c6"
+SRC_URI[md5sum] = "dac9c31eb3ef1d0cfe30251f238c49c4"
+SRC_URI[sha256sum] = "7e331163b72e7bcf63bd35cb85cba87b48d12fab3f264b94c23f7d3991094207"
 
 COMPATIBLE_HOST_mipsarchn32 = "null"
 COMPATIBLE_HOST_mipsarchn64 = "null"

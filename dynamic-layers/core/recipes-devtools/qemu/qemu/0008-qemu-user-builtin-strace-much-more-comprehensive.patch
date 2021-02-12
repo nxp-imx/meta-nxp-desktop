@@ -1,4 +1,4 @@
-From 79c9896e91abd6386be83d27ec72cdd824de9609 Mon Sep 17 00:00:00 2001
+From 58df3cb70cce8347cdcb61961f3334adaa5c68fd Mon Sep 17 00:00:00 2001
 From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
 Date: Fri, 24 Jan 2020 14:09:35 +0100
 Subject: [PATCH 8/9] qemu-user: builtin strace much more comprehensive
@@ -11,14 +11,14 @@ not even show at all.
 Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
 ---
  linux-user/strace.c    | 38 ++++++++++++++++++++++++++++++++++++--
- linux-user/strace.list | 35 +++++++++++++++++++----------------
- 2 files changed, 55 insertions(+), 18 deletions(-)
+ linux-user/strace.list | 34 +++++++++++++++++-----------------
+ 2 files changed, 53 insertions(+), 19 deletions(-)
 
 diff --git a/linux-user/strace.c b/linux-user/strace.c
-index c80e93b5..0edb759d 100644
+index 3d4d684450..dda3eb3783 100644
 --- a/linux-user/strace.c
 +++ b/linux-user/strace.c
-@@ -142,8 +142,10 @@ print_signal(abi_ulong arg, int last)
+@@ -144,8 +144,10 @@ print_signal(abi_ulong arg, int last)
      case TARGET_SIGCHLD: signal_name = "SIGCHLD"; break;
      case TARGET_SIGCONT: signal_name = "SIGCONT"; break;
      case TARGET_SIGSTOP: signal_name = "SIGSTOP"; break;
@@ -29,7 +29,7 @@ index c80e93b5..0edb759d 100644
      }
      if (signal_name == NULL) {
          print_raw_param("%ld", arg, last);
-@@ -660,7 +662,7 @@ print_execve(const struct syscallname *name,
+@@ -698,7 +700,7 @@ print_execve(const struct syscallname *name,
          }
      }
  
@@ -38,7 +38,7 @@ index c80e93b5..0edb759d 100644
  }
  
  #ifdef TARGET_NR_ipc
-@@ -1108,6 +1110,7 @@ print_file_mode(abi_long mode, int last)
+@@ -1146,6 +1148,7 @@ print_file_mode(abi_long mode, int last)
  {
      const char *sep = "";
      const struct flags *m;
@@ -46,7 +46,7 @@ index c80e93b5..0edb759d 100644
  
      for (m = &mode_flags[0]; m->f_string != NULL; m++) {
          if ((m->f_value & mode) == m->f_value) {
-@@ -1120,7 +1123,7 @@ print_file_mode(abi_long mode, int last)
+@@ -1158,7 +1161,7 @@ print_file_mode(abi_long mode, int last)
  
      mode &= ~S_IFMT;
      /* print rest of the mode as octal */
@@ -55,7 +55,7 @@ index c80e93b5..0edb759d 100644
          gemu_log("%s%#o", sep, (unsigned int)mode);
  
      gemu_log("%s", get_comma(last));
-@@ -2557,6 +2560,23 @@ print_mmap(const struct syscallname *name,
+@@ -2651,6 +2654,23 @@ print_mmap(const struct syscallname *name,
  #define print_mmap2     print_mmap
  #endif
  
@@ -79,7 +79,7 @@ index c80e93b5..0edb759d 100644
  #ifdef TARGET_NR_mprotect
  static void
  print_mprotect(const struct syscallname *name,
-@@ -2681,6 +2701,20 @@ print_tgkill(const struct syscallname *name,
+@@ -2775,6 +2795,20 @@ print_tgkill(const struct syscallname *name,
  }
  #endif
  
@@ -101,20 +101,19 @@ index c80e93b5..0edb759d 100644
  static void
  print_statx(const struct syscallname *name,
 diff --git a/linux-user/strace.list b/linux-user/strace.list
-index 63a94664..e60b1243 100644
+index 1de4319dcf..6339bad583 100644
 --- a/linux-user/strace.list
 +++ b/linux-user/strace.list
-@@ -121,6 +121,9 @@
- #ifdef TARGET_NR_dup2
+@@ -122,7 +122,7 @@
  { TARGET_NR_dup2, "dup2" , NULL, NULL, NULL },
  #endif
-+#ifdef TARGET_NR_dup3
+ #ifdef TARGET_NR_dup3
+-{ TARGET_NR_dup3, "dup3" , NULL, NULL, NULL },
 +{ TARGET_NR_dup3, "dup3" , "%s(%d,%d,%#x)", NULL, NULL },
-+#endif
+ #endif
  #ifdef TARGET_NR_epoll_create
  { TARGET_NR_epoll_create, "epoll_create" , NULL, NULL, NULL },
- #endif
-@@ -248,7 +251,7 @@
+@@ -251,7 +251,7 @@
  { TARGET_NR_fstatfs64, "fstatfs64" , "%s(%d,%p)", NULL, NULL },
  #endif
  #ifdef TARGET_NR_fsync
@@ -123,7 +122,7 @@ index 63a94664..e60b1243 100644
  #endif
  #ifdef TARGET_NR_ftime
  { TARGET_NR_ftime, "ftime" , NULL, NULL, NULL },
-@@ -272,10 +275,10 @@
+@@ -275,10 +275,10 @@
  { TARGET_NR_getcwd, "getcwd" , "%s(%p,%d)", NULL, NULL },
  #endif
  #ifdef TARGET_NR_getdents
@@ -136,7 +135,7 @@ index 63a94664..e60b1243 100644
  #endif
  #ifdef TARGET_NR_getdomainname
  { TARGET_NR_getdomainname, "getdomainname" , NULL, NULL, NULL },
-@@ -284,22 +287,22 @@
+@@ -287,22 +287,22 @@
  { TARGET_NR_getdtablesize, "getdtablesize" , NULL, NULL, NULL },
  #endif
  #ifdef TARGET_NR_getegid
@@ -164,7 +163,7 @@ index 63a94664..e60b1243 100644
  #endif
  #ifdef TARGET_NR_getgroups
  { TARGET_NR_getgroups, "getgroups" , NULL, NULL, NULL },
-@@ -384,13 +387,13 @@
+@@ -387,13 +387,13 @@
  { TARGET_NR_gettid, "gettid" , "%s()", NULL, NULL },
  #endif
  #ifdef TARGET_NR_gettimeofday
@@ -180,7 +179,7 @@ index 63a94664..e60b1243 100644
  #endif
  #ifdef TARGET_NR_getxattr
  { TARGET_NR_getxattr, "getxattr" , NULL, NULL, NULL },
-@@ -510,7 +513,7 @@
+@@ -513,7 +513,7 @@
  { TARGET_NR_lremovexattr, "lremovexattr" , NULL, NULL, NULL },
  #endif
  #ifdef TARGET_NR_lseek
@@ -189,7 +188,7 @@ index 63a94664..e60b1243 100644
  #endif
  #ifdef TARGET_NR_lsetxattr
  { TARGET_NR_lsetxattr, "lsetxattr" , NULL, NULL, NULL },
-@@ -609,7 +612,7 @@
+@@ -612,7 +612,7 @@
  { TARGET_NR_mq_unlink, "mq_unlink" , NULL, print_mq_unlink, NULL },
  #endif
  #ifdef TARGET_NR_mremap
@@ -198,7 +197,7 @@ index 63a94664..e60b1243 100644
  #endif
  #ifdef TARGET_NR_msgctl
  { TARGET_NR_msgctl, "msgctl" , NULL, NULL, NULL },
-@@ -1056,7 +1059,7 @@
+@@ -1059,7 +1059,7 @@
  { TARGET_NR_profil, "profil" , NULL, NULL, NULL },
  #endif
  #ifdef TARGET_NR_pselect6
@@ -207,7 +206,7 @@ index 63a94664..e60b1243 100644
  #endif
  #ifdef TARGET_NR_ptrace
  { TARGET_NR_ptrace, "ptrace" , NULL, NULL, NULL },
-@@ -1212,7 +1215,7 @@
+@@ -1215,7 +1215,7 @@
  { TARGET_NR_sched_yield, "sched_yield" , NULL, NULL, NULL },
  #endif
  #ifdef TARGET_NR_seccomp
@@ -216,7 +215,7 @@ index 63a94664..e60b1243 100644
  #endif
  #ifdef TARGET_NR_security
  { TARGET_NR_security, "security" , NULL, NULL, NULL },
-@@ -1618,7 +1621,7 @@
+@@ -1621,7 +1621,7 @@
  { TARGET_NR_vserver, "vserver" , NULL, NULL, NULL },
  #endif
  #ifdef TARGET_NR_wait4
@@ -225,7 +224,7 @@ index 63a94664..e60b1243 100644
  #endif
  #ifdef TARGET_NR_waitid
  { TARGET_NR_waitid, "waitid" , "%s(%#x,%d,%p,%#x)", NULL, NULL },
-@@ -1642,7 +1645,7 @@
+@@ -1645,7 +1645,7 @@
  { TARGET_NR_sync_file_range2, "sync_file_range2", NULL, NULL, NULL },
  #endif
  #ifdef TARGET_NR_pipe2
