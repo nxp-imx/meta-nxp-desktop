@@ -544,9 +544,6 @@ do_enable_graphics() {
 	echo >>"${IMAGE_ROOTFS}/etc/environment" "CLUTTER_BACKEND=wayland"
 	echo >>"${IMAGE_ROOTFS}/etc/environment" "CLUTTER_DRIVER=gles2"
 
-	# disable GL/GLX for vivante GPU temporally
-	rm -f ${IMAGE_ROOTFS}/usr/lib/libGL.so*
-
 	# disable xsession startup
 	rm -f ${IMAGE_ROOTFS}/usr/share/xsessions/*
 
