@@ -43,11 +43,6 @@ IMAGE_INSTALL += "\
 	tensorflow-lite \
 	armnn \
 "
-
-IMAGE_INSTALL += "\
-	patchelf \
-"
-
 # We want to have an itb to boot from in the /boot directory to be flexible
 # about U-Boot behavior
 #IMAGE_INSTALL += "\
@@ -79,7 +74,7 @@ APTGET_EXTRA_PACKAGES_SERVICES_DISABLED += "\
 APTGET_EXTRA_PACKAGES += "\
 	console-setup locales \
 	mc htop \
-\
+	patchelf \
 	apt git vim \
 	ethtool wget ftp iputils-ping lrzsz \
 	net-tools \
@@ -572,9 +567,6 @@ do_cleanup_rootfs() {
 fakeroot do_fix_ldconfig() {
 	#Ld config mises /usr/lib path
 	set -x
-
-	# Replace libGL.so.1 to libGLESv2.so.2 for libmutter
-	chroot "${APTGET_CHROOT_DIR}" /usr/bin/patchelf --replace-needed libGL.so.1 libGLESv2.so.2 /lib/aarch64-linux-gnu/libmutter-6.so.0.0.0
 
 	echo >>"${APTGET_CHROOT_DIR}/etc/ld.so.conf.d/01-yocto.conf" "/usr/lib"
 #	chroot "${APTGET_CHROOT_DIR}" /sbin/ldconfig
