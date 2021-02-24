@@ -35,6 +35,7 @@ IMAGE_INSTALL += "\
 "
 
 IMAGE_INSTALL += "\
+	systemd-gpuconfig \
 	alsa-state \
         libcogl \
         clutter-gst-3.0 \
