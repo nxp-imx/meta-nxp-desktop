@@ -451,8 +451,23 @@ IMAGE_INSTALL += " \
 # GPU driver
 
 IMAGE_INSTALL += " \
-    imx-gpu-viv \
+    libclc-imx libclc-imx-dev \
+    libgl-imx libgl-imx-dev \
+    libgles1-imx libgles1-imx-dev \
+    libgles2-imx libgles2-imx-dev \
+    libgles3-imx-dev \
+    libglslc-imx \
+    libopencl-imx \
+    libegl-imx libegl-imx-dev \
+    libgal-imx libgal-imx-dev \
+    libvivante-dri-imx \
+    libvsc-imx \
+    libgbm-imx libgbm-imx-dev \
+    libvulkan-imx \
+    libopenvx-imx libopenvx-imx-dev \
+    libnn-imx \
     libdrm-vivante \
+    imx-gpu-viv-tools \
 "
 
 # Minimum support for LS2 and S32V specific elements.
