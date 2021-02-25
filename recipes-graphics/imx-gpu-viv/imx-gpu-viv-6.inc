@@ -79,7 +79,6 @@ PACKAGES =+ "libclc-imx libclc-imx-dev \
 	libwayland-viv-imx libwayland-viv-imx-dev \
 	libgc-wayland-protocol-imx libgc-wayland-protocol-imx-dev \
 	imx-gpu-viv-tools \
-	imx-gpu-viv-demos \
 	libvulkan-imx libvulkan-imx-dev \
 	libopenvx-imx libopenvx-imx-dev \
     libnn-imx \
@@ -156,7 +155,6 @@ do_install () {
 
     cp -P ${S}/gpu-core/usr/lib/*.so* ${D}${libdir}
     cp -r ${S}/gpu-core/usr/include/* ${D}${includedir}
-    cp -r ${S}/gpu-demos/opt ${D}
     cp -r ${S}/gpu-tools/gmem-info/usr/bin/* ${D}${bindir}
 
     # Use vulkan header from vulkan-headers recipe to support vkmark
@@ -175,7 +173,6 @@ do_install () {
         install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/egl_wayland.pc ${D}${libdir}/pkgconfig/egl.pc
         install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glesv1_cm.pc ${D}${libdir}/pkgconfig/glesv1_cm.pc
         install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glesv2.pc ${D}${libdir}/pkgconfig/glesv2.pc
-        install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/vg.pc ${D}${libdir}/pkgconfig/vg.pc
 
        if [ "${USE_X11}" = "yes" ]; then
 
@@ -213,17 +210,9 @@ do_install () {
 
     # Handle backend specific drivers
     cp -r ${S}/gpu-core/usr/lib/${backend}/* ${D}${libdir}
-    if [ "${USE_WL}" = "yes" ]; then
-        # Special case for libVDK on Wayland backend, deliver fb library as well.
-        cp ${S}/gpu-core/usr/lib/fb/libVDK.so.1.2.0 ${D}${libdir}/libVDK-fb.so.1.2.0
-    fi
     if [ "${IS_MX8}" = "1" ]; then
-        # Rename our libvulkan.so so it doesn't clash with vulkan-loader libvulkan.so
-        mv ${D}${libdir}/libvulkan.so.1.1.6 ${D}${libdir}/libvulkan_VSI.so.1.1.6
-        patchelf --set-soname libvulkan_VSI.so.1 ${D}${libdir}/libvulkan_VSI.so.1.1.6
-        ln -sf libvulkan_VSI.so.1.1.6 ${D}${libdir}/libvulkan_VSI.so.1
-        ln -sf libvulkan_VSI.so.1.1.6 ${D}${libdir}/libvulkan_VSI.so
-        rm ${D}${libdir}/libvulkan.so*
+        ln -sf libvulkan.so.1.1.6 ${D}${libdir}/libvulkan.so.1
+        ln -sf libvulkan.so.1.1.6 ${D}${libdir}/libvulkan.so
     fi
     for header in ${GLES3_HEADER_REMOVALS}; do
         rm -f ${D}${includedir}/GLES3/${header}
@@ -284,8 +273,8 @@ FILES_libgbm-imx-dev_mx8 = "${libdir}/pkgconfig/gbm.pc ${includedir}/gbm.h"
 RDEPENDS_libgbm-imx_append_mx8 = " libdrm"
 INSANE_SKIP_libgbm-imx += "dev-so"
 
-FILES_libvulkan-imx = "${libdir}/libvulkan_VSI${SOLIBS} ${libdir}/libvulkan_VSI${REALSOLIBS} ${libdir}/libSPIRV_viv${SOLIBS}"
-FILES_libvulkan-imx-dev = "${includedir}/vulkan ${libdir}/libvulkan_VSI${SOLIBSDEV}"
+FILES_libvulkan-imx = "${libdir}/libvulkan${SOLIBS} ${libdir}/libvulkan${REALSOLIBS} ${libdir}/libSPIRV_viv${SOLIBS}"
+FILES_libvulkan-imx-dev = "${includedir}/vulkan ${libdir}/libvulkan${SOLIBSDEV}"
 INSANE_SKIP_libvulkan-imx += "dev-so"
 
 FILES_libopenvx-imx = "${libdir}/libOpenVX${SOLIBS} ${libdir}/libOpenVX${REALSOLIBS} ${libdir}/libOvx*${SOLIBS} ${libdir}/libOpenVXC${SOLIBS} ${libdir}/libOpenVXU${SOLIBS} ${libdir}/libArchModelSw${SOLIBS}"
@@ -331,7 +320,7 @@ FILES_libnn-imx = "${libdir}/libNN*${SOLIBS}"
 
 INSANE_SKIP_libopenvg-imx += "dev-so"
 FILES_libopenvg-imx = "${libdir}/libOpenVG*${REALSOLIBS} ${libdir}/libOpenVG*${SOLIBS}"
-FILES_libopenvg-imx-dev = "${includedir}/VG ${libdir}/libOpenVG*${SOLIBSDEV} ${libdir}/pkgconfig/vg.pc"
+FILES_libopenvg-imx-dev = "${includedir}/VG ${libdir}/libOpenVG*${SOLIBSDEV}"
 RDEPENDS_libopenvg-imx += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd-gpuconfig', '', d)}"
 
 FILES_libvdk-imx = "${libdir}/libVDK*${REALSOLIBS} ${libdir}/libVDK*${SOLIBS}"
@@ -351,8 +340,5 @@ FILES_libgc-wayland-protocol-imx = "${libdir}/libgc_wayland_protocol${REALSOLIBS
 FILES_libgc-wayland-protocol-imx-dev = "${libdir}/libgc_wayland_protocol${SOLIBSDEV} ${libdir}/pkgconfig/gc_wayland_protocol.pc"
 
 FILES_imx-gpu-viv-tools = "${bindir}/gmem_info"
-
-FILES_imx-gpu-viv-demos = "/opt"
-INSANE_SKIP_imx-gpu-viv-demos += "rpaths dev-deps"
 
 # COMPATIBLE_MACHINE = "(mx6q|mx6dl|mx6sx|mx6sl|mx8)"
