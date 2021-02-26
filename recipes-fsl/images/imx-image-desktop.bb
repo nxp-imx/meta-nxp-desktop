@@ -468,6 +468,8 @@ IMAGE_INSTALL += " \
     libnn-imx \
     libdrm-vivante \
     imx-gpu-viv-tools \
+    apitrace \
+    gputop \
 "
 
 # Minimum support for LS2 and S32V specific elements.
