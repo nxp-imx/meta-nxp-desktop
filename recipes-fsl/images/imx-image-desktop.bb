@@ -468,6 +468,8 @@ IMAGE_INSTALL += " \
     libnn-imx \
     libdrm-vivante \
     imx-gpu-viv-tools \
+    libgpuperfcnt \
+    imx-gpu-g2d \
     apitrace \
     gputop \
 "
