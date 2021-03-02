@@ -151,6 +151,8 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       libxshmfence1 python3-nose python3-numpy libcairo-dbg \
                       libharfbuzz-dev libharfbuzz-dbg libpciaccess-dbg pango-dbg pango-dev \
                       librsvg-2-dbg librsvg-2-dev libsndfile-dbg libsndfile-dev \
+                      xrandr xrandr-dev libxrandr-dev libxrandr2 libxxf86vm1 \
+                      libxxf86vm-dev ibxshmfence-dev alsa-states mesa-dev \
 "
 
 RCONFLICTS_${PN} += " ${YOCTO-DEPENDS-LIST} "

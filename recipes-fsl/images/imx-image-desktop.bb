@@ -85,7 +85,6 @@ APTGET_EXTRA_PACKAGES += "\
 	libcairo2 libpixman-1-0 libpango-1.0-0 libpangocairo-1.0-0 \
 "
 APTGET_EXTRA_SOURCE_PACKAGES += "\
-	iproute2 \
 "
 
 # Add user with password user and default shell bash
@@ -472,17 +471,6 @@ IMAGE_INSTALL += " \
     imx-gpu-g2d \
     apitrace \
     gputop \
-"
-
-# Minimum support for LS2 and S32V specific elements.
-IMAGE_INSTALL_append_fsl-lsch3 += "\
-    mc-utils-image \
-    restool \
-"
-
-# We want easy installation of the BlueBox image to the target
-DEPENDS_append_fsl-lsch3 = " \
-    bbdeployscripts \
 "
 
 fakeroot do_update_host() {
