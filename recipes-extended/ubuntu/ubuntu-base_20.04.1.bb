@@ -37,7 +37,6 @@ APTGET_EXTRA_PACKAGES_RECONFIGURABLE += " \
     totem libtotem0 \
     alsa-base alsa-utils \
     rhythmbox \
-    cheese \
 "
 
 APTGET_EXTRA_PACKAGES_REMOVE += " \
@@ -153,6 +152,8 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       librsvg-2-dbg librsvg-2-dev libsndfile-dbg libsndfile-dev \
                       xrandr xrandr-dev libxrandr-dev libxrandr2 libxxf86vm1 \
                       libxxf86vm-dev ibxshmfence-dev alsa-states mesa-dev \
+                     adwaita-icon-theme-symbolic gtk+3-dev libgtk-3.0 gsettings-desktop-schemas gnome-theme-adwaita \ 
+                     libgdk-pixbuf-2.0-loader-xpm libgdk-pixbuf-2.0-loader-png libgdk-pixbuf-2.0-loader-jpeg libgdk-pixbuf-2.0-loader-gif libgtk-2.0 \
 "
 
 RCONFLICTS_${PN} += " ${YOCTO-DEPENDS-LIST} "

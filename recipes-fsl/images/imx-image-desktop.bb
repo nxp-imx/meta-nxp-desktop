@@ -37,8 +37,9 @@ IMAGE_INSTALL += "\
 IMAGE_INSTALL += "\
 	systemd-gpuconfig \
 	alsa-state \
-        libcogl \
-        clutter-gst-3.0 \
+	libcogl \
+	clutter-gst-3.0 \
+	cheese \
 	xserver-xorg-xwayland \
 	tensorflow-lite \
 	armnn \
