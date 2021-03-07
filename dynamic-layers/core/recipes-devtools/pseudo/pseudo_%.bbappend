@@ -29,5 +29,6 @@ SRC_URI += " \
     file://0001-pseudo-Diagnostic-cleanup-for-utimensat.patch \
 \
     file://0001-xattr-adjust-for-attr-2.4.48-release.patch \
+    file://0001-Add-fcntl64-to-support-GLIBC-2.28-version.patch \
 "
 

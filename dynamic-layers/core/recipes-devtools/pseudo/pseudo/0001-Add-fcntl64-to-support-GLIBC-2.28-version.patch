@@ -1,0 +1,108 @@
+From f1195d004093961db426d1eb4206af7a45242bac Mon Sep 17 00:00:00 2001
+From: Xianzhong Li <xianzhong.li@nxp.com>
+Date: Sun, 7 Mar 2021 20:12:49 +0800
+Subject: [PATCH] Add fcntl64 to support GLIBC 2.28 version
+
+GLIBC 2.28 force to link fcntl64 instead of fcntl
+
+Signed-off-by: Xianzhong Li <xianzhong.li@nxp.com>
+---
+ ports/linux/guts/fcntl64.c | 73 ++++++++++++++++++++++++++++++++++++++
+ ports/linux/wrapfuncs.in   |  1 +
+ 2 files changed, 74 insertions(+)
+ create mode 100644 ports/linux/guts/fcntl64.c
+
+diff --git a/ports/linux/guts/fcntl64.c b/ports/linux/guts/fcntl64.c
+new file mode 100644
+index 0000000..16542db
+--- /dev/null
++++ b/ports/linux/guts/fcntl64.c
+@@ -0,0 +1,73 @@
++/* 
++ * Copyright (c) 2008-2010 Wind River Systems; see
++ * guts/COPYRIGHT for information.
++ *
++ * SPDX-License-Identifier: LGPL-2.1-only
++ *
++ * static int
++ * wrap_fcntl64(int fd, int cmd, ...struct flock *lock) {
++ *	int rc = -1;
++ */
++ 	long arg;
++	int save_errno;
++
++	/* we don't know whether we need lock or arg; grab both, which
++	 * should be safe enough on Linuxy systems. */
++	va_start(ap, cmd);
++	arg = va_arg(ap, long);
++	va_end(ap);
++
++	switch (cmd) {
++	case F_DUPFD:
++#ifdef F_DUPFD_CLOEXEC
++	case F_DUPFD_CLOEXEC:
++#endif
++		/* actually do something */
++		rc = real_fcntl64(fd, cmd, arg);
++		save_errno = errno;
++		if (rc != -1) {
++			pseudo_debug(PDBGF_OP, "fcntl64_dup: %d->%d\n", fd, rc);
++			pseudo_client_op(OP_DUP, 0, fd, rc, 0, 0);
++		}
++		errno = save_errno;
++		break;
++	/* no argument: */
++	case F_GETFD:
++	case F_GETFL:
++	case F_GETOWN:
++	case F_GETSIG:
++	case F_GETLEASE:
++		rc = real_fcntl64(fd, cmd);
++		break;
++	/* long argument */
++	case F_SETFD:
++	case F_SETFL:
++	case F_SETOWN:
++	case F_SETSIG:
++	case F_SETLEASE:
++	case F_NOTIFY:
++		rc = real_fcntl64(fd, cmd, arg);
++		break;
++	/* struct flock * argument */
++	case F_GETLK:
++	case F_SETLK:
++	case F_SETLKW:
++		rc = real_fcntl64(fd, cmd, lock);
++		break;
++#if defined(F_GETLK64) && (F_GETLK64 != F_GETLK)
++	/* the cast is safe, all struct pointers must smell the same */
++	case F_GETLK64:
++	case F_SETLK64:
++	case F_SETLKW64:
++		rc = real_fcntl64(fd, cmd, (struct flock64 *) lock);
++		break;
++#endif
++	default:
++		pseudo_diag("unknown fcntl argument %d, assuming long argument.\n",
++			cmd);
++		rc = real_fcntl64(fd, cmd, arg);
++		break;
++	}
++/*	return rc;
++ * }
++ */
+diff --git a/ports/linux/wrapfuncs.in b/ports/linux/wrapfuncs.in
+index c5ea7c3..e9b2c62 100644
+--- a/ports/linux/wrapfuncs.in
++++ b/ports/linux/wrapfuncs.in
+@@ -12,6 +12,7 @@ int mknodat(int dirfd, const char *path, mode_t mode, dev_t dev); /* real_func=p
+ int __xmknod(int ver, const char *path, mode_t mode, dev_t *dev); /* flags=AT_SYMLINK_NOFOLLOW */
+ int __xmknodat(int ver, int dirfd, const char *path, mode_t mode, dev_t *dev); /* flags=AT_SYMLINK_NOFOLLOW */
+ int fcntl(int fd, int cmd, ...{struct flock *lock});
++int fcntl64(int fd, int cmd, ...{struct flock *lock});
+ # just so we know the inums of symlinks
+ char *canonicalize_file_name(const char *filename);
+ int eaccess(const char *path, int mode);
+-- 
+2.25.1
+
