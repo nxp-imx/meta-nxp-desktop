@@ -247,7 +247,13 @@ END_PROXY
 		echo >>"${APTGET_CHROOT_DIR}$xf" "$proxy"
 	done
 
-        if [ -e $xf ]; then
+        if [ ! -e "${APTGET_CHROOT_DIR}$xf" ]; then
+            if [ -f /etc/apt/apt.conf ]; then
+                cp -f /etc/apt/apt.conf "${APTGET_CHROOT_DIR}$xf"
+            fi
+        fi
+
+        if [ -e "${APTGET_CHROOT_DIR}$xf" ]; then
                 aptget_always_install_faketool "/etc/apt/apt.conf.d/01yoctoinstallproxies" $xf
         fi
 }
@@ -798,6 +804,7 @@ fakeroot aptget_update_end() {
         # Remove any proxy instrumentation
         xf="/__etc_apt_apt.conf.d_01yoctoinstallproxies__"
         aptget_delete_faketool "/etc/apt/apt.conf.d/01yoctoinstallproxies" $xf
+        rm -f "${APTGET_CHROOT_DIR}/etc/apt/apt.conf.d/01yoctoinstallproxies"
 
         # Remove our temporary helper again
         aptget_delete_fakeproc
