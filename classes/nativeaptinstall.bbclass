@@ -516,9 +516,11 @@ fakeroot aptget_update_begin() {
 	# convoluted stunt here to hopefully be flexible enough about
 	# different rootfs types.
 	cp "/etc/hosts" "${APTGET_CHROOT_DIR}/__etchosts__"
-        aptget_install_faketool "/etc/hosts" "/__etchosts__"
-	cp "/etc/resolv.conf" "${APTGET_CHROOT_DIR}/__etcresolvconf__"
-        aptget_install_faketool "/etc/resolv.conf" "/__etcresolvconf__"
+	aptget_install_faketool "/etc/hosts" "/__etchosts__"
+
+	if [ ! -d "${APTGET_CHROOT_DIR}/etc/resolv.conf" ]; then
+	    cp /etc/resolv.conf "${APTGET_CHROOT_DIR}/etc/resolv.conf"
+	fi
 
 	# We need to set at least one (dummy) user and we set passwords for all of them.
 	# useradd is not debian, but good enough for now.
@@ -812,7 +814,6 @@ fakeroot aptget_update_end() {
 	# Now that we are done in qemu land, we reinstate the original
 	# networking config of our target rootfs.
         aptget_delete_faketool "/etc/hosts" "/__etchosts__"
-        aptget_delete_faketool "/etc/resolv.conf" "/__etcresolvconf__"
 
 	if [ $aptgetfailure -ne 0 ]; then
 		bberror "${APTGET_EXECUTABLE} failed to execute as expected!"
