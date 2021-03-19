@@ -154,6 +154,13 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       libxxf86vm-dev ibxshmfence-dev alsa-states mesa-dev \
                      adwaita-icon-theme-symbolic gtk+3-dev libgtk-3.0 gsettings-desktop-schemas gnome-theme-adwaita \ 
                      libgdk-pixbuf-2.0-loader-xpm libgdk-pixbuf-2.0-loader-png libgdk-pixbuf-2.0-loader-jpeg libgdk-pixbuf-2.0-loader-gif libgtk-2.0 \
+                     libclutter-1.0-dev libclutter-gtk-1.0-0 libclutter-gtk-1.0-dev libcogl-gles2-20 \
+                     libcogl-pango20 libcogl-path20 libcanberra libcanberra-dev libcanberra-gtk2 \
+                     libcanberra-gtk3 gtk+-dev libepoxy-dev gnome-desktop3 gnome-desktop3-dev \
+                     gsettings-desktop-schemas-dev libgnome-desktop-3-19 libxkbcommon \
+                     libxcb-util-dev libxcb-util1 libxcomposite-dev libxcomposite1 \
+                     libxcursor-dev libxcursor1 libxkbcommon-dev libxshmfence-dev \
+                     libjson-glib-1.0-0 libjson-glib-1.0-dev xserver-xorg-dev \
 "
 
 RCONFLICTS_${PN} += " ${YOCTO-DEPENDS-LIST} "
