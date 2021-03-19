@@ -11,7 +11,7 @@ PR = "r0"
 
 GNOMEBASEBUILDCLASS = "meson"
 
-inherit gnomebase pkgconfig gobject-introspection vala distro_features_check
+inherit gnomebase pkgconfig gobject-introspection vala features_check
 
 REQUIRED_DISTRO_FEATURES = "opengl x11"
 

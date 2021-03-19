@@ -13,8 +13,8 @@ export PACKAGE_INSTALL = "${IMAGE_INSTALL}"
 APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
-ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_save_graphics;  do_aptget_update; do_update_host; do_update_dns;"
-IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_bluetooth; do_enable_graphics; do_cleanup_rootfs"
+ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_save_graphics; do_save_cheese;  do_aptget_update; do_update_host; do_update_dns;"
+IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_bluetooth; do_enable_graphics; do_enable_cheese; do_cleanup_rootfs"
 
 REQUIRED_DISTRO_FEATURES = "wayland"
 
@@ -559,6 +559,23 @@ do_enable_graphics() {
 
 	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/default.target
 	ln /usr/lib/systemd/system/graphical.target -s ${IMAGE_ROOTFS}/etc/systemd/system/default.target
+
+	set +x
+}
+
+fakeroot do_save_cheese() {
+	set -x
+
+	# backup cheese exe
+	mv ${IMAGE_ROOTFS}/usr/bin/cheese ${IMAGE_ROOTFS}/usr/bin/cheese_imx
+
+	set +x
+}
+
+fakeroot do_enable_cheese() {
+	set -x
+
+	cp -f ${IMAGE_ROOTFS}/usr/bin/cheese_imx ${IMAGE_ROOTFS}/usr/bin/cheese
 
 	set +x
 }
