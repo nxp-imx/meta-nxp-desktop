@@ -158,7 +158,7 @@ ${PSEUDO_LOCALSTATEDIR}:\
 ${DPKG_NATIVE}:\
 "
 
-ENV_HOST_PROXIES ?= ""
+ENV_HOST_PROXIES ?= "http_proxy=${http_proxy}"
 APTGET_HOST_PROXIES ?= ""
 APTGET_EXECUTABLE ?= "/usr/bin/apt-get"
 APTGET_DEFAULT_OPTS ?= "-qy -o=Dpkg::Use-Pty=0"
@@ -201,6 +201,10 @@ END_PROXY
 			continue
 		fi
 
+		if [ -z "$proxy_val"  ]; then
+			continue
+		fi
+
 		export QEMU_SET_ENV="$QEMU_SET_ENV,${proxy_type}_${proxy_string}=$proxy_val"
 	done
 
@@ -229,6 +233,10 @@ $ENV_HOST_PROXIES
 END_PROXY
 		if [ "$proxy_string" != "proxy" ]; then
 			bbwarn "Invalid proxy \"$proxy\""
+			continue
+		fi
+
+		if [ -z "$proxy_val"  ]; then
 			continue
 		fi
 
