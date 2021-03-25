@@ -7,6 +7,9 @@ SRC_URI[aarch64-wayland.sha256sum] = "6a28829e1b06b05ebf3f6c76379b9fab1e697c36ae
 
 inherit fsl-eula-unpack2 fsl-eula-graphics
 
+FSLBIN_NAME = "${PN}-${PV}-aarch64-wayland"
+SRC_URI = "${FSL_GPU_MIRROR}/${FSLBIN_NAME}.bin;name=aarch64-wayland;fsl-eula=true"
+
 PACKAGE_ARCH = "${MACHINE_SOCARCH}"
 
 RDEPENDS_${PN} = "libgal-imx"
