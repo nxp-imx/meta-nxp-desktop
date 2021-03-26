@@ -41,6 +41,7 @@ IMAGE_INSTALL += "\
 	clutter-gst-3.0 \
 	cheese \
 	xserver-xorg-xwayland \
+	chromium-ozone-wayland \
 	tensorflow-lite \
 	armnn \
 "

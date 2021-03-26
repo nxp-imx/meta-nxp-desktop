@@ -21,7 +21,7 @@ UBUNTU_TARGET_ARCH="${@d.getVar('TRANSLATED_TARGET_ARCH', True).replace("aarch64
 IMAGE_LINGUAS = ""
 POKY_DEFAULT_EXTRA_RDEPENDS_remove = "packagegroup-core-boot"
 INITRAMFS_IMAGE = ""
-POSTINST_INTERCEPTS_DIR = "<--InVaLiD-->"
+#POSTINST_INTERCEPTS_DIR = "<--InVaLiD-->"
 
 # The Yocto glibc version must not exceed the Desktop glibc version
 # or Yocto-created executables will fail on the Desktop image.
