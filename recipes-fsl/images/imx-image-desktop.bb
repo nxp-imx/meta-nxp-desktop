@@ -51,7 +51,6 @@ IMAGE_INSTALL += "\
 #"
 #####
 IMAGE_FEATURES += " \
-    dev-pkgs \
     tools-sdk \
     debug-tweaks \
     tools-profile \
