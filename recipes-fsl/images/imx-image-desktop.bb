@@ -79,6 +79,7 @@ APTGET_EXTRA_PACKAGES += "\
 	apt git vim \
 	ethtool wget ftp iputils-ping lrzsz \
 	net-tools \
+	ntpdate \
 	nfs-common \
 	openssh-server \
 	python3-future libtool autoconf pkg-config \
