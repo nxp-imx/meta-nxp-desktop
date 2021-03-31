@@ -74,9 +74,8 @@ APTGET_EXTRA_PACKAGES_SERVICES_DISABLED += "\
 "
 APTGET_EXTRA_PACKAGES += "\
 	console-setup locales \
-	mc htop \
 	patchelf \
-	apt git vim \
+	apt vim \
 	ethtool wget ftp iputils-ping lrzsz \
 	net-tools \
 	ntpdate \
