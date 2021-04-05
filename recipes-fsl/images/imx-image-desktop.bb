@@ -587,6 +587,9 @@ do_cleanup_rootfs() {
 	# remove apt-get source list, apt-get update can download them
 	rm -rf ${IMAGE_ROOTFS}/var/lib/apt/lists/*
 
+	# remove the unused VXC library
+	rm -f ${IMAGE_ROOTFS}/lib/lib*Binary-evis.so
+
 	set +x
 }
 
