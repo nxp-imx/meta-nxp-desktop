@@ -1,0 +1,160 @@
+NXP Software Content Register
+
+Release - Desktop Release with Linux 5.10.9_1.0.0
+  May 2021
+
+Yocto Project recipe manifest:
+repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-gatesgarth -m imx-5.10.9-1.0.0-desktop.xml
+
+Release tag: rel_imx_5.10.9_1.0.0_desktop
+
+--------------------------------------------
+PACKAGES FOR META-NXP-DESKTOP_RELEASE
+--------------------------------------------
+
+Package:                     imx-gpu-viv-6.4.3.p1.2d-aarch64.bin
+Outgoing License:            LA_OPT_NXP_Software_License v19 February 2021 - Additional distribution license granted - Section 2.3 applies 
+License File:                COPYING
+Package Category:            Graphics
+Type of Content:             binary and source
+Description and comments:    GPU Core IP in binary and test application source
+Release Location:            Mirror
+Origin:                      NXP (proprietary)
+                             Verisilicon (formerly Vivante Corp.) (proprietary)
+                             opengleskul (MIT) - https://code.google.com/archive/p/opengleskul/
+                             The Khronos Group Inc. (MIT) - http://www.khronos.org/opencl/
+                             Mesa3D - Mesa Lib [GL3ext header] (SGI-B-2.0) - http://mesa3d.sourceforge.net/
+                             libdri (MIT) - http://dri.freedesktop.org/wiki/
+                             The Android Open Source Project (Apache-2.0) - https://source.android.com/
+                             LLVM Compiler (BSD-3-clause) - https://github.com/prof123/llvm/
+
+--------------------------------------------
+
+Package:                     imx-gpu-g2d-6.4.3.p1.2d-aarch64.bin
+Outgoing License:            LA_OPT_NXP_Software_License v19 February 2021 - Additional distribution license granted - Section 2.3 applies 
+License File:                COPYING
+Package Category:            Graphics
+Type of Content:             binary
+Description and comments:    Graphics 2D
+Release Location:            Mirror
+Origin:                      NXP (proprietary)
+
+--------------------------------------------
+
+Package:                     libgpuperfcnt-6.4.3.p1.2d-aarch64-wayland.bin
+Outgoing License:            LA_OPT_NXP_Software_License v19 February 2021 - Additional distribution license granted - Section 2.3 applies 
+License File:                COPYING
+Package Category:            Graphics
+Type of Content:             binary
+Description and comments:    Library to retrieve i.MX GPU performance data
+Release Location:            Mirror
+Origin:                      NXP (proprietary)
+
+
+--------------------------------------------
+PATCHES IN META-NXP-DESKTOP_RELEASE
+--------------------------------------------
+
+Patches for:               gcc
+Source Location:           ftp://gcc.gnu.org/pub/gcc/releases/gcc/gcc-9.3.0/gcc-9.3.0.tar.xz
+Patch Location:            recipes-devtools/gcc
+Outgoing License:          GPL-3.0
+License File:              COPYING3
+Package Category:          Core
+Description and comments:  The GNU Compiler Collection
+Origin of patches:         Gcc (GPL-3.0) https://gcc.gnu.org/git/gcc.git
+
+--------------------------------------------
+
+Patches for:               glibc
+Source Location:           git://sourceware.org/git/glibc.git -b release/2.31/master
+Patch Location:            recipes-core/glibc2.31
+Outgoing License:          GPL-2.0
+License File:              COPYING
+Package Category:          Core
+Description and comments:  The GNU C Library project provides the core libraries for the GNU system and GNU/Linux systems, as well as many other systems that use Linux as the kernel
+Origin of patches:         Glibc (GPL-2.0) https://sourceware.org/git/glibc.git
+
+--------------------------------------------
+
+Patches for:               binutils2.34
+Source Location:           git://sourceware.org/git/binutils-gdb.git -b binutils-2_34
+Patch Location:            recipes-devtools/binutils2.34/
+Outgoing License:          GPL-2.0/GPL-3.0
+License File:              COPYING COPYING3
+Package Category:          Devtools
+Description and comments:  The GNU Binutils are a collection of binary tools
+Origin of patches:         Binutils (GPL-2.0/GPL-3.0) https://sourceware.org/git/binutils-gdb.git
+
+
+--------------------------------------------
+
+Patches for:               pseudo
+Source Location:           git://git.yoctoproject.org/pseudo
+Patch Location:            dynamic-layers/core/recipes-devtools/pseudo
+                           recipes-devtools/pseudo
+Outgoing License:          LGPL-2.1
+License File:              COPYING
+Package Category:          Devtools
+Description and comments:  The pseudo utility offers a way to run commands in a virtualized "root"
+environment
+Origin of patches:         NXP (LGPL-2.1)
+                           Pseudo (LGPL-2.1)  https://git.yoctoproject.org/git/pseudo
+
+--------------------------------------------
+
+Patches for:               qemu
+Source Location:           https://download.qemu.org/qemu-4.2.1.tar.xz
+Patch Location:            dynamic-layers/core/recipes-devtools/qemu
+                           recipes-devtools/qemu
+Outgoing License:          GPL-2.0
+License File:              COPYING
+Package Category:          Devtools
+Description and comments:  QEMU is a generic and open source machine & userspace emulator and virtualizer
+Origin of patches:         NXP (GPL-2.0)
+                           Qemu (GPL-2.0) https://git.qemu.org/git/qemu.git
+
+--------------------------------------------
+
+Patches for:               xserver-xorg
+Source Location:           https://www.x.org/releases/individual/xserver/
+Patch Location:            recipes-graphics/xorg-xserver/xserver-xorg
+Outgoing License:          MIT.X
+License File:              COPYING
+Package Category:          Linux
+Description and comments:  X11
+Origin of patches:         NXP (MIT.X)
+
+--------------------------------------------
+
+Patches for:               cheese
+Source Location:           https://ftp.acc.umu.se/pub/GNOME/sources/cheese/3.34/
+Patch Location:            recipes-apps/cheese
+Outgoing License:          GPL-2.0
+License File:              COPYING
+Package Category:          GNOME
+Description and comments:  Take photos and videos with your webcam, with fun graphical effects
+Origin of patches:         NXP (GPL-2.0)
+
+--------------------------------------------
+
+Patches for:               clutter-gst
+Source Location:           https://ftp.gnome.org/pub/GNOME/sources/clutter-gst/3.0/
+Patch Location:            recipes-graphics/clutter
+Outgoing License:          LGPL-2.1
+License File:              COPYING
+Package Category:          Graphics
+Description and comments:  Clutter-Gst is an integration library for using GStreamer with Clutter
+Origin of patches:         NXP (LGPL-2.1)
+
+--------------------------------------------
+
+Patches for:               cogl
+Source Location:           https://ftp.gnome.org/pub/GNOME/sources/cogl/1.22/
+Patch Location:            recipes-graphics/cogl
+Outgoing License:          MIT
+License File:              COPYING
+Package Category:          Graphics
+Description and comments:  Cogl is a small open source library for using 3D graphics hardware for
+rendering.
+Origin of patches:         NXP (MIT)
