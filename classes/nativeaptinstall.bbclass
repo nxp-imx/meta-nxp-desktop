@@ -526,10 +526,6 @@ fakeroot aptget_update_begin() {
 	cp "/etc/hosts" "${APTGET_CHROOT_DIR}/__etchosts__"
 	aptget_install_faketool "/etc/hosts" "/__etchosts__"
 
-	if [ ! -d "${APTGET_CHROOT_DIR}/etc/resolv.conf" ]; then
-	    cp /etc/resolv.conf "${APTGET_CHROOT_DIR}/etc/resolv.conf"
-	fi
-
 	# We need to set at least one (dummy) user and we set passwords for all of them.
 	# useradd is not debian, but good enough for now.
 	# Technically, this should be done at image generation time,
