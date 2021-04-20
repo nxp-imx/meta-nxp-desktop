@@ -1,3 +1,6 @@
+# Override the EULA defined in meta-imx
+cp sources/meta-nxp-desktop/EULA.txt sources/meta-imx/EULA.txt
+
 source sources/meta-imx/tools/imx-setup-release.sh $@
 
 if [ -f conf/local.conf ]; then
