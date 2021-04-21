@@ -22,7 +22,7 @@ Download the Yocto Project BSP
 ```
 $ mkdir desktop
 $ cd desktop
-$ repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-gatesgarth -m imx-5.10.9-1.0.0-desktop.xml
+$ repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-gatesgarth -m imx-5.10.9-1.0.0_desktop.xml
 $ repo sync
 ```
 
