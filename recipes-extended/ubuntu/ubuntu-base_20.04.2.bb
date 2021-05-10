@@ -165,7 +165,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       gsettings-desktop-schemas adwaita-icon-theme-symbolic \
                       hicolor-icon-theme libatk-bridge-2.0-0 libxslt nss \
                       libatspi0 libgtk-3.0 gtk+3 gtk+3-dev gdk-pixbuf \
-                      libxfont2-2 libfontenc1 \
+                      libxfont2-2 libfontenc1 desktop-file-utils \
 "
 
 RCONFLICTS_${PN} += " ${YOCTO-DEPENDS-LIST} "
