@@ -33,6 +33,7 @@ inherit meson pkgconfig
 EXTRA_OEMESON += "\
                 -Denable-test=true \
                 -Dinstall-test=true \
+                -Dtflite2-nnapi-delegate-support=true \
                 "
 
 PACKAGECONFIG ??= "\
