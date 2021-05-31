@@ -148,6 +148,13 @@ GLES3_HEADER_REMOVALS_mx8mm  = "gl31.h gl32.h"
 GLES3_HEADER_REMOVALS_mx8qxp = ""
 GLES3_HEADER_REMOVALS_mx8qm  = ""
 
+VXC_BINARY_REMOVALS          = "libNNGPUBinary-*.so libNNVXCBinary-*.so libOvx12VXCBinary-*.so"
+
+VXC_BINARY_INSTALLS          = ""
+VXC_BINARY_INSTALLS_mx8mp    = "libNNGPUBinary-evis2.so libNNVXCBinary-evis2.so libOvx12VXCBinary-evis2.so libNNGPUBinary-ulite.so"
+VXC_BINARY_INSTALLS_mx8mq    = "libNNGPUBinary-lite.so"
+VXC_BINARY_INSTALLS_mx8mn    = "libNNGPUBinary-ulite.so"
+
 do_install () {
     install -d ${D}${libdir}
     install -d ${D}${includedir}
@@ -216,6 +223,14 @@ do_install () {
     fi
     for header in ${GLES3_HEADER_REMOVALS}; do
         rm -f ${D}${includedir}/GLES3/${header}
+    done
+
+    for vxcbinary in ${VXC_BINARY_REMOVALS}; do
+        rm -f ${D}${libdir}/${vxcbinary}
+    done
+
+    for vxcbinary in ${VXC_BINARY_INSTALLS}; do
+        cp -P ${S}/gpu-core/usr/lib/${vxcbinary} ${D}${libdir}
     done
 
     # skip packaging wayland libraries if no support is requested
