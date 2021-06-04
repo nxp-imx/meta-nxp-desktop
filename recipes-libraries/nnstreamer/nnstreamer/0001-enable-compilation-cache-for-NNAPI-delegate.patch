@@ -1,0 +1,33 @@
+From 18b0e3b2fdf167c25d7754a1e0ec81ed101beb7f Mon Sep 17 00:00:00 2001
+From: Xianzhong <xianzhong.li@nxp.com>
+Date: Tue, 1 Jun 2021 14:47:16 +0800
+Subject: [PATCH] enable compilation cache for NNAPI delegate
+
+https://source.android.com/devices/neural-networks/compilation-caching
+
+Signed-off-by: Xianzhong <xianzhong.li@nxp.com>
+---
+ .../tensor_filter/tensor_filter_tensorflow_lite.cc          | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/ext/nnstreamer/tensor_filter/tensor_filter_tensorflow_lite.cc b/ext/nnstreamer/tensor_filter/tensor_filter_tensorflow_lite.cc
+index 04792ae9..cccb24f4 100644
+--- a/ext/nnstreamer/tensor_filter/tensor_filter_tensorflow_lite.cc
++++ b/ext/nnstreamer/tensor_filter/tensor_filter_tensorflow_lite.cc
+@@ -422,8 +422,12 @@ TFLiteInterpreter::loadModel (int num_threads, tflite_delegate_e delegate)
+     case TFLITE_DELEGATE_NNAPI:
+     {
+ #ifdef TFLITE_NNAPI_DELEGATE_SUPPORTED
++      tflite::StatefulNnApiDelegate::Options options;
++      options.cache_dir = g_getenv ("NNSTREAMER_NNAPI_CACHE_DIR");
++      options.model_token = g_getenv ("NNSTREAMER_NNAPI_MODEL_TOKEN");
++
+       /* set nnapi delegate when accelerator set to auto (cpu.neon in Android) or NPU */
+-      stateful_nnapi_delegate.reset (new tflite::StatefulNnApiDelegate ());
++      stateful_nnapi_delegate.reset (new tflite::StatefulNnApiDelegate (options));
+       setDelegate (stateful_nnapi_delegate.get ());
+ #else
+       ml_logw ("NNAPI delegate support is available only in Android with tflite v1.14.0 or higher");
+-- 
+2.17.1
+
