@@ -68,6 +68,12 @@ do_install() {
     fi
 }
 
+do_install_append() {
+    # Remove duplicated basler-camera files
+    rm -f ${D}${libdir}/libdaA3840_30mc.so*
+    rm -f ${D}/opt/imx8-isp/bin/case/config/daA3840*
+}
+
 # The build contains a mix of versioned and unversioned libraries, so
 # the default packaging configuration needs some modifications
 FILES_SOLIBSDEV = ""
