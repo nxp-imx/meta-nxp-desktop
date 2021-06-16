@@ -476,6 +476,12 @@ IMAGE_INSTALL += " \
     apitrace \
     gputop \
 "
+# isp
+IMAGE_INSTALL_append_mx8mp = " \
+    isp-imx \
+    basler-camera \
+    kernel-module-isp-vvcam \
+"
 
 fakeroot do_update_host() {
 	set -x
