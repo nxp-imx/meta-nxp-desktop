@@ -50,6 +50,17 @@ Description and comments:    Library to retrieve i.MX GPU performance data
 Release Location:            Mirror
 Origin:                      NXP (proprietary)
 
+--------------------------------------------
+
+Package:                     isp-imx-4.2.2.13.0d.bin
+Version:                     4.2.2.13.0d
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
+License File:                COPYING
+Package Category:            Graphics
+Type of Content:             binary and source
+Description and comments:    i.MX software ISP
+Release Location:            Mirror
+Origin:                      VeriSilicon Holdings Co., Ltd. (proprietary)
 
 --------------------------------------------
 PATCHES IN META-NXP-DESKTOP_RELEASE
