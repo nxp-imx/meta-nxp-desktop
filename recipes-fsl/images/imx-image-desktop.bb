@@ -644,3 +644,7 @@ IMAGE_ROOTFS_SIZE ?= "8192"
 IMAGE_ROOTFS_EXTRA_SPACE_append = "${@bb.utils.contains("DISTRO_FEATURES", "systemd", " + 4096", "" ,d)}"
 
 COMPATIBLE_MACHINE ="(.*ubuntu)"
+
+python do_rootfs_prepend() {
+    d.setVar('IMAGE_LOG_CHECK_EXCLUDES', 'Failed')
+}
