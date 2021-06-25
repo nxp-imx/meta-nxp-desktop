@@ -8,7 +8,7 @@ SRC_URI[aarch64-wayland.sha256sum] = "dc89b58fcceda12d70aaea6e2b8317aefa92b239b8
 inherit fsl-eula-unpack2 fsl-eula-graphics
 
 FSLBIN_NAME = "${PN}-${PV}-aarch64-wayland"
-SRC_URI = "${FSL_GPU_MIRROR}/${FSLBIN_NAME}.bin;name=aarch64-wayland;fsl-eula=true"
+SRC_URI = "${FSL_BIN_MIRROR}/${FSLBIN_NAME}.bin;name=aarch64-wayland;fsl-eula=true"
 
 PACKAGE_ARCH = "${MACHINE_SOCARCH}"
 

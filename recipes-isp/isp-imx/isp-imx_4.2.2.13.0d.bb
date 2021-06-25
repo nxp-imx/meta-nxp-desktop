@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=b3b0bab6ff55420d043cf1652c52d788"
 
 DEPENDS = "python3 libdrm virtual/libg2d"
 
-SRC_URI = "${FSL_MIRROR}/${BP}.bin;fsl-eula=true"
+SRC_URI = "${FSL_BIN_MIRROR}/${BP}.bin;fsl-eula=true"
 SRC_URI[md5sum] = "2563c7771fb0c32bad839923f8288cab"
 SRC_URI[sha256sum] = "bf833aca13d960a2142746476d436a5e8daa1a0491d462cbe5aca78020699f8b"
 
