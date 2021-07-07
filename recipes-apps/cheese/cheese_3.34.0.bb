@@ -20,6 +20,8 @@ GNOME_MIRROR = "https://ftp.acc.umu.se/pub/GNOME/sources/"
 SRC_URI = "${GNOME_MIRROR}/${BPN}/${@gnome_verdir("${PV}")}/${BPN}-${PV}.tar.${GNOME_COMPRESS_TYPE};name=archive \
            file://0001-change-encoding-profile-hide-video-recording-timesta.patch \
            file://0002-don-t-build-help-folder-to-avoid-build-break.patch \
+           file://0001-cheese-camera-support-max-framerate-to-60.patch \
+           file://0002-disable-viewfinder-sink-a-v-sync-to-get-better-perfo.patch \
 "
 
 FILES_${PN} += "${datadir}/dbus-1 ${datadir}/metainfo"
