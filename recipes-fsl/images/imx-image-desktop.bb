@@ -556,6 +556,9 @@ do_enable_graphics() {
 	echo >>"${IMAGE_ROOTFS}/etc/environment" "COGL_DRIVER=gles2"
 #	echo >>"${IMAGE_ROOTFS}/etc/environment" "CLUTTER_BACKEND=wayland"
 	echo >>"${IMAGE_ROOTFS}/etc/environment" "CLUTTER_DRIVER=gles2"
+	# Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=waylandd
+	# to run on Wayland anyway.
+	echo >>"${IMAGE_ROOTFS}/etc/environment" "QT_QPA_PLATFORM=wayland"
 
 	# disable xsession startup
 	rm -f ${IMAGE_ROOTFS}/usr/share/xsessions/*
