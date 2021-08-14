@@ -483,6 +483,18 @@ IMAGE_INSTALL_append_mx8mp = " \
     kernel-module-isp-vvcam \
 "
 
+IMAGE_INSTALL_remove_mx8mm = " \
+    libgles3-imx-dev \
+    libclc-imx libclc-imx-dev \
+    libopencl-imx \
+    libvulkan-imx \
+    libopenvx-imx libopenvx-imx-dev \
+    libnn-imx \
+    tensorflow-lite \
+    nnstreamer \
+    armnn \
+"
+
 fakeroot do_update_host() {
 	set -x
 
