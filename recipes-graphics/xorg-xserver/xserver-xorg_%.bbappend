@@ -1,5 +1,8 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
+SRC_URI_append = "file://0001-glamor-Fix-fbo-pixmap-format-with-GL_BGRA_EXT.patch \
+"
+
 EXTRA_OECONF += "--disable-glx \
 "
 
