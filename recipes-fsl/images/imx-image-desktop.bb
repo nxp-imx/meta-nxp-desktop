@@ -609,6 +609,11 @@ do_cleanup_rootfs() {
 	# remove apt-get source list, apt-get update can download them
 	rm -rf ${IMAGE_ROOTFS}/var/lib/apt/lists/*
 
+	# remove vsidaemon to disable hantro v4l2 decoder/encoder
+	if [ -e ${IMAGE_ROOTFS}/usr/bin/vsidaemon ]; then
+		mv ${IMAGE_ROOTFS}/usr/bin/vsidaemon ${IMAGE_ROOTFS}/usr/bin/vsidaemon.bak
+	fi
+
 	set +x
 }
 
