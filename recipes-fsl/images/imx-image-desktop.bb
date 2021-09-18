@@ -473,6 +473,7 @@ IMAGE_INSTALL += " \
     imx-gpu-viv-tools \
     libgpuperfcnt \
     ${@bb.utils.contains('COMPATIBLE_MACHINE', 'imxgpu2d', 'imx-gpu-g2d', '', d)} \
+    ${@bb.utils.contains('COMPATIBLE_MACHINE', 'imxdpu', 'imx-dpu-g2d', '', d)} \
     apitrace \
     gputop \
 "
