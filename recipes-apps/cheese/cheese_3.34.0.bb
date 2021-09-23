@@ -22,6 +22,11 @@ SRC_URI = "${GNOME_MIRROR}/${BPN}/${@gnome_verdir("${PV}")}/${BPN}-${PV}.tar.${G
            file://0002-don-t-build-help-folder-to-avoid-build-break.patch \
            file://0001-cheese-camera-support-max-framerate-to-60.patch \
            file://0002-disable-viewfinder-sink-a-v-sync-to-get-better-perfo.patch \
+           file://0001-disable-global-preset-usage-for-encoder-auto-plugin.patch \
+"
+
+SRC_URI_append_mx8qm += " \
+           file://0001-fixate-caps-to-NV12-for-8qm-8qm-encoder-only-support.patch \
 "
 
 FILES_${PN} += "${datadir}/dbus-1 ${datadir}/metainfo"

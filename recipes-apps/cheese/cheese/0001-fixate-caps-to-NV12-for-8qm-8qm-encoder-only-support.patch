@@ -1,0 +1,27 @@
+From 968ff5b48560c49b2419626324421b1869c0811b Mon Sep 17 00:00:00 2001
+From: Haihua Hu <jared.hu@nxp.com>
+Date: Thu, 23 Sep 2021 16:53:14 +0800
+Subject: [PATCH] fixate caps to NV12 for 8qm, 8qm encoder only support NV12
+ input
+
+---
+ libcheese/cheese-camera.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
+index a3873ecf..0de229f4 100644
+--- a/libcheese/cheese-camera.c
++++ b/libcheese/cheese-camera.c
+@@ -754,6 +754,9 @@ cheese_camera_set_new_caps (CheeseCamera *camera)
+ 
+     /* GStreamer >= 1.1.4 expects fully-specified video-capture-source caps. */
+     caps = gst_caps_fixate (caps);
++    if (gst_caps_is_fixed (caps)) {
++      gst_caps_set_simple (caps, "format", G_TYPE_STRING, "NV12", NULL);
++    }
+ 
+     g_object_set (priv->camerabin, "video-capture-caps", caps, NULL);
+ 
+-- 
+2.17.1
+
