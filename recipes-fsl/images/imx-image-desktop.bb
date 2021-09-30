@@ -455,7 +455,6 @@ IMAGE_INSTALL += " \
 IMAGE_INSTALL += " \
     wayland-protocols \
     libclc-imx libclc-imx-dev \
-    libgl-imx libgl-imx-dev \
     libgles1-imx libgles1-imx-dev \
     libgles2-imx libgles2-imx-dev \
     libgles3-imx-dev \
@@ -463,7 +462,6 @@ IMAGE_INSTALL += " \
     libopencl-imx \
     libegl-imx libegl-imx-dev \
     libgal-imx libgal-imx-dev \
-    libvivante-dri-imx \
     libvsc-imx \
     libgbm-imx libgbm-imx-dev \
     libvulkan-imx \
