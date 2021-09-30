@@ -151,6 +151,8 @@ GLES3_HEADER_REMOVALS_mx8qm  = ""
 VXC_BINARY_REMOVALS          = "libNNGPUBinary-*.so libNNVXCBinary-*.so libOvx12VXCBinary-*.so"
 
 VXC_BINARY_INSTALLS          = ""
+VXC_BINARY_INSTALLS_mx8qxp   = "libNNGPUBinary-lite.so"
+VXC_BINARY_INSTALLS_mx8qm    = "libNNGPUBinary-evis.so libNNVXCBinary-evis.so libOvx12VXCBinary-evis.so"
 VXC_BINARY_INSTALLS_mx8mp    = "libNNGPUBinary-evis2.so libNNVXCBinary-evis2.so libOvx12VXCBinary-evis2.so libNNGPUBinary-ulite.so"
 VXC_BINARY_INSTALLS_mx8mq    = "libNNGPUBinary-lite.so"
 VXC_BINARY_INSTALLS_mx8mn    = "libNNGPUBinary-ulite.so"
