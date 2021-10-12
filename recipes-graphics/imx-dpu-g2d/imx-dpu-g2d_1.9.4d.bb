@@ -7,7 +7,7 @@ LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://COPYING;md5=e565271ec9a80ce47abbddc4bffe56fa"
 PROVIDES += "virtual/libg2d"
 
-SRC_URI = "${FSL_MIRROR}/${BPN}-${PV}.bin;fsl-eula=true"
+SRC_URI = "${FSL_BIN_MIRROR}/${BPN}-${PV}.bin;fsl-eula=true"
 SRC_URI[md5sum] = "d01a270719f0f1e94ce800d9241144a4"
 SRC_URI[sha256sum] = "ef1f71f16c2a10eae4b54e591cda85bca7b1672e168d69afb0484e31127bffb0"
 
