@@ -14,7 +14,7 @@ APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
 ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_save_graphics; do_save_cheese;  do_aptget_update; do_update_host; do_update_dns;"
-IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_bluetooth; do_enable_graphics; do_enable_cheese; do_cleanup_rootfs"
+IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_graphics; do_enable_cheese; do_cleanup_rootfs"
 
 REQUIRED_DISTRO_FEATURES = "wayland"
 
