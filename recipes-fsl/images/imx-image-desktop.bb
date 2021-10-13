@@ -35,6 +35,7 @@ IMAGE_INSTALL += "\
 "
 
 IMAGE_INSTALL += "\
+	firmwared \
 	systemd-gpuconfig \
 	alsa-state \
 	libcogl \
