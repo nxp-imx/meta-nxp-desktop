@@ -18,6 +18,14 @@ IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_graphics;
 
 REQUIRED_DISTRO_FEATURES = "wayland"
 
+ML_NNSTREAMER_PKGS = " \
+    nnstreamer \
+    nnstreamer-tensorflow-lite \
+    nnstreamer-python3 \
+    nnstreamer-protobuf \
+    nnshark \
+"
+
 # This must be added first as it provides the foundation for
 # subsequent modifications to the rootfs
 IMAGE_INSTALL += "\
@@ -44,7 +52,7 @@ IMAGE_INSTALL += "\
 	xserver-xorg-xwayland \
 	chromium-ozone-wayland \
 	tensorflow-lite \
-	nnstreamer \
+	${ML_NNSTREAMER_PKGS} \
 	armnn \
 "
 # We want to have an itb to boot from in the /boot directory to be flexible
@@ -83,7 +91,7 @@ APTGET_EXTRA_PACKAGES += "\
 	ntpdate \
 	nfs-common \
 	openssh-server \
-	python3-future libtool autoconf pkg-config \
+	python3.9 libtool autoconf pkg-config \
 	bluez connman \
 	python-is-python3 \
 	libcairo2 libpixman-1-0 libpango-1.0-0 libpangocairo-1.0-0 \
@@ -491,7 +499,7 @@ IMAGE_INSTALL_remove_mx8mm = " \
     libopenvx-imx libopenvx-imx-dev \
     libnn-imx \
     tensorflow-lite \
-    nnstreamer \
+    ${ML_NNSTREAMER_PKGS} \
     armnn \
 "
 
