@@ -87,7 +87,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      lame libatomic-ops libatomic1 libattr1 libavahi-client3 libavahi-common3 \
                      libavahi-core7 libavahi-glib1 libavahi-gobject0 libblkid1 \
                      libcairo-gobject2 libcairo-script-interpreter2 libcairo2 libcap-ng0 \
-                     libcap2 libcrypt2 libdaemon0 libdbus-1-3 libdbus-glib-1-2 \
+                     libcap2 libdaemon0 libdbus-1-3 libdbus-glib-1-2 \
                      libdrm-radeon libdrm-nouveau libdrm-omap \
                      libdrm-intel libdrm-exynos libdrm-freedreno libdrm-amdgpu libdrm-etnaviv \
                      libexpat1 libfdisk1 libffi7 libflac libflac++6 libflac8 libfontconfig1 \
@@ -96,7 +96,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      libharfbuzz0 libical libice6 libicudata64 libicui18n64 libicuio64 libicutu64 \
                      libicuuc64 libidn2-0 libltdl7 liblzma5 libmount1 libmp3lame0 \
                      libnss-db2 libogg0 liborc-0.4-0 liborc-test-0.4-0 libpam libpciaccess0 \
-                     libpcre1 libpcrecpp0 libpcreposix0 libpixman-1-0 libpng16-16 libpsl5 \
+                     libpcrecpp0 libpcreposix0 libpixman-1-0 libpng16-16 libpsl5 \
                      libreadline8 libsbc1 libsm6 libsmartcols1 libsoup-2.4 libspeex1 \
                      libspeexdsp1 libsqlite3-0 libstdc++6 libsystemd0 libtag-c0 libtag1 \
                      libtheora libticw5 libtool libturbojpeg0 libudev1 \
@@ -118,7 +118,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      flex-dev glib-networking gobject-introspection-dev \
                       icu-dev lame-dev libatomic-dev libatomic-ops-dev \
                       libc6-dbg libc6-dev libcap-dbg libcap-dev libcap-ng-dev \
-                      libcrypt-dbg libcrypt-dev \
+                      perl perl-dev libcrypt libcrypt-dbg libcrypt-dev \
                       libdaemon-dev libdbus-glib-1-dev libexpat-dbg libexpat-dev \
                       libffi-dbg libffi-dev libfontconfig-dbg libfontconfig-dev \
                       libfreetype-dbg libfreetype-dev libfribidi-dbg libfribidi-dev \

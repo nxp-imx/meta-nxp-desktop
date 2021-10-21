@@ -43,6 +43,7 @@ IMAGE_INSTALL += "\
 "
 
 IMAGE_INSTALL += "\
+	perf \
 	firmwared \
 	systemd-gpuconfig \
 	alsa-state \
