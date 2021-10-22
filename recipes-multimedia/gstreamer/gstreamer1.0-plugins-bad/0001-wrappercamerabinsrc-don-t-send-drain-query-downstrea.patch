@@ -1,0 +1,36 @@
+From 16293e45db765d01f15d52deccce733082aa73b1 Mon Sep 17 00:00:00 2001
+From: Haihua Hu <jared.hu@nxp.com>
+Date: Mon, 25 Oct 2021 17:04:46 +0800
+Subject: [PATCH] wrappercamerabinsrc: don't send drain query downstream
+
+in ubuntu, drain query is in the same thread of clutter
+videosink render thread, when cluttervideosink is blocked
+while waiting redraw finish, the drain is hang up,
+but the redraw will never come as it in the same thread of
+query drain
+
+Signed-off-by: Haihua Hu <jared.hu@nxp.com>
+---
+ gst/camerabin2/gstwrappercamerabinsrc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/gst/camerabin2/gstwrappercamerabinsrc.c b/gst/camerabin2/gstwrappercamerabinsrc.c
+index 6fd11292a..dd9cb2df2 100644
+--- a/gst/camerabin2/gstwrappercamerabinsrc.c
++++ b/gst/camerabin2/gstwrappercamerabinsrc.c
+@@ -235,9 +235,9 @@ static void
+ gst_wrapper_camera_bin_src_set_output (GstWrapperCameraBinSrc * self,
+     GstPad * old_pad, GstPad * output_pad)
+ {
+-  GstQuery *drain = gst_query_new_drain ();
+-  gst_pad_peer_query (self->src_pad, drain);
+-  gst_query_unref (drain);
++  //GstQuery *drain = gst_query_new_drain ();
++  //gst_pad_peer_query (self->src_pad, drain);
++  //gst_query_unref (drain);
+ 
+   if (old_pad)
+     gst_ghost_pad_set_target (GST_GHOST_PAD (old_pad), NULL);
+-- 
+2.17.1
+
