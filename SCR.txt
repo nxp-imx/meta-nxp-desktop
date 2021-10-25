@@ -64,7 +64,6 @@ Origin:                      NXP (proprietary)
 --------------------------------------------
 
 Package:                     isp-imx-4.2.2.15.0d.bin
-Version:                     4.2.2.13.0d
 Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
