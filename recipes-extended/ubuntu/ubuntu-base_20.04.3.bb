@@ -81,7 +81,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       python3-misc python3-doctest python3-multiprocessing \
                       python3-compression python3-html python3-netserver \
                       libtirpc3 python3-compile python3-json python3-unixadmin \
-                      python3-plistlib python3-xmlrpc \
+                      python3-plistlib python3-xmlrpc python2 python3 \
                      attr avahi-daemon base-files base-passwd bash-completion consolekit \
                      cracklib cryptodev-linux curl flex-libfl gobject-introspection icu \
                      lame libatomic-ops libatomic1 libattr1 libavahi-client3 libavahi-common3 \
