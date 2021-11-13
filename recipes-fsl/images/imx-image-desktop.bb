@@ -141,7 +141,7 @@ IMAGE_INSTALL += " \
     libdrm-vivante \
     imx-gpu-viv-tools \
     libgpuperfcnt \
-    ${@bb.utils.contains('COMPATIBLE_MACHINE', 'imxgpu2d', 'imx-gpu-g2d', '', d)} \
+    ${@bb.utils.contains('COMPATIBLE_MACHINE', 'imxgpu2d', 'imx-gpu-g2d imx-g2d-samples', '', d)} \
     ${@bb.utils.contains('COMPATIBLE_MACHINE', 'imxdpu', 'imx-dpu-g2d', '', d)} \
     apitrace \
     gputop \
