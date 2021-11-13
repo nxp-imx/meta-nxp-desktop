@@ -5,7 +5,7 @@
 
 DESCRIPTION = "GPU G2D library and apps for i.MX with 2D GPU and no DPU"
 LICENSE = "Proprietary"
-LIC_FILES_CHKSUM = "file://COPYING;md5=e565271ec9a80ce47abbddc4bffe56fa"
+LIC_FILES_CHKSUM = "file://COPYING;md5=03bcadc8dc0a788f66ca9e2b89f56c6f"
 
 DEPENDS += "libgal-imx"
 PROVIDES += "virtual/libg2d"
@@ -13,8 +13,8 @@ PROVIDES += "virtual/libg2d"
 FSLBIN_NAME     = "${PN}-${PV}-${TARGET_ARCH}"
 
 SRC_URI = "${FSL_BIN_MIRROR}/${FSLBIN_NAME}.bin;name=${TARGET_ARCH};fsl-eula=true"
-SRC_URI[aarch64.md5sum] = "60fa1060d27ef1a621174a506dc42787"
-SRC_URI[aarch64.sha256sum] = "10ea1016292c52f7db69d6303f73f340dd3dd0d355631c3516fb62be9ab397cf"
+SRC_URI[aarch64.md5sum] = "5b2d4c83d36d29cb84f63e4ee461cfd2"
+SRC_URI[aarch64.sha256sum] = "d6b0bea14fbb787f75782e883539ef9d525fdce3c84fff20b9f30c2ca1707bfa"
 
 S = "${WORKDIR}/${FSLBIN_NAME}"
 
@@ -25,7 +25,6 @@ do_install () {
     install -d ${D}${includedir}
     cp ${S}/g2d/usr/lib/*.so* ${D}${libdir}
     cp -Pr ${S}/g2d/usr/include/* ${D}${includedir}
-    cp -r ${S}/gpu-demos/opt ${D}
 }
 
 FILES_${PN} = "${libdir}/libg2d* /opt"

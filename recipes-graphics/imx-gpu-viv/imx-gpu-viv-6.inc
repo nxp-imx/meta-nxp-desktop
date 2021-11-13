@@ -183,12 +183,6 @@ do_install () {
         install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glesv1_cm.pc ${D}${libdir}/pkgconfig/glesv1_cm.pc
         install -m 0644 ${S}/gpu-core/usr/lib/pkgconfig/glesv2.pc ${D}${libdir}/pkgconfig/glesv2.pc
 
-       if [ "${USE_X11}" = "yes" ]; then
-
-        cp -r ${S}/gpu-core/usr/lib/dri ${D}${libdir}
-
-       fi
-
     elif [ "${USE_X11}" = "yes" ]; then
 
         cp -r ${S}/gpu-core/usr/lib/dri ${D}${libdir}
