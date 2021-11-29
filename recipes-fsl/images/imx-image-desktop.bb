@@ -122,6 +122,9 @@ IMAGE_INSTALL += " \
 "
 
 # GPU driver
+G2D_SAMPLES                 = ""
+G2D_SAMPLES_imxgpu2d        = "imx-g2d-samples"
+G2D_SAMPLES_imxgpu2d_imxdpu = ""
 
 IMAGE_INSTALL += " \
     wayland-protocols \
@@ -141,8 +144,7 @@ IMAGE_INSTALL += " \
     libdrm-vivante \
     imx-gpu-viv-tools \
     libgpuperfcnt \
-    ${@bb.utils.contains('COMPATIBLE_MACHINE', 'imxgpu2d', 'imx-gpu-g2d imx-g2d-samples', '', d)} \
-    ${@bb.utils.contains('COMPATIBLE_MACHINE', 'imxdpu', 'imx-dpu-g2d', '', d)} \
+    ${G2D_SAMPLES} \
     apitrace \
     gputop \
 "
