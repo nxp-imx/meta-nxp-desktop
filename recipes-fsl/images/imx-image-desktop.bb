@@ -283,6 +283,10 @@ do_cleanup_rootfs() {
 	# remove apt-get source list, apt-get update can download them
 	rm -rf ${IMAGE_ROOTFS}/var/lib/apt/lists/*
 
+	# imx kernel didn't use udev to load firmware, remove this rules
+	# to avoid login hang when load sdma firmware
+	rm -f ${IMAGE_ROOTFS}/usr/lib/udev/rules.d/50-firmware.rules
+
 	# remove vsidaemon to disable hantro v4l2 decoder/encoder
 	if [ -e ${IMAGE_ROOTFS}/usr/bin/vsidaemon ]; then
 		mv ${IMAGE_ROOTFS}/usr/bin/vsidaemon ${IMAGE_ROOTFS}/usr/bin/vsidaemon.bak
