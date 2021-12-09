@@ -68,8 +68,16 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       python3-distutils python3-pickle python3-xml \
                       update-alternatives-opkg pam-plugin-unix \
                       libpam-runtime shadow-base shadow dbus polkit \
-                      systemd systemd-dev iso-codes-dev \ 
-                      shared-mime-info-dev bluez5 \ 
+                      systemd systemd-dev iso-codes-dev file gptfdisk \
+                      shared-mime-info-dev bluez5 dtc e2fsprogs kmod \
+                      e2fsprogs-e2fsck e2fsprogs-tune2fs e2fsprogs-badblocks \
+                      procps procps-sysctl pstree fuser killall elfutils \
+                      fio i2c-tools ifenslave keyutils libkmod2 libelf1 \
+                      libasm1 libaio1 libpci3 libsysfs2 libtinfo5 udev \
+                      memtester minicom mmc-utils pciutils psmisc ptpd \
+                      coreutils openssl-conf libcap merge-files upower \
+                      python3-pyelftools slang zstd libdrm-dev pkgconfig \
+                      python3-resource sysfsutils sysklogd sysstat lrzsz \
                       python3-stringold python3-numbers python3-numbers \
                       python3-shell python3-pprint python3-logging \
                       python3-datetime python3-difflib python3-typing \
@@ -80,11 +88,11 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       python3-asyncio python3-unittest python3-pydoc \
                       python3-misc python3-doctest python3-multiprocessing \
                       python3-compression python3-html python3-netserver \
-                      libtirpc3 python3-compile python3-json python3-unixadmin \
+                      python3-compile python3-json python3-unixadmin \
                       python3-plistlib python3-xmlrpc python2 python3 bash \
                      attr avahi-daemon base-files base-passwd bash-completion consolekit \
                      cracklib cryptodev-linux curl flex-libfl gobject-introspection icu \
-                     lame libatomic-ops libatomic1 libattr1 libavahi-client3 libavahi-common3 \
+                     lame libatomic-ops libattr1 libavahi-client3 libavahi-common3 \
                      libavahi-core7 libavahi-glib1 libavahi-gobject0 libblkid1 \
                      libcairo-gobject2 libcairo-script-interpreter2 libcairo2 libcap-ng0 \
                      libcap2 libdaemon0 libdbus-1-3 libdbus-glib-1-2 \
