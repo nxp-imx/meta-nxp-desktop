@@ -21,7 +21,7 @@
 #                           'do_aptget_update' have been executed
 #   APTGET_EXTRA_PACKAGES_REMOVE - the list of debian packages (space separated) to be
 #                           removed from the existing root filesystem, after all packages
-#   APTGET_EXTRA_PACKAGES_RECONFIGURABLE - the list of debian packages (space separated) to be
+#   APTGET_EXTRA_PACKAGES_DESKTOP - the list of desktop packages (space separated) to be
 #                           installed over the existing root filesystem, skip configuration error
 #   APTGET_EXTRA_SOURCE_PACKAGES - the list of debian source packages (space separated)
 #                                  to be installed over the existing root filesystem
@@ -76,7 +76,7 @@ APTGET_EXTRA_PACKAGES ?= ""
 APTGET_EXTRA_PACKAGES_LAST ?= ""
 APTGET_EXTRA_SOURCE_PACKAGES ?= ""
 APTGET_EXTRA_PACKAGES_SERVICES_DISABLED ?= ""
-APTGET_EXTRA_PACKAGES_RECONFIGURABLE ?= ""
+APTGET_EXTRA_PACKAGES_DESKTOP ?= ""
 APTGET_EXTRA_PACKAGES_REMOVE ?= ""
 
 # Parent recipes must define the path to the root filesystem to be updated
@@ -766,7 +766,9 @@ END_PPA
 	# to avoid downloads on a subsequent attempt
 	aptget_save_cache_into_sstate
 
-	aptget_run_aptget install ${APTGET_EXTRA_PACKAGES_RECONFIGURABLE}
+	if [ -n "${APTGET_EXTRA_PACKAGES_DESKTOP}" ]; then
+		aptget_run_aptget install ${APTGET_EXTRA_PACKAGES_DESKTOP}
+	fi
 
 	if [ $aptgetfailure -ne 0 ]; then
 		bberror "${APTGET_EXECUTABLE} failed to execute as expected!"

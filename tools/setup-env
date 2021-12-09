@@ -32,6 +32,8 @@ if [ -f conf/local.conf ]; then
     echo ""
     echo "You can now build the following images:"
     echo ""
-    echo "$ bitbake ls-image-distro"
+    echo "$ bitbake ls-image-main  # for all layerscape boards"
+    echo ""
+    echo "$ bitbake ls-image-desktop  # for ls1028a only"
     echo ""
 fi

@@ -1,10 +1,7 @@
 # A desktop image with an Desktop rootfs
 #
-# Note that we have a tight dependency to ubuntu-base
 # and that we cannot just install arbitrary Yocto packages to avoid
 # rootfs pollution or destruction.
-PV = "${@d.getVar('PREFERRED_VERSION_ubuntu-base', True) or '1.0'}"
-
 IMAGE_LINGUAS = ""
 IMAGE_INSTALL = ""
 inherit core-image image nativeaptinstall features_check
@@ -18,15 +15,6 @@ IMAGE_PREPROCESS_COMMAND:append = " do_fix_connman_conflict; do_enable_graphics;
 
 REQUIRED_DISTRO_FEATURES = ""
 REQUIRED_DISTRO_FEATURES:append:ls1028a = " wayland x11"
-
-# This must be added first as it provides the foundation for
-# subsequent modifications to the rootfs
-IMAGE_INSTALL += "\
-	ubuntu-base \
-	ubuntu-base-dev \
-	ubuntu-base-dbg \
-	ubuntu-base-doc \
-"
 
 # Without the kernel, modules, and firmware we can't really use the Linux
 IMAGE_INSTALL += "\
@@ -280,29 +268,6 @@ fakeroot do_fix_ldconfig() {
 #    rm ${IMAGE_ROOTFS}/etc/fonts/fonts.conf
 
 	set +x
-}
-
-
-fakeroot do_enable_bluetooth() {
-    set -x
-    
-    echo >> "${APTGET_CHROOT_DIR}/lib/systemd/system/hciattach.service" "[Unit] \n
-Description=Configure Bluetooth Modems connected by UART \n
-Before=bluetooth.service \n
-After=dev-serial1.device \n
-\n
-[Service] \n
-Type=forking \n
-ExecStart=-/usr/bin/hciattach /dev/ttymxc0 qualcomm -t120 115200 flow \n
- \n
-[Install] \n
-WantedBy=multi-user.target \n
-" 
-
-    rm -f ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/hciattach.service
-    ln -s /lib/systemd/system/hciattach.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/hciattach.service
-    
-    set +x
 }
 
 IMAGE_ROOTFS_SIZE ?= "8192"

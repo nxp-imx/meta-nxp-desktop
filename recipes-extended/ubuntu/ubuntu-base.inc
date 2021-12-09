@@ -36,6 +36,7 @@ INHIBIT_DEFAULT_DEPS = "1"
 # during runtime through default dependencies!
 RCONFLICTS:${PN} += "glibc eglibc"
 RREPLACES:${PN} += "glibc eglibc"
+RPROVIDES:${PN} += "glibc eglibc"
 
 # The basic ubuntu-base rootfs does not provide enough functionality to
 # enable ethernet or interfaces automatically in general.
@@ -67,16 +68,6 @@ APTGET_EXTRA_PACKAGES += "\
 	xz-utils bzip2 \
 	libtinfo5 \
 "
-# Some packages are implicitly present in Desktop due to the kernel
-# and rootfs configuration. We pretend to have the respective Yocto
-# names therefore. Stuff is grouped for easier updates
-RPROVIDES:${PN}:ubuntu += " \
-/bin/sh \
-flex \
-"
-RPROVIDES:${PN}:ubuntu += " \
-shared-mime-info \
-"
 RPROVIDES:${PN}:ubuntu += " \
 rtld(GNU_HASH) \
 libc6 \
@@ -88,69 +79,6 @@ libcrypto1.1 \
 libgcc1-dev \
 libssl1.1 \
 update-alternatives \
-"
-RPROVIDES:${PN}:ubuntu += " \
-pam-plugin-access \
-pam-plugin-debug \
-pam-plugin-deny \
-pam-plugin-echo \
-pam-plugin-env \
-pam-plugin-exec \
-pam-plugin-faildelay \
-pam-plugin-filter \
-pam-plugin-ftp \
-pam-plugin-group \
-pam-plugin-issue \
-pam-plugin-keyinit \
-pam-plugin-limits \
-pam-plugin-lastlog \
-pam-plugin-listfile \
-pam-plugin-localuser \
-pam-plugin-loginuid \
-pam-plugin-mkhomedir \
-pam-plugin-motd \
-pam-plugin-namespace \
-pam-plugin-nologin \
-pam-plugin-permit \
-pam-plugin-pwhistory \
-pam-plugin-rhosts \
-pam-plugin-rootok \
-pam-plugin-securetty \
-pam-plugin-shells \
-pam-plugin-stress \
-pam-plugin-succeed-if \
-pam-plugin-time \
-pam-plugin-timestamp \
-pam-plugin-tally \
-pam-plugin-tally2 \
-pam-plugin-umask \
-pam-plugin-unix \
-pam-plugin-warn \
-pam-plugin-wheel \
-pam-plugin-xauth \
-"
-RPROVIDES:${PN}:ubuntu += " \
-libform5 \
-libformw5 \
-libmenu5 \
-libmenuw5 \
-libncurses5 \
-libncursesw5 \
-libpanel5 \
-libpanelw5 \
-libtic5 \
-libtinfo5 \
-ncurses-terminfo-base \
-"
-
-# A few things are provided where we don't have a Yocto equivalent
-# currently/possibly. We add them preemptively just in case
-RPROVIDES:${PN}:ubuntu += " \
-pam-plugin-tty-audit \
-pam-plugin-userdb \
-pam-plugin-extrausers \
-pam-plugin-sepermit \
-pam-plugin-selinux \
 "
 
 # Ensure that all files of the tgz end up in our packages
