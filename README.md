@@ -32,15 +32,15 @@ Create a _new_ build folder
 If you want to create a _new_ build folder:
 
 ```
-$ DISTRO=imx-desktop-xwayland MACHINE=imx8mpevkdesktop source imx-setup-desktop.sh -b build-desktop
+$ DISTRO=imx-desktop-xwayland MACHINE=imx8mpevk source imx-setup-desktop.sh -b build-desktop
 ```
 
 Note: The available build MACHINEs for below boards:
-	imx8mpevkdesktop - i.MX8MP-EVK
-	imx8mqevkdesktop - i.MX8MQ-EVK
-	imx8mmevkdesktop - i.MX8MM-EVK
-	imx8mnevkdesktop - i.MX8MN-EVK
-	imx8qmmekdesktop - i.MX8QM-MEK
+	imx8mpevk -  i.MX8MP-EVK
+	imx8mqevk -  i.MX8MQ-EVK
+	imx8mmevk -  i.MX8MM-EVK
+	imx8mnevk -  i.MX8MN-EVK
+	imx8qmmek -  i.MX8QM-MEK
 
 Use an _existing_ build folder
 ------------------------------
