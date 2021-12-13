@@ -1,0 +1,27 @@
+# short-description: Create SD card image with a boot partition
+# long-description:
+# Create an image that can be written onto a SD card using
+# dd for use with Layerscape ls1043a/ls1046a family.
+#
+# The disk layout used is:
+#  - ----- --------- -------------- ------------------------------
+# | | PBL | FIP     |  FMAN-UCODE  | NET PHY |   boot +  rootfs  |
+#  - ----- --------- -------------- ------------------------------
+# ^ ^     ^         ^              ^         ^
+# | |     |         |              |         |
+# 0 4kiB  1MiB    9MiB           9.5MiB    16MiB
+#
+
+part PBL --source rawcopy --sourceparams="file=${PBL_FILE}" --ondisk mmcblk0 --no-table --align ${SD_PBL_OFFSET}
+
+part FIP --source rawcopy --sourceparams="file=${FIP_FILE}" --ondisk mmcblk0 --no-table --align ${SD_FIP_OFFSET}
+
+part FMANUCODER --source rawcopy --sourceparams="file=${FMAN_UCODE_FILE}" --ondisk mmcblk0 --no-table --align ${SD_FMAN_UCODE_OFFSET}
+
+part ETH --source rawcopy --sourceparams="file=${ETH_PHY_FILE}" --ondisk mmcblk0 --no-table --align ${SD_ETH_PHY_FW_OFFSET}
+
+part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=ext4 --label boot --active --align 16384 --size 128
+
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfs --align 4096
+
+bootloader --ptable msdos

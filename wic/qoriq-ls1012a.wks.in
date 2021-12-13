@@ -1,0 +1,19 @@
+# short-description: Create QSPI flash image with a boot partition
+# long-description:
+#
+# The disk layout used is:
+#  ------ --------- --------- ---------
+# | PBL  | FIP     |  PFE    |   ITB   |
+#  ------ --------- --------- ---- ----
+# ^      ^         ^         ^
+# |      |         |         |
+# 0    1MiB       10MiB     16MiB
+#
+
+part PBL --source rawcopy --sourceparams="file=${PBL_FILE}" --ondisk flash --no-table --align ${FLASH_PBL_OFFSET}
+
+part FIP --source rawcopy --sourceparams="file=${FIP_FILE}" --ondisk flash --no-table --align ${FLASH_FIP_OFFSET}
+
+part PFE --source rawcopy --sourceparams="file=${PFE_FILE}" --ondisk flash --no-table --align ${FLASH_PFE_OFFSET}
+
+part ITB --source rawcopy --sourceparams="file=${ITB_FILE}" --ondisk flash --no-table --align ${FLASH_KERNELITB_OFFSET}

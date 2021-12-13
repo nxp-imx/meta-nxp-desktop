@@ -1,0 +1,27 @@
+# short-description: Create SD card image with a boot partition
+# long-description:
+# Create an image that can be written onto a SD card using
+# dd for use with Layerscape ls1028a family.
+#
+#  - ----- --------- --------- -------------------
+# | | PBL |   FIP   |  DP     |   boot +  rootfs  |
+#  - ----- --------- --------- -------------------
+# ^ ^     ^         ^         ^
+# | |     |         |         |
+# 0 4kiB  1MiB    9.24MiB   16MiB
+#
+
+
+# offset(1K) number in beginning 64MB space of SD/eMMC card on all QorIQ platforms
+
+part PBL --source rawcopy --sourceparams="file=${PBL_FILE}" --ondisk mmcblk0 --no-table --align ${SD_PBL_OFFSET}
+
+part FIP --source rawcopy --sourceparams="file=${FIP_FILE}" --ondisk mmcblk0 --no-table --align ${SD_FIP_OFFSET}
+
+part QEDP --source rawcopy --sourceparams="file=${QE_DP_FILE}" --ondisk mmcblk0 --no-table --align ${SD_QE_DP_FW_OFFSET}
+
+part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=ext4 --label boot --active --align 16384 --size 128
+
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfs --align 4096
+
+bootloader --ptable msdos
