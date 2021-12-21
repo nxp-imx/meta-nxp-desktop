@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-2.0-only;m
 
 SRC_URI = " file://gpuconfig \
             file://gpuconfig.service \
+            file://profile \
 "
 S = "${WORKDIR}"
 
@@ -17,6 +18,8 @@ do_install () {
 
     install -m 0755 ${WORKDIR}/gpuconfig ${D}${sysconfdir}
     install -m 0644 ${WORKDIR}/gpuconfig.service ${D}${systemd_unitdir}/system
+
+    install -Dm0755 ${WORKDIR}/profile ${D}${sysconfdir}/profile.d/gpuconfig.sh
 
     # Enable the gpuconfig.service
     ln -sf ${systemd_unitdir}/system/gpuconfig.service \
