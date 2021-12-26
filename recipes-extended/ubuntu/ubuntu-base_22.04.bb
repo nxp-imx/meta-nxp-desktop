@@ -5,7 +5,7 @@ SECTION = "devel"
 APTGET_EXTRA_PACKAGES += " \
     libtinfo5 \
     udhcpc \
-    python \
+    python3.10 \
 "
 
 APTGET_EXTRA_PACKAGES_DESKTOP = " \

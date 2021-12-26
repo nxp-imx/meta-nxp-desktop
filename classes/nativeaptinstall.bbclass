@@ -792,6 +792,16 @@ END_PPA
 		return $aptgetfailure
 	fi
 
+        if [ -e "${APTGET_CHROOT_DIR}/usr/bin/python3" ]; then
+            if [ ! -e "${APTGET_CHROOT_DIR}/usr/bin/python" ]; then
+                ln "python3" -s "${APTGET_CHROOT_DIR}/usr/bin/python"
+            fi
+
+            if [ ! -e "${APTGET_CHROOT_DIR}/usr/local/bin/python" ]; then
+                ln "/usr/bin/python3" -s "${APTGET_CHROOT_DIR}/usr/local/bin/python"
+            fi
+        fi
+
 	# The list of installed packages goes into the log
 	echo "Installed packages:"
 	chroot "${APTGET_CHROOT_DIR}" /usr/bin/dpkg -l | grep '^ii' | awk '{print $2}'
