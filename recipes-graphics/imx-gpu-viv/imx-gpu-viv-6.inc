@@ -17,8 +17,8 @@ DEPENDS += " \
     ${@bb.utils.contains('DISTRO_FEATURES',     'x11', 'libxcb libxshmfence libxxf86vm', \
                                                        '', d)} \
 "
-DEPENDS_append_imxdrm = " libdrm wayland"
-DEPENDS_append_mx8 = " patchelf-native"
+DEPENDS:append:imxdrm = " libdrm wayland"
+DEPENDS:append:mx8 = " patchelf-native"
 
 # imx-gpu-viv does not provide everything it needs to for virtual/libgl
 # on x11 backend or on Wayland backend with XWayland support.
@@ -26,17 +26,17 @@ DEPENDS_append_mx8 = " patchelf-native"
 DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'mesa', '', d)}"
 
 EXTRA_PROVIDES = ""
-EXTRA_PROVIDES_append_imxgpu3d = " \
+EXTRA_PROVIDES:append:imxgpu3d = " \
     virtual/libgl \
     virtual/libgles1 \
     virtual/libgles2 \
 "
-EXTRA_PROVIDES_append_mx8 = " \
+EXTRA_PROVIDES:append:mx8 = " \
     virtual/libgbm \
 "
-PROVIDES_OPENVX       = ""
-PROVIDES_OPENVX_mx8   = "virtual/libopenvx"
-PROVIDES_OPENVX_mx8mm = ""
+PROVIDES:OPENVX       = ""
+PROVIDES:OPENVX:mx8   = "virtual/libopenvx"
+PROVIDES:OPENVX:mx8mm = ""
 PROVIDES += " \
     imx-gpu-viv \
     libgal-imx \
@@ -46,22 +46,22 @@ PROVIDES += " \
     virtual/opencl-headers \
     virtual/opencl-icd \
     ${EXTRA_PROVIDES} \
-    ${PROVIDES_OPENVX} \
+    ${PROVIDES:OPENVX} \
 "
 
-RPROVIDES_${PN}_imxgpu3d += "imx-gpu-viv"
+RPROVIDES:${PN}:imxgpu3d += "imx-gpu-viv"
 
 PE = "1"
 
 inherit fsl-eula-unpack features_check
 
-REQUIRED_DISTRO_FEATURES_mx8 = "wayland"
+REQUIRED_DISTRO_FEATURES:mx8 = "wayland"
 
 SRC_URI = "${FSL_BIN_MIRROR}/${BPN}-${PV}.bin;fsl-eula=true"
 
 # Note : If you add a package here, to prevent a naming conflict see the python_anonymous() futher below
 IMX_PACKAGES_GBM     = ""
-IMX_PACKAGES_GBM_mx8 = "libgbm-imx libgbm-imx-dev"
+IMX_PACKAGES_GBM:mx8 = "libgbm-imx libgbm-imx-dev"
 PACKAGES =+ "libclc-imx libclc-imx-dev \
 	libgl-imx libgl-imx-dev \
 	libgles1-imx libgles1-imx-dev \
@@ -108,7 +108,7 @@ python __anonymous() {
     # the source we cannot fix it. Disable the insane check for now.
     packages = d.getVar('PACKAGES').split()
     for p in packages:
-        d.appendVar("INSANE_SKIP_%s" % p, " ldflags")
+        d.appendVar("INSANE_SKIP:%s" % p, " ldflags")
 
     # For the packages that make up the OpenGL interfaces, inject variables so that
     # they don't get Debian-renamed (which would remove the -imx suffix).
@@ -117,45 +117,45 @@ python __anonymous() {
               ("libgles3",), ("libgbm",)):
         fullp = p[0] + "-imx"
         pkgs = "".join(' %s' % i for i in p)
-        d.setVar("DEBIAN_NOAUTONAME_" + fullp, "1")
-        d.appendVar("RREPLACES_" + fullp, pkgs)
-        d.appendVar("RPROVIDES_" + fullp, pkgs)
-        d.appendVar("RCONFLICTS_" + fullp, pkgs)
+        d.setVar("DEBIAN_NOAUTONAME:" + fullp, "1")
+        d.appendVar("RREPLACES:" + fullp, pkgs)
+        d.appendVar("RPROVIDES:" + fullp, pkgs)
+        d.appendVar("RCONFLICTS:" + fullp, pkgs)
 
         # For -dev, the first element is both the Debian and original name
         fullp += "-dev"
         pkgs = p[0] + "-dev"
-        d.setVar("DEBIAN_NOAUTONAME_" + fullp, "1")
-        d.appendVar("RREPLACES_" + fullp, pkgs)
-        d.appendVar("RPROVIDES_" + fullp, pkgs)
-        d.appendVar("RCONFLICTS_" + fullp, pkgs)
+        d.setVar("DEBIAN_NOAUTONAME:" + fullp, "1")
+        d.appendVar("RREPLACES:" + fullp, pkgs)
+        d.appendVar("RPROVIDES:" + fullp, pkgs)
+        d.appendVar("RCONFLICTS:" + fullp, pkgs)
 }
 
 IS_MX6SL = "0"
-IS_MX6SL_mx6sl = "1"
+IS_MX6SL:mx6sl = "1"
 
 IS_MX8 = "0"
-IS_MX8_mx8 = "1"
+IS_MX8:mx8 = "1"
 
 PACKAGE_FP_TYPE = "hardfp"
 
 HAS_GBM     = "false"
-HAS_GBM_mx8 = "true"
+HAS_GBM:mx8 = "true"
 
 GLES3_HEADER_REMOVALS        = "gl31.h gl32.h"
-GLES3_HEADER_REMOVALS_mx8m   = "gl32.h"
-GLES3_HEADER_REMOVALS_mx8mm  = "gl31.h gl32.h"
-GLES3_HEADER_REMOVALS_mx8qxp = ""
-GLES3_HEADER_REMOVALS_mx8qm  = ""
+GLES3_HEADER_REMOVALS:mx8m   = "gl32.h"
+GLES3_HEADER_REMOVALS:mx8mm  = "gl31.h gl32.h"
+GLES3_HEADER_REMOVALS:mx8qxp = ""
+GLES3_HEADER_REMOVALS:mx8qm  = ""
 
 VXC_BINARY_REMOVALS          = "libNNGPUBinary-*.so libNNVXCBinary-*.so libOvx12VXCBinary-*.so"
 
 VXC_BINARY_INSTALLS          = ""
-VXC_BINARY_INSTALLS_mx8qxp   = "libNNGPUBinary-lite.so"
-VXC_BINARY_INSTALLS_mx8qm    = "libNNGPUBinary-evis.so libNNVXCBinary-evis.so libOvx12VXCBinary-evis.so"
-VXC_BINARY_INSTALLS_mx8mp    = "libNNGPUBinary-evis2.so libNNVXCBinary-evis2.so libOvx12VXCBinary-evis2.so libNNGPUBinary-ulite.so"
-VXC_BINARY_INSTALLS_mx8mq    = "libNNGPUBinary-lite.so"
-VXC_BINARY_INSTALLS_mx8mn    = "libNNGPUBinary-ulite.so"
+VXC_BINARY_INSTALLS:mx8qxp   = "libNNGPUBinary-lite.so"
+VXC_BINARY_INSTALLS:mx8qm    = "libNNGPUBinary-evis.so libNNVXCBinary-evis.so libOvx12VXCBinary-evis.so"
+VXC_BINARY_INSTALLS:mx8mp    = "libNNGPUBinary-evis2.so libNNVXCBinary-evis2.so libOvx12VXCBinary-evis2.so libNNGPUBinary-ulite.so"
+VXC_BINARY_INSTALLS:mx8mq    = "libNNGPUBinary-lite.so"
+VXC_BINARY_INSTALLS:mx8mn    = "libNNGPUBinary-ulite.so"
 
 do_install () {
     install -d ${D}${libdir}
@@ -261,95 +261,95 @@ do_install () {
     chown -R root:root "${D}"
 }
 
-ALLOW_EMPTY_${PN} = "1"
+ALLOW_EMPTY:${PN} = "1"
 
-FILES_libclc-imx = "${libdir}/libCLC${SOLIBS} ${includedir}/CL/cl_viv_vx_ext.h"
-FILES_libclc-imx-dev = "${includedir}/CL ${libdir}/libCLC${SOLIBSDEV}"
+FILES:libclc-imx = "${libdir}/libCLC${SOLIBS} ${includedir}/CL/cl_viv_vx_ext.h"
+FILES:libclc-imx-dev = "${includedir}/CL ${libdir}/libCLC${SOLIBSDEV}"
 
 # libEGL.so is used by some demo apps from Freescale
-INSANE_SKIP_libegl-imx += "dev-so"
-FILES_libegl-imx = "${libdir}/libEGL${REALSOLIBS} ${libdir}/libEGL${SOLIBSDEV} "
-FILES_libegl-imx-dev = "${includedir}/EGL ${includedir}/KHR ${libdir}/pkgconfig/egl.pc"
+INSANE_SKIP:libegl-imx += "dev-so"
+FILES:libegl-imx = "${libdir}/libEGL${REALSOLIBS} ${libdir}/libEGL${SOLIBSDEV} "
+FILES:libegl-imx-dev = "${includedir}/EGL ${includedir}/KHR ${libdir}/pkgconfig/egl.pc"
 
-FILES_libgal-imx = "${libdir}/libGAL${SOLIBS} ${libdir}/libGAL_egl${SOLIBS}"
-FILES_libgal-imx-dev = "${libdir}/libGAL${SOLIBSDEV} ${includedir}/HAL"
-RDEPENDS_libgal-imx += "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'valgrind', '', d)}"
-RPROVIDES_libgal-imx += "libgal-imx"
-INSANE_SKIP_libgal-imx += "build-deps"
+FILES:libgal-imx = "${libdir}/libGAL${SOLIBS} ${libdir}/libGAL_egl${SOLIBS}"
+FILES:libgal-imx-dev = "${libdir}/libGAL${SOLIBSDEV} ${includedir}/HAL"
+RDEPENDS:libgal-imx += "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'valgrind', '', d)}"
+RPROVIDES:libgal-imx += "libgal-imx"
+INSANE_SKIP:libgal-imx += "build-deps"
 
-FILES_libvsc-imx = "${libdir}/libVSC${SOLIBS}"
+FILES:libvsc-imx = "${libdir}/libVSC${SOLIBS}"
 
-FILES_libgbm-imx_mx8 = "${libdir}/libgbm${REALSOLIBS} ${libdir}/libgbm${SOLIBSDEV} ${libdir}/libgbm_viv${SOLIBSDEV}"
-FILES_libgbm-imx-dev_mx8 = "${libdir}/pkgconfig/gbm.pc ${includedir}/gbm.h"
-RDEPENDS_libgbm-imx_append_mx8 = " libdrm"
-INSANE_SKIP_libgbm-imx += "dev-so"
+FILES:libgbm-imx:mx8 = "${libdir}/libgbm${REALSOLIBS} ${libdir}/libgbm${SOLIBSDEV} ${libdir}/libgbm_viv${SOLIBSDEV}"
+FILES:libgbm-imx-dev:mx8 = "${libdir}/pkgconfig/gbm.pc ${includedir}/gbm.h"
+RDEPENDS:libgbm-imx:append:mx8 = " libdrm"
+INSANE_SKIP:libgbm-imx += "dev-so"
 
-FILES_libvulkan-imx = "${libdir}/libvulkan${SOLIBS} ${libdir}/libvulkan${REALSOLIBS} ${libdir}/libSPIRV_viv${SOLIBS}"
-FILES_libvulkan-imx-dev = "${includedir}/vulkan ${libdir}/libvulkan${SOLIBSDEV}"
-INSANE_SKIP_libvulkan-imx += "dev-so"
+FILES:libvulkan-imx = "${libdir}/libvulkan${SOLIBS} ${libdir}/libvulkan${REALSOLIBS} ${libdir}/libSPIRV_viv${SOLIBS}"
+FILES:libvulkan-imx-dev = "${includedir}/vulkan ${libdir}/libvulkan${SOLIBSDEV}"
+INSANE_SKIP:libvulkan-imx += "dev-so"
 
-FILES_libopenvx-imx = "${libdir}/libOpenVX${SOLIBS} ${libdir}/libOpenVX${REALSOLIBS} ${libdir}/libOvx*${SOLIBS} ${libdir}/libOpenVXC${SOLIBS} ${libdir}/libOpenVXU${SOLIBS} ${libdir}/libArchModelSw${SOLIBS}"
-FILES_libopenvx-imx-dev = "${includedir}/VX ${libdir}/libOpenVX${SOLIBSDEV}"
-RDEPENDS_libopenvx-imx = "libnn-imx"
-INSANE_SKIP_libopenvx-imx += "dev-so dev-deps"
+FILES:libopenvx-imx = "${libdir}/libOpenVX${SOLIBS} ${libdir}/libOpenVX${REALSOLIBS} ${libdir}/libOvx*${SOLIBS} ${libdir}/libOpenVXC${SOLIBS} ${libdir}/libOpenVXU${SOLIBS} ${libdir}/libArchModelSw${SOLIBS}"
+FILES:libopenvx-imx-dev = "${includedir}/VX ${libdir}/libOpenVX${SOLIBSDEV}"
+RDEPENDS:libopenvx-imx = "libnn-imx"
+INSANE_SKIP:libopenvx-imx += "dev-so dev-deps"
 
-FILES_libgl-imx = "${libdir}/libGL${REALSOLIBS}"
-FILES_libgl-imx-dev = "${libdir}/libGL${SOLIBSDEV} ${includedir}/GL"
-INSANE_SKIP_libgl-imx += "file-rdeps"
+FILES:libgl-imx = "${libdir}/libGL${REALSOLIBS}"
+FILES:libgl-imx-dev = "${libdir}/libGL${SOLIBSDEV} ${includedir}/GL"
+INSANE_SKIP:libgl-imx += "file-rdeps"
 
 # libEGL needs to open libGLESv1.so
-INSANE_SKIP_libgles1-imx += "dev-so"
-FILES_libgles1-imx = "${libdir}/libGLESv1*${REALSOLIBS} ${libdir}/libGLESv1*${SOLIBS} ${libdir}/libGLES_*${REALSOLIBS} ${libdir}/libGLES_*${SOLIBS}"
-FILES_libgles1-imx-dev = "${includedir}/GLES ${libdir}/libGLESv1*${SOLIBS} ${libdir}/libGLES_*${SOLIBSDEV} ${libdir}/pkgconfig/glesv1_cm.pc"
-RPROVIDES_libgles1-imx = "libgles-imx"
-RPROVIDES_libgles1-imx-dev = "libgles-imx-dev"
+INSANE_SKIP:libgles1-imx += "dev-so"
+FILES:libgles1-imx = "${libdir}/libGLESv1*${REALSOLIBS} ${libdir}/libGLESv1*${SOLIBS} ${libdir}/libGLES_*${REALSOLIBS} ${libdir}/libGLES_*${SOLIBS}"
+FILES:libgles1-imx-dev = "${includedir}/GLES ${libdir}/libGLESv1*${SOLIBS} ${libdir}/libGLES_*${SOLIBSDEV} ${libdir}/pkgconfig/glesv1_cm.pc"
+RPROVIDES:libgles1-imx = "libgles-imx"
+RPROVIDES:libgles1-imx-dev = "libgles-imx-dev"
 
 # libEGL needs to open libGLESv2.so
-INSANE_SKIP_libgles2-imx += "dev-so"
-FILES_libgles2-imx = "${libdir}/libGLESv2${REALSOLIBS} ${libdir}/libGLESv2${SOLIBS}"
-FILES_libgles2-imx-dev = "${includedir}/GLES2 ${libdir}/libGLESv2${SOLIBSDEV} ${libdir}/pkgconfig/glesv2.pc"
-RDEPENDS_libgles2-imx = "libglslc-imx"
+INSANE_SKIP:libgles2-imx += "dev-so"
+FILES:libgles2-imx = "${libdir}/libGLESv2${REALSOLIBS} ${libdir}/libGLESv2${SOLIBS}"
+FILES:libgles2-imx-dev = "${includedir}/GLES2 ${libdir}/libGLESv2${SOLIBSDEV} ${libdir}/pkgconfig/glesv2.pc"
+RDEPENDS:libgles2-imx = "libglslc-imx"
 
-FILES_libgles3-imx-dev = "${includedir}/GLES3"
+FILES:libgles3-imx-dev = "${includedir}/GLES3"
 # as long as there is no libgles3: ship libgles3-dev along with
 # libgles2-dev - otherwise GLES3 headers have to be added manually
-RDEPENDS_libgles2-imx-dev += "libgles3-imx-dev"
+RDEPENDS:libgles2-imx-dev += "libgles3-imx-dev"
 
-FILES_libglslc-imx = "${libdir}/libGLSLC${SOLIBS}"
-FILES_libglslc-imx-dev = "${includedir}/CL ${libdir}/libGLSLC${SOLIBSDEV}"
+FILES:libglslc-imx = "${libdir}/libGLSLC${SOLIBS}"
+FILES:libglslc-imx-dev = "${includedir}/CL ${libdir}/libGLSLC${SOLIBSDEV}"
 
-FILES_libopencl-imx = "${libdir}/libOpenCL${SOLIBS} \
+FILES:libopencl-imx = "${libdir}/libOpenCL${SOLIBS} \
                        ${libdir}/libOpenCL${REALSOLIBS} \
                        ${libdir}/libVivanteOpenCL${SOLIBS} \
                        ${libdir}/libLLVM_viv${SOLIBS} \
                        ${sysconfdir}/OpenCL/vendors/Vivante.icd"
-FILES_libopencl-imx-dev = "${includedir}/CL ${libdir}/libOpenCL${SOLIBSDEV}"
-RDEPENDS_libopencl-imx= "libclc-imx"
-INSANE_SKIP_libopencl-imx += "dev-so dev-deps"
+FILES:libopencl-imx-dev = "${includedir}/CL ${libdir}/libOpenCL${SOLIBSDEV}"
+RDEPENDS:libopencl-imx= "libclc-imx"
+INSANE_SKIP:libopencl-imx += "dev-so dev-deps"
 
-FILES_libnn-imx = "${libdir}/libNN*${SOLIBS}"
+FILES:libnn-imx = "${libdir}/libNN*${SOLIBS}"
 
-INSANE_SKIP_libopenvg-imx += "dev-so"
-FILES_libopenvg-imx = "${libdir}/libOpenVG*${REALSOLIBS} ${libdir}/libOpenVG*${SOLIBS}"
-FILES_libopenvg-imx-dev = "${includedir}/VG ${libdir}/libOpenVG*${SOLIBSDEV}"
-RDEPENDS_libopenvg-imx += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd-gpuconfig', '', d)}"
+INSANE_SKIP:libopenvg-imx += "dev-so"
+FILES:libopenvg-imx = "${libdir}/libOpenVG*${REALSOLIBS} ${libdir}/libOpenVG*${SOLIBS}"
+FILES:libopenvg-imx-dev = "${includedir}/VG ${libdir}/libOpenVG*${SOLIBSDEV}"
+RDEPENDS:libopenvg-imx += "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd-gpuconfig', '', d)}"
 
-FILES_libvdk-imx = "${libdir}/libVDK*${REALSOLIBS} ${libdir}/libVDK*${SOLIBS}"
-FILES_libvdk-imx-dev = "${includedir}/*vdk*.h ${libdir}/libVDK${SOLIBSDEV}"
-INSANE_SKIP_libvdk-imx += "dev-so"
+FILES:libvdk-imx = "${libdir}/libVDK*${REALSOLIBS} ${libdir}/libVDK*${SOLIBS}"
+FILES:libvdk-imx-dev = "${includedir}/*vdk*.h ${libdir}/libVDK${SOLIBSDEV}"
+INSANE_SKIP:libvdk-imx += "dev-so"
 
-FILES_libvivante-dri-imx = "${libdir}/dri/vivante_dri.so"
-RDEPENDS_libvivante-dri-imx = "libdrm"
+FILES:libvivante-dri-imx = "${libdir}/dri/vivante_dri.so"
+RDEPENDS:libvivante-dri-imx = "libdrm"
 
-INSANE_SKIP_libwayland-viv-imx += "dev-so"
-FILES_libwayland-viv-imx =  "${libdir}/libwayland-viv${REALSOLIBS}  ${libdir}/libwayland-viv${SOLIBS}"
-FILES_libwayland-viv-imx-dev = "${includedir}/wayland-viv ${libdir})/libwayland-viv${SOLIBSDEV} ${libdir}/pkgconfig/wayland-viv.pc"
-RPROVIDES_libwayland-viv-imx += "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'xf86-video-imx-vivante', '', d)}"
+INSANE_SKIP:libwayland-viv-imx += "dev-so"
+FILES:libwayland-viv-imx =  "${libdir}/libwayland-viv${REALSOLIBS}  ${libdir}/libwayland-viv${SOLIBS}"
+FILES:libwayland-viv-imx-dev = "${includedir}/wayland-viv ${libdir})/libwayland-viv${SOLIBSDEV} ${libdir}/pkgconfig/wayland-viv.pc"
+RPROVIDES:libwayland-viv-imx += "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'xf86-video-imx-vivante', '', d)}"
 
-INSANE_SKIP_libgc-wayland-protocol-imx += "dev-so"
-FILES_libgc-wayland-protocol-imx = "${libdir}/libgc_wayland_protocol${REALSOLIBS} ${libdir}/libgc_wayland_protocol${SOLIBS}"
-FILES_libgc-wayland-protocol-imx-dev = "${libdir}/libgc_wayland_protocol${SOLIBSDEV} ${libdir}/pkgconfig/gc_wayland_protocol.pc"
+INSANE_SKIP:libgc-wayland-protocol-imx += "dev-so"
+FILES:libgc-wayland-protocol-imx = "${libdir}/libgc_wayland_protocol${REALSOLIBS} ${libdir}/libgc_wayland_protocol${SOLIBS}"
+FILES:libgc-wayland-protocol-imx-dev = "${libdir}/libgc_wayland_protocol${SOLIBSDEV} ${libdir}/pkgconfig/gc_wayland_protocol.pc"
 
-FILES_imx-gpu-viv-tools = "${bindir}/gmem_info"
+FILES:imx-gpu-viv-tools = "${bindir}/gmem_info"
 
 # COMPATIBLE_MACHINE = "(mx6q|mx6dl|mx6sx|mx6sl|mx8)"

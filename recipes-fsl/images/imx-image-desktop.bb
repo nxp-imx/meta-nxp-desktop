@@ -13,8 +13,8 @@ export PACKAGE_INSTALL = "${IMAGE_INSTALL}"
 APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
-ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_save_graphics; do_save_cheese;  do_aptget_update; do_update_host; do_update_dns; do_config_netplan;"
-IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_graphics; do_enable_cheese; do_cleanup_rootfs"
+ROOTFS_POSTPROCESS_COMMAND:append = "do_fix_ldconfig; do_save_graphics; do_save_cheese;  do_aptget_update; do_update_host; do_update_dns; do_config_netplan;"
+IMAGE_PREPROCESS_COMMAND:append = " do_fix_connman_conflict; do_enable_graphics; do_enable_cheese; do_cleanup_rootfs"
 
 REQUIRED_DISTRO_FEATURES = "wayland"
 
@@ -126,8 +126,8 @@ IMAGE_INSTALL += " \
 
 # GPU driver
 G2D_SAMPLES                 = ""
-G2D_SAMPLES_imxgpu2d        = "imx-g2d-samples"
-G2D_SAMPLES_imxgpu2d_imxdpu = ""
+G2D_SAMPLES:imxgpu2d        = "imx-g2d-samples"
+G2D_SAMPLES:imxgpu2d:imxdpu = ""
 
 IMAGE_INSTALL += " \
     wayland-protocols \
@@ -152,13 +152,13 @@ IMAGE_INSTALL += " \
     gputop \
 "
 # isp
-IMAGE_INSTALL_append_mx8mp = " \
+IMAGE_INSTALL:append:mx8mp = " \
     isp-imx \
     basler-camera \
     kernel-module-isp-vvcam \
 "
 
-IMAGE_INSTALL_remove_mx8mm = " \
+IMAGE_INSTALL:remove:mx8mm = " \
     libgles3-imx-dev \
     libclc-imx libclc-imx-dev \
     libopencl-imx \
@@ -350,10 +350,10 @@ WantedBy=multi-user.target \n
 }
 
 IMAGE_ROOTFS_SIZE ?= "8192"
-IMAGE_ROOTFS_EXTRA_SPACE_append = "${@bb.utils.contains("DISTRO_FEATURES", "systemd", " + 4096", "" ,d)}"
+IMAGE_ROOTFS_EXTRA_SPACE:append = "${@bb.utils.contains("DISTRO_FEATURES", "systemd", " + 4096", "" ,d)}"
 
 COMPATIBLE_MACHINE ="(.*ubuntu)"
 
-python do_rootfs_prepend() {
+python do_rootfs:prepend() {
     d.setVar('IMAGE_LOG_CHECK_EXCLUDES', 'Failed')
 }

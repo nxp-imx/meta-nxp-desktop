@@ -50,13 +50,13 @@ APTGET_EXTRA_PACKAGES_REMOVE += " \
 # We still need to ship the symlinks.
 # We also need to remove the udev reference as apparently bitbake.conf
 # isn't quite adapted to usrmerge there.
-FILES_${PN}_remove = "/lib/udev"
-FILES_${PN} += "/bin"
-FILES_${PN} += "/sbin"
+FILES:${PN}:remove = "/lib/udev"
+FILES:${PN} += "/bin"
+FILES:${PN} += "/sbin"
 
 # The downside of not having the symlink destination content is that we
 # are missing a few basic files that are must have for dependencies.
-RPROVIDES_${PN}_ubuntu += " \
+RPROVIDES:${PN}:ubuntu += " \
     /bin/sh \
     /bin/bash \
     /bin/dash \
@@ -168,13 +168,13 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       libxfont2-2 libfontenc1 desktop-file-utils \
 "
 
-RCONFLICTS_${PN} += " ${YOCTO-DEPENDS-LIST} "
-RREPLACES_${PN} += " ${YOCTO-DEPENDS-LIST} "
-RPROVIDES_${PN} += " ${YOCTO-DEPENDS-LIST} "
+RCONFLICTS:${PN} += " ${YOCTO-DEPENDS-LIST} "
+RREPLACES:${PN} += " ${YOCTO-DEPENDS-LIST} "
+RPROVIDES:${PN} += " ${YOCTO-DEPENDS-LIST} "
 
-RPROVIDES_${PN}_ubuntu += " libglib-2.0 "
+RPROVIDES:${PN}:ubuntu += " libglib-2.0 "
 
-python do_package_append() {
+python do_package:append() {
     os.environ['PSEUDO_DISABLED'] = '1'
     d.setVar('ERROR_QA', '')
 }

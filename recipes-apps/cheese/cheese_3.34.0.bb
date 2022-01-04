@@ -25,18 +25,18 @@ SRC_URI = "${GNOME_MIRROR}/${BPN}/${@gnome_verdir("${PV}")}/${BPN}-${PV}.tar.${G
            file://0001-disable-global-preset-usage-for-encoder-auto-plugin.patch \
 "
 
-SRC_URI_append_mx8qm += " \
+SRC_URI:append:mx8qm += " \
            file://0001-fixate-caps-to-NV12-for-8qm-8qm-encoder-only-support.patch \
 "
 
-FILES_${PN} += "${datadir}/dbus-1 ${datadir}/metainfo"
+FILES:${PN} += "${datadir}/dbus-1 ${datadir}/metainfo"
 
 SRC_URI[archive.md5sum] = "13f8326689df42b0aedda023705db803"
 SRC_URI[archive.sha256sum] = "d1865600ac88012e136b1ec3db72a4634f57bc2035895277be792bb078627e73"
 
 EXTRA_OEMESON += "-Dintrospection=false -Dgtk_doc=false -Dman=false"
 
-do_install_append() {
+do_install:append() {
     rm -f ${D}${datadir}/icons/hicolor/scalable/apps/org.gnome.Cheese.svg
     rm -f ${D}${datadir}/icons/hicolor/symbolic/apps/org.gnome.Cheese-symbolic.svg
 }

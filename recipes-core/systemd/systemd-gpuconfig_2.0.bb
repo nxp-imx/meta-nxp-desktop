@@ -9,7 +9,7 @@ SRC_URI = " file://gpuconfig \
 "
 S = "${WORKDIR}"
 
-RDEPENDS_${PN} = "systemd"
+RDEPENDS:${PN} = "systemd"
 
 do_install () {
     install -d ${D}${sysconfdir}
@@ -26,7 +26,7 @@ do_install () {
             ${D}${sysconfdir}/systemd/system/graphical.target.wants/gpuconfig.service
 }
 
-FILES_${PN} = "${systemd_unitdir}/system/*.service ${sysconfdir}"
+FILES:${PN} = "${systemd_unitdir}/system/*.service ${sysconfdir}"
 
 # As this package is tied to systemd, only build it when we're also building systemd.
 python () {

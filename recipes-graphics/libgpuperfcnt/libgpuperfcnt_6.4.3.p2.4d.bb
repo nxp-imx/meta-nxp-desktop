@@ -12,8 +12,8 @@ SRC_URI = "${FSL_BIN_MIRROR}/${FSLBIN_NAME}.bin;name=aarch64-wayland;fsl-eula=tr
 
 PACKAGE_ARCH = "${MACHINE_SOCARCH}"
 
-RDEPENDS_${PN} = "libgal-imx"
+RDEPENDS:${PN} = "libgal-imx"
 
 # Compatible only with i.MX with GPU
 COMPATIBLE_MACHINE        = "(^$)"
-COMPATIBLE_MACHINE_imxgpu = "${MACHINE}"
+COMPATIBLE_MACHINE:imxgpu = "${MACHINE}"

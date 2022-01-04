@@ -29,13 +29,13 @@ APTGET_ADD_USERS = ""
 # to look at any build- or runtime-dependencies or debug symbols!
 # We have quite a number of deficiencies to ignore. The Desktop packages
 # and rootfs do not really conform to Yocto rules.
-INSANE_SKIP_${PN} += "already-stripped build-deps file-rdeps dev-so staticdev"
+INSANE_SKIP:${PN} += "already-stripped build-deps file-rdeps dev-so staticdev"
 INHIBIT_DEFAULT_DEPS = "1"
 
 # We need to keep all the other recipes happy that will rely on us
 # during runtime through default dependencies!
-RCONFLICTS_${PN} += "glibc eglibc"
-RREPLACES_${PN} += "glibc eglibc"
+RCONFLICTS:${PN} += "glibc eglibc"
+RREPLACES:${PN} += "glibc eglibc"
 
 # The basic ubuntu-base rootfs does not provide enough functionality to
 # enable ethernet or interfaces automatically in general.
@@ -69,14 +69,14 @@ APTGET_EXTRA_PACKAGES += "\
 # Some packages are implicitly present in Desktop due to the kernel
 # and rootfs configuration. We pretend to have the respective Yocto
 # names therefore. Stuff is grouped for easier updates
-RPROVIDES_${PN}_ubuntu += " \
+RPROVIDES:${PN}:ubuntu += " \
 /bin/sh \
 flex \
 "
-RPROVIDES_${PN}_ubuntu += " \
+RPROVIDES:${PN}:ubuntu += " \
 shared-mime-info \
 "
-RPROVIDES_${PN}_ubuntu += " \
+RPROVIDES:${PN}:ubuntu += " \
 rtld(GNU_HASH) \
 libc6 \
 libc6-utils \
@@ -88,7 +88,7 @@ libgcc1-dev \
 libssl1.1 \
 update-alternatives \
 "
-RPROVIDES_${PN}_ubuntu += " \
+RPROVIDES:${PN}:ubuntu += " \
 pam-plugin-access \
 pam-plugin-debug \
 pam-plugin-deny \
@@ -128,7 +128,7 @@ pam-plugin-warn \
 pam-plugin-wheel \
 pam-plugin-xauth \
 "
-RPROVIDES_${PN}_ubuntu += " \
+RPROVIDES:${PN}:ubuntu += " \
 libform5 \
 libformw5 \
 libmenu5 \
@@ -144,7 +144,7 @@ ncurses-terminfo-base \
 
 # A few things are provided where we don't have a Yocto equivalent
 # currently/possibly. We add them preemptively just in case
-RPROVIDES_${PN}_ubuntu += " \
+RPROVIDES:${PN}:ubuntu += " \
 pam-plugin-tty-audit \
 pam-plugin-userdb \
 pam-plugin-extrausers \
@@ -153,22 +153,22 @@ pam-plugin-selinux \
 "
 
 # Ensure that all files of the tgz end up in our packages
-FILES_${PN} += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/lib*${SOLIBS}"
-FILES_${PN} += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/ld*${SOLIBS}"
-FILES_${PN}-dev = ""
-#FILES_${PN}-dev += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/lib*${SOLIBSDEV}"
-#FILES_${PN}-dev += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/ld*${SOLIBSDEV}"
-#FILES_${PN}-dev += "${libdir}/sudo/lib*${SOLIBSDEV}"
-FILES_${PN}-dbg += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/.debug/lib*${SOLIBS}"
-FILES_${PN}-dbg += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/.debug/lib*${SOLIBSDEV}"
+FILES:${PN} += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/lib*${SOLIBS}"
+FILES:${PN} += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/ld*${SOLIBS}"
+FILES:${PN}-dev = ""
+#FILES:${PN}-dev += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/lib*${SOLIBSDEV}"
+#FILES:${PN}-dev += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/ld*${SOLIBSDEV}"
+#FILES:${PN}-dev += "${libdir}/sudo/lib*${SOLIBSDEV}"
+FILES:${PN}-dbg += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/.debug/lib*${SOLIBS}"
+FILES:${PN}-dbg += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/.debug/lib*${SOLIBSDEV}"
 
-FILES_${PN} += "/usr/include"
-FILES_${PN} += "/usr/share /usr/lib /usr/local /usr/games /usr/src"
-FILES_${PN} += "/dev"
-FILES_${PN} += "/lib"
-FILES_${PN} += "/run /dev /lib /media /boot /tmp /proc /opt /mnt /home /srv /sys /run /root"
-FILES_${PN}-dbg_append = " ${localstatedir}/lib/dpkg/info/.debug"
-FILES_${PN}-dbg_${TRANSLATED_TARGET_ARCH} += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/.debug"
+FILES:${PN} += "/usr/include"
+FILES:${PN} += "/usr/share /usr/lib /usr/local /usr/games /usr/src"
+FILES:${PN} += "/dev"
+FILES:${PN} += "/lib"
+FILES:${PN} += "/run /dev /lib /media /boot /tmp /proc /opt /mnt /home /srv /sys /run /root"
+FILES:${PN}-dbg:append = " ${localstatedir}/lib/dpkg/info/.debug"
+FILES:${PN}-dbg:${TRANSLATED_TARGET_ARCH} += "${base_libdir}/${TRANSLATED_TARGET_ARCH}-linux-gnu/.debug"
 
 fakeroot do_shell_prepare() {
 	cd "${D}"
@@ -176,7 +176,7 @@ fakeroot do_shell_prepare() {
 	tar -C "${D}" -xzf "${S}/${ROOTFS}"
 }
 
-fakeroot do_aptget_user_update_append() {
+fakeroot do_aptget_user_update:append() {
 
 	set -x
 
@@ -242,7 +242,7 @@ python prep_xattr_postinst() {
                 body += 'chroot "$D" chown ' + l + '\n'
             suffix = 'fi\n'
 
-            d.setVar('pkg_postinst_' + pkg, prefix + body + suffix)
+            d.setVar('pkg_postinst:' + pkg, prefix + body + suffix)
 }
 PACKAGEFUNCS =+ "prep_xattr_postinst"
 

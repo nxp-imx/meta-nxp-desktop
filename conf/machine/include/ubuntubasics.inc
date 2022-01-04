@@ -19,7 +19,7 @@ UBUNTU_TARGET_ARCH="${@d.getVar('TRANSLATED_TARGET_ARCH', True).replace("aarch64
 # We do not want any default post intercepts or special default
 # packages added.
 IMAGE_LINGUAS = ""
-POKY_DEFAULT_EXTRA_RDEPENDS_remove = "packagegroup-core-boot"
+POKY_DEFAULT_EXTRA_RDEPENDS:remove = "packagegroup-core-boot"
 INITRAMFS_IMAGE = ""
 #POSTINST_INTERCEPTS_DIR = "<--InVaLiD-->"
 
@@ -48,7 +48,7 @@ BINUVERSION="2.34"
 
 # More recent Desktop versions work with symlinks for the base
 # directories. We can't refer to symlink based files
-DISTRO_FEATURES_append = '${@ \
+DISTRO_FEATURES:append = '${@ \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "16.04", "", \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "18.04", "", \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "20.04", " usrmerge", \

@@ -9,14 +9,14 @@ SECTION = "base"
 LICENSE = "LGPL2.1"
 DEPENDS = "sqlite3 attr"
 
-FILES_${PN} = "${prefix}/lib/pseudo/lib*/libpseudo.so ${bindir}/* ${localstatedir}/pseudo ${prefix}/var/pseudo"
-INSANE_SKIP_${PN} += "libdir"
-INSANE_SKIP_${PN}-dbg += "libdir"
+FILES:${PN} = "${prefix}/lib/pseudo/lib*/libpseudo.so ${bindir}/* ${localstatedir}/pseudo ${prefix}/var/pseudo"
+INSANE_SKIP:${PN} += "libdir"
+INSANE_SKIP:${PN}-dbg += "libdir"
 
 PROVIDES += "virtual/fakeroot"
 
 MAKEOPTS = ""
-MAKEOPTS_class-native = "'RPATH=-Wl,--rpath=XORIGIN/../../../sqlite3-native/usr/lib/'"
+MAKEOPTS:class-native = "'RPATH=-Wl,--rpath=XORIGIN/../../../sqlite3-native/usr/lib/'"
 
 inherit siteinfo pkgconfig
 
@@ -25,7 +25,7 @@ do_configure () {
 }
 
 NO32LIBS ??= "1"
-NO32LIBS_class-nativesdk = "1"
+NO32LIBS:class-nativesdk = "1"
 
 PSEUDO_EXTRA_OPTS ?= "--enable-force-async --without-passwd-fallback --enable-epoll --enable-xattr"
 
@@ -78,7 +78,7 @@ warn_32bit_missing() {
 # Two below are the same
 # If necessary compile for the alternative machine arch.  This is only 
 # necessary in a native build.
-do_compile_prepend_class-native () {
+do_compile:prepend:class-native () {
 	maybe_make32
 	if $make32; then
 		# We need the 32-bit libpseudo on a 64-bit machine...
@@ -99,7 +99,7 @@ do_compile_prepend_class-native () {
 	fi
 }
 
-do_compile_prepend_class-nativesdk () {
+do_compile:prepend:class-nativesdk () {
 	maybe_make32
 	if $make32; then
 		# We need the 32-bit libpseudo on a 64-bit machine.
@@ -115,7 +115,7 @@ do_install () {
 	oe_runmake 'DESTDIR=${D}' ${MAKEOPTS} 'LIB=lib/pseudo/lib$(MARK64)' install
 }
 
-do_install_append_class-native () {
+do_install:append:class-native () {
 	chrpath ${D}${bindir}/pseudo -r `chrpath ${D}${bindir}/pseudo | cut -d = -f 2 | sed s/XORIGIN/\\$ORIGIN/`
 	install -d ${D}${sysconfdir}
 	# The fallback files should never be modified
@@ -132,7 +132,7 @@ do_install_append_class-native () {
 	fi
 }
 
-do_install_append_class-nativesdk () {
+do_install:append:class-nativesdk () {
 	maybe_make32
 	if $make32; then
 		mkdir -p ${D}${prefix}/lib/pseudo/lib

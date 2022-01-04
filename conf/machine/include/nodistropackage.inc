@@ -28,7 +28,7 @@ def dnwp_nopackagewrites(d):
     foundnowritepkg, fnwpkglist, fnwprp = dnwp_checkpackagematch(d, pn, 'DISTRO_NEVER_WRITE_PACKAGE')
     foundwritepkg,   fwpkglist,  fwprp  = dnwp_checkpackagematch(d, pn, 'DISTRO_ALWAYS_WRITE_PACKAGE')
     if foundnowritepkg and not foundwritepkg:
-        d.appendVar('PACKAGE_EXCLUDE_' + pn, ' ${PACKAGES}')
+        d.appendVar('PACKAGE_EXCLUDE:' + pn, ' ${PACKAGES}')
 
 def dnwp_prefrprov(d):
     # This is really a workaround only, which is limiting the
@@ -120,7 +120,7 @@ def dnwp_fixuprdepends(d):
             # dependency no longer matches the redepends. This means that we
             # need to skip build-dep warnings. This is a bit ugly, but
             # it is a reasonable solution to the QA problem.
-            d.appendVar('INSANE_SKIP_' +  ppn, ' build-deps')
+            d.appendVar('INSANE_SKIP:' +  ppn, ' build-deps')
 
 # This is called once per package. It better be quick
 python () {

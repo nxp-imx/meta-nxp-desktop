@@ -780,7 +780,7 @@ END_PPA
 
 # Must have to preset all variables properly. It also means that
 # the user of this class should not prepend to avoid ordering issues.
-fakeroot do_aptget_user_update_prepend() {
+fakeroot do_aptget_user_update:prepend() {
 
 	aptget_update_presetvars;
 }

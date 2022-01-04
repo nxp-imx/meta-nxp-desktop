@@ -1,6 +1,6 @@
-FILES_libgnome-desktop3 += "${datadir}/gnome/"
+FILES:libgnome-desktop3 += "${datadir}/gnome/"
 
-do_install_append() {
+do_install:append() {
 	rm -f ${D}${datadir}/gnome/gnome-version.xml
 }
 

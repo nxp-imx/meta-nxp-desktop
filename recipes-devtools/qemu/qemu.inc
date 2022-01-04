@@ -6,7 +6,7 @@ a variety of guest operating systems"
 HOMEPAGE = "http://qemu.org"
 LICENSE = "GPLv2 & LGPLv2.1"
 
-RDEPENDS_${PN}-ptest = "bash make"
+RDEPENDS:${PN}-ptest = "bash make"
 
 require qemu-targets.inc
 inherit pkgconfig ptest
@@ -35,10 +35,10 @@ UPSTREAM_CHECK_REGEX = "qemu-(?P<pver>\d+(\.\d+)+)\.tar"
 SRC_URI[md5sum] = "dac9c31eb3ef1d0cfe30251f238c49c4"
 SRC_URI[sha256sum] = "7e331163b72e7bcf63bd35cb85cba87b48d12fab3f264b94c23f7d3991094207"
 
-COMPATIBLE_HOST_mipsarchn32 = "null"
-COMPATIBLE_HOST_mipsarchn64 = "null"
+COMPATIBLE_HOST:mipsarchn32 = "null"
+COMPATIBLE_HOST:mipsarchn64 = "null"
 
-do_install_append() {
+do_install:append() {
     # Prevent QA warnings about installed ${localstatedir}/run
     if [ -d ${D}${localstatedir}/run ]; then rmdir ${D}${localstatedir}/run; fi
 }
@@ -82,9 +82,9 @@ export LIBTOOL="${HOST_SYS}-libtool"
 
 B = "${WORKDIR}/build"
 
-EXTRA_OECONF_append = " --python=${HOSTTOOLS_DIR}/python3"
+EXTRA_OECONF:append = " --python=${HOSTTOOLS_DIR}/python3"
 
-do_configure_prepend_class-native() {
+do_configure:prepend:class-native() {
 	# Append build host pkg-config paths for native target since the host may provide sdl
 	BHOST_PKGCONFIG_PATH=$(PATH=/usr/bin:/bin pkg-config --variable pc_path pkg-config || echo "")
 	if [ ! -z "$BHOST_PKGCONFIG_PATH" ]; then
@@ -107,7 +107,7 @@ do_install () {
 # This will trigger a MMU access fault in the virtual CPU. With this change,
 # the qemu-mips works fine.
 # IMPORTANT: This piece needs to be removed once the root cause is fixed!
-do_install_append() {
+do_install:append() {
 	if [ -e "${D}/${bindir}/qemu-mips" ]; then
 		create_wrapper ${D}/${bindir}/qemu-mips \
 			QEMU_RESERVED_VA=0x0
@@ -127,8 +127,8 @@ make_qemu_wrapper() {
 }
 
 # Disable kvm/virgl/mesa on targets that do not support it
-PACKAGECONFIG_remove_darwin = "kvm virglrenderer glx gtk+"
-PACKAGECONFIG_remove_mingw32 = "kvm virglrenderer glx gtk+"
+PACKAGECONFIG:remove:darwin = "kvm virglrenderer glx gtk+"
+PACKAGECONFIG:remove:mingw32 = "kvm virglrenderer glx gtk+"
 
 PACKAGECONFIG[sdl] = "--enable-sdl,--disable-sdl,libsdl2"
 PACKAGECONFIG[virtfs] = "--enable-virtfs --enable-attr,--disable-virtfs,libcap attr,"
@@ -166,6 +166,6 @@ PACKAGECONFIG[usb-redir] = "--enable-usb-redir,--disable-usb-redir,usbredir"
 PACKAGECONFIG[snappy] = "--enable-snappy,--disable-snappy,snappy"
 PACKAGECONFIG[glusterfs] = "--enable-glusterfs,--disable-glusterfs,glusterfs"
 
-INSANE_SKIP_${PN} = "arch"
+INSANE_SKIP:${PN} = "arch"
 
-FILES_${PN} += "${datadir}/icons"
+FILES:${PN} += "${datadir}/icons"

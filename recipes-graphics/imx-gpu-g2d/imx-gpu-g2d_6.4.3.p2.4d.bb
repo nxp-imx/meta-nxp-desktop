@@ -27,10 +27,10 @@ do_install () {
     cp -Pr ${S}/g2d/usr/include/* ${D}${includedir}
 }
 
-FILES_${PN} = "${libdir}/libg2d* /opt"
-FILES_${PN}-dev = "${includedir}"
-INSANE_SKIP_${PN} = "ldflags"
+FILES:${PN} = "${libdir}/libg2d* /opt"
+FILES:${PN}-dev = "${includedir}"
+INSANE_SKIP:${PN} = "ldflags"
 
-RDEPENDS_${PN} = "libgal-imx"
+RDEPENDS:${PN} = "libgal-imx"
 
 COMPATIBLE_MACHINE = "(imxgpu2d)"
