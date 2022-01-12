@@ -1,18 +1,18 @@
 NXP Software Content Register
 
-Release - Desktop Release with Linux 5.10.52_2.1.0
-  Nov 2021
+Release - Desktop Release with Linux 5.10.72_2.2.0
+  Jan 2022
 
 Yocto Project recipe manifest:
-repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-hardknott -m imx-5.10.52-2.1.0_desktop.xml
+repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-hardknott -m imx-5.10.72-2.2.0_desktop.xml
 
-Release tag: rel_imx_5.10.52_2.1.0_desktop
+Release tag: rel_imx_5.10.72_2.2.0_desktop
 
 --------------------------------------------
 PACKAGES FOR META-NXP-DESKTOP_RELEASE
 --------------------------------------------
 
-Package:                     imx-gpu-viv-6.4.3.p2.2d-aarch64.bin
+Package:                     imx-gpu-viv-6.4.3.p2.4d-aarch64.bin
 Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
@@ -30,7 +30,7 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     imx-gpu-g2d-6.4.3.p2.2d-aarch64.bin
+Package:                     imx-gpu-g2d-6.4.3.p2.4d-aarch64.bin
 Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
@@ -41,7 +41,7 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     imx-dpu-g2d-1.9.4d.bin
+Package:                     imx-dpu-g2d-1.9.5d.bin
 Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
@@ -52,7 +52,7 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     libgpuperfcnt-6.4.3.p2.2d-aarch64-wayland.bin
+Package:                     libgpuperfcnt-6.4.3.p2.4d-aarch64-wayland.bin
 Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
@@ -63,7 +63,7 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     isp-imx-4.2.2.15.0d.bin
+Package:                     isp-imx-4.2.2.16.0d.bin
 Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
