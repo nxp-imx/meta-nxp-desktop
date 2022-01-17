@@ -3,6 +3,9 @@ NXP Software Content Register
 Release - Desktop Release with Linux 5.10.72_2.2.0
   Jan 2022
 
+Outgoing License: LA_OPT_NXP_Software_License v30 October 2021 - No distribution permitted, license in Section 2.2 applies
+License File: EULA.txt
+
 Yocto Project recipe manifest:
 repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-hardknott -m imx-5.10.72-2.2.0_desktop.xml
 
