@@ -50,7 +50,7 @@ IMAGE_INSTALL += "\
 	libcogl \
 	clutter-gst-3.0 \
 	cheese \
-	xserver-xorg-xwayland \
+	xwayland \
 	chromium-ozone-wayland \
 	tensorflow-lite \
 	${ML_NNSTREAMER_PKGS} \
