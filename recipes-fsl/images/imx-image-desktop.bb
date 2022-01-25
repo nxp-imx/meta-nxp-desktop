@@ -13,7 +13,7 @@ export PACKAGE_INSTALL = "${IMAGE_INSTALL}"
 APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
-ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_save_graphics; do_save_cheese;  do_aptget_update; do_update_host; do_update_dns;"
+ROOTFS_POSTPROCESS_COMMAND_append = "do_fix_ldconfig; do_save_graphics; do_save_cheese;  do_aptget_update; do_update_host; do_update_dns; do_config_netplan;"
 IMAGE_PREPROCESS_COMMAND_append = " do_fix_connman_conflict; do_enable_graphics; do_enable_cheese; do_cleanup_rootfs"
 
 REQUIRED_DISTRO_FEATURES = "wayland"
@@ -98,6 +98,7 @@ APTGET_EXTRA_PACKAGES += "\
 	libcairo2 libpixman-1-0 libpango-1.0-0 libpangocairo-1.0-0 \
 	squashfs-tools golang-github-snapcore-snapd-dev golang-github-ubuntu-core-snappy-dev \
 	snap-confine snapd-xdg-open snapd ubuntu-core-launcher ubuntu-core-snapd-units ubuntu-snappy-cli ubuntu-snappy \
+	netplan.io \
 "
 APTGET_EXTRA_SOURCE_PACKAGES += "\
 "
@@ -208,6 +209,16 @@ fakeroot do_update_dns() {
 			touch "${APTGET_CHROOT_DIR}/etc/resolv.conf"
 		fi
 	fi
+
+	set +x
+}
+
+do_config_netplan() {
+	set -x
+
+	echo >>"${APTGET_CHROOT_DIR}/etc/netplan/network-manage-all.yaml" "network:"
+	echo >>"${APTGET_CHROOT_DIR}/etc/netplan/network-manage-all.yaml" "  version: 2"
+	echo >>"${APTGET_CHROOT_DIR}/etc/netplan/network-manage-all.yaml" "  renderer: NetworkManager"
 
 	set +x
 }
