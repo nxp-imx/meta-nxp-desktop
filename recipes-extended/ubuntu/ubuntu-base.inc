@@ -21,6 +21,10 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 do_populate_sdk[noexec] = "1"
 
+# disable useradd when install base image early
+# rootfs build can support useradd from local.conf.
+APTGET_ADD_USERS = ""
+
 # As this package will never be built/compiled, we do not really need
 # to look at any build- or runtime-dependencies or debug symbols!
 # We have quite a number of deficiencies to ignore. The Desktop packages
