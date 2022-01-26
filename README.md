@@ -60,4 +60,4 @@ $ bitbake imx-image-desktop
 ```
 
 The default PoC build will create the account "user" with the password "user" for desktop evaluation,
-In order to change the account or password, uncomment and update APTGET_ADD_USER in <build_dir>/conf/local.conf.
+In order to change the account or password, uncomment and update APTGET_ADD_USERS in <build_dir>/conf/local.conf.

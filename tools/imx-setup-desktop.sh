@@ -16,7 +16,7 @@ if [ -f conf/local.conf ]; then
     echo "#ENV_HOST_PROXIES = \"http_proxy=\""                                    >> conf/local.conf
     echo ""                                                                       >> conf/local.conf
     echo "# Set user account and password"                                        >> conf/local.conf
-    echo "#APTGET_ADD_USER = \"user:password:shell\""                             >> conf/local.conf
+    echo "#APTGET_ADD_USERS = \"user:password:shell\""                            >> conf/local.conf
     echo "#  format 'name:password:shell'."                                       >> conf/local.conf
     echo "#    'name' is the user name."                                          >> conf/local.conf
     echo "#    'password' is an encrypted password (e.g. generated with"          >> conf/local.conf
