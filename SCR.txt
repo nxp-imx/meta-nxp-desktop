@@ -76,6 +76,19 @@ Release Location:            Mirror
 Origin:                      VeriSilicon Holdings Co., Ltd. (proprietary)
 
 --------------------------------------------
+
+Package:                     imx-vpu-hantro-vc-1.7.0d.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
+License Files:               COPYING
+Package Category:            Multimedia
+Type of content:             Source, recipes
+Description and comments:    VPU Library
+Release Location:            NXP Mirror
+Origin:                      VeriSilicon Inc. (proprietary)
+                             Alliance for Open Media (BSD-2-clause, AFOM Patent License) - http://www.aomedia.org/
+                             The WebM project by Google Inc. (BSD-3-clause) https://bugs.chromium.org/p/webm/issues/list
+
+--------------------------------------------
 PATCHES IN META-NXP-DESKTOP_RELEASE
 --------------------------------------------
 
