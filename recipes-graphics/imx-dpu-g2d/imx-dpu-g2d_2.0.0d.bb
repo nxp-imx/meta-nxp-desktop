@@ -4,12 +4,12 @@
 
 DESCRIPTION = "GPU G2D library and apps for i.MX with 2D GPU and DPU"
 LICENSE = "Proprietary"
-LIC_FILES_CHKSUM = "file://COPYING;md5=03bcadc8dc0a788f66ca9e2b89f56c6f"
+LIC_FILES_CHKSUM = "file://COPYING;md5=be5ff43682ed6c57dfcbeb97651c2829"
 PROVIDES += "virtual/libg2d"
 
 SRC_URI = "${FSL_BIN_MIRROR}/${BPN}-${PV}.bin;fsl-eula=true"
-SRC_URI[md5sum] = "b0531732257c5a34c133f567efe984da"
-SRC_URI[sha256sum] = "75ffe6509e30ce17350ef999f6ac4457131c1ce399ccae66e7a549affa557ce2"
+SRC_URI[md5sum] = "cbc5e6311e17f00d55763f711a8d403f"
+SRC_URI[sha256sum] = "07d53b86cd7447d967c59909a8890e1f502dfc4d626e683f7926489e09e7705b"
 
 inherit fsl-eula-unpack
 
@@ -18,7 +18,6 @@ do_install () {
     install -d ${D}${includedir}
     cp -r ${S}/g2d/usr/lib/*.so* ${D}${libdir}
     cp -Pr ${S}/g2d/usr/include/* ${D}${includedir}
-    cp -r ${S}/gpu-demos/opt ${D}
 }
 
 FILES:${PN} = "${libdir}/libg2d* /opt"
