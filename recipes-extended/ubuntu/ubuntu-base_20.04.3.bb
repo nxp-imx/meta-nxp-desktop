@@ -141,7 +141,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       python3-dbus-dev python3-pycairo-dev python3-pygobject-dev shadow-dev \
                       util-linux-dev util-macros-dev valgrind-dev wayland-dbg wayland-dev \
                       wireless-tools xcb-proto-dev xorgproto-dev xtrans-dev \
-                     rgb xkeyboard-config xf86-input-libinput libinput10 xserver-xorg \
+                     rgb xkeyboard-config xf86-input-libinput libinput10 \
                      xkbcomp xserver-xf86-config mkfontdir mkfontscale font-util \
                      mkfontdir-dev mkfontscale-dev xkeyboard-config-dev encodings-dev \
                      font-util-dev libxkbfile-dev libfontenc-dev libxfont2-dev \
@@ -161,7 +161,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      gsettings-desktop-schemas-dev libxkbcommon \
                      libxcb-util-dev libxcb-util1 libxcomposite-dev libxcomposite1 \
                      libxcursor-dev libxcursor1 libxkbcommon-dev libxshmfence-dev \
-                     libjson-glib-1.0-0 libjson-glib-1.0-dev xserver-xorg-dev \
+                     libjson-glib-1.0-0 libjson-glib-1.0-dev \
                       gsettings-desktop-schemas adwaita-icon-theme-symbolic \
                       hicolor-icon-theme libatk-bridge-2.0-0 libxslt nss \
                       libatspi0 libgtk-3.0 gtk+3 gtk+3-dev gdk-pixbuf \

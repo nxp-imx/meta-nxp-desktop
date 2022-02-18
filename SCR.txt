@@ -153,17 +153,6 @@ Origin of patches:         NXP (GPL-2.0)
 
 --------------------------------------------
 
-Patches for:               xserver-xorg
-Source Location:           https://www.x.org/releases/individual/xserver/
-Patch Location:            recipes-graphics/xorg-xserver/xserver-xorg
-Outgoing License:          MIT.X
-License File:              COPYING
-Package Category:          Linux
-Description and comments:  X11
-Origin of patches:         NXP (MIT.X)
-
---------------------------------------------
-
 Patches for:               cheese
 Source Location:           https://ftp.acc.umu.se/pub/GNOME/sources/cheese/3.34/
 Patch Location:            recipes-apps/cheese
