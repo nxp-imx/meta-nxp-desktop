@@ -1,0 +1,81 @@
+From b4fcdf3393dd5e6d43dae66cee854e5a54c5c6cc Mon Sep 17 00:00:00 2001
+From: Haihua Hu <jared.hu@nxp.com>
+Date: Sat, 19 Feb 2022 14:01:43 +0800
+Subject: [PATCH] fix build break on L5.15 desktop build
+
+Signed-off-by: Haihua Hu <jared.hu@nxp.com>
+---
+ src/cheese-preferences.vala |  6 +++---
+ src/cheese-window.vala      | 12 ++++++------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/src/cheese-preferences.vala b/src/cheese-preferences.vala
+index f56af7e0..a113b13c 100644
+--- a/src/cheese-preferences.vala
++++ b/src/cheese-preferences.vala
+@@ -361,9 +361,9 @@ public PreferencesDialog (Cheese.Camera camera)
+     Cheese.CameraDevice   dev;
+ 
+     // Add (if) / Remove (else) a camera device.
+-    if (devices.len > camera_model.iter_n_children (null))
++    if (devices.length > camera_model.iter_n_children (null))
+     {
+-      dev = (Cheese.CameraDevice) devices.index (devices.len - 1);
++      dev = (Cheese.CameraDevice) devices.get (devices.length - 1);
+       add_camera_device(dev);
+     }
+     else
+@@ -450,7 +450,7 @@ public PreferencesDialog (Cheese.Camera camera)
+       // Check if the camera that we want to remove, is the active one
+       if (device_node == active_device_node)
+       {
+-        if (devices.len > 0)
++        if (devices.length > 0)
+           set_new_available_camera_device (iter);
+         else
+           this.hide ();
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index 32644872..d7dae6bd 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -1235,9 +1235,9 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+ 
+       cameras = camera.get_camera_devices ();
+ 
+-      for (i = 0; i < cameras.len; i++)
++      for (i = 0; i < cameras.length; i++)
+       {
+-          next = (Cheese.CameraDevice )cameras.index (i);
++          next = (Cheese.CameraDevice )cameras.get (i);
+ 
+           if (next == selected)
+           {
+@@ -1245,13 +1245,13 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+           }
+       }
+ 
+-      if (i + 1 < cameras.len)
++      if (i + 1 < cameras.length)
+       {
+-          next = (Cheese.CameraDevice )cameras.index (i + 1);
++          next = (Cheese.CameraDevice )cameras.get (i + 1);
+       }
+       else
+       {
+-          next = (Cheese.CameraDevice )cameras.index (0);
++          next = (Cheese.CameraDevice )cameras.get (0);
+       }
+ 
+       if (next == selected)
+@@ -1288,7 +1288,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+ 
+       cameras = camera.get_camera_devices ();
+ 
+-      if (cameras.len > 1)
++      if (cameras.length > 1)
+       {
+          switch_camera_button.set_visible (true);
+          return;
+-- 
+2.17.1
+
