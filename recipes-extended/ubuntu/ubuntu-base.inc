@@ -65,6 +65,7 @@ APTGET_EXTRA_PACKAGES += "\
     openssl \
 	python bc db5.3 \
 	xz-utils bzip2 \
+	libtinfo5 \
 "
 # Some packages are implicitly present in Desktop due to the kernel
 # and rootfs configuration. We pretend to have the respective Yocto
