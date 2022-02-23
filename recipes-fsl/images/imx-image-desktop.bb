@@ -127,7 +127,7 @@ IMAGE_INSTALL += " \
 # GPU driver
 G2D_SAMPLES                 = ""
 G2D_SAMPLES:imxgpu2d        = "imx-g2d-samples"
-G2D_SAMPLES:imxgpu2d:imxdpu = ""
+G2D_SAMPLES:imxdpu          = "imx-g2d-samples"
 
 IMAGE_INSTALL += " \
     wayland-protocols \
