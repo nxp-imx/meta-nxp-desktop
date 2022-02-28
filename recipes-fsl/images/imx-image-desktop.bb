@@ -54,7 +54,6 @@ IMAGE_INSTALL += "\
 	chromium-ozone-wayland \
 	tensorflow-lite \
 	${ML_NNSTREAMER_PKGS} \
-	armnn \
 "
 # We want to have an itb to boot from in the /boot directory to be flexible
 # about U-Boot behavior
@@ -167,7 +166,6 @@ IMAGE_INSTALL:remove:mx8mm = " \
     libnn-imx \
     tensorflow-lite \
     ${ML_NNSTREAMER_PKGS} \
-    armnn \
 "
 
 fakeroot do_update_host() {
