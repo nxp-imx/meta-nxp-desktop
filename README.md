@@ -41,7 +41,7 @@ Note: The available build MACHINEs for below boards:
 	imx8mmevk -  i.MX8MM-EVK
 	imx8mnevk -  i.MX8MN-EVK
 	imx8qmmek -  i.MX8QM-MEK
-	imx8qxpmek -  i.MX8QXP-MEK
+	imx8qxpc0mek -  i.MX8QXP-MEK with silicon revision C0 chip
 
 Use an _existing_ build folder
 ------------------------------
