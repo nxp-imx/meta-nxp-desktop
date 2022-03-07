@@ -40,7 +40,8 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       e2fsprogs-e2fsck e2fsprogs-tune2fs e2fsprogs-badblocks \
                       procps procps-sysctl pstree fuser killall elfutils \
                       fio i2c-tools ifenslave keyutils libkmod2 libelf1 \
-                      libasm1 libaio1 libpci3 libsysfs2 libtinfo5 udev \
+                      libasm1 libpci3 libsysfs2 libtinfo5 udev \
+                      udev-hwdb iproute2-ip iproute2 \
                       memtester minicom mmc-utils pciutils psmisc ptpd \
                       coreutils openssl-conf libcap merge-files upower \
                       python3-pyelftools slang zstd libdrm-dev pkgconfig \
@@ -75,7 +76,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      libreadline8 libsbc1 libsm6 libsmartcols1 libsoup-2.4 libspeex1 \
                      libspeexdsp1 libsqlite3-0 libstdc++6 libsystemd0 libtag-c0 libtag1 \
                      libtheora libticw5 libtool libturbojpeg0 libudev1 \
-                     libunistring2 libusb-1.0-0 libuuid1 libvorbis libpulse0 \
+                     libunistring2 libuuid1 libvorbis libpulse0 \
                      libpulse-mainloop-glib0 libpulse-simple0 pulseaudio-dev \
                      libx11-6 libx11-xcb1 libxau6 libxcb-composite0 libxcb-damage0 \
                      libxcb-dpms0 libxcb-dri2-0 libxcb-dri3-0 libxcb-glx0 libxcb-present0 \
