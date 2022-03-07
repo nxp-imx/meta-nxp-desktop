@@ -3,3 +3,5 @@ require ubuntu-base-image.inc
 SECTION = "devel"
 
 APTGET_EXTRA_PACKAGES_DESKTOP = ""
+
+APTGET_EXTRA_PACKAGES_MAIN = "1"

@@ -78,6 +78,7 @@ APTGET_EXTRA_SOURCE_PACKAGES ?= ""
 APTGET_EXTRA_PACKAGES_SERVICES_DISABLED ?= ""
 APTGET_EXTRA_PACKAGES_DESKTOP ?= ""
 APTGET_EXTRA_PACKAGES_REMOVE ?= ""
+APTGET_EXTRA_PACKAGES_MAIN ?= "0"
 
 # Parent recipes must define the path to the root filesystem to be updated
 APTGET_CHROOT_DIR ?= "${D}"
@@ -592,6 +593,20 @@ END_USER
 			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/# deb-src/deb-src/g' /etc/apt/sources.list
 		fi
 	fi
+
+	if [ -z "${APTGET_EXTRA_PACKAGES_DESKTOP}" ]; then
+		if [ "${APTGET_EXTRA_PACKAGES_MAIN}" = "1" ]; then
+			# Disable other source providers, only keep main package provider
+			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/main/main #/g' /etc/apt/sources.list
+			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*universe*/#&/g' /etc/apt/sources.list
+			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*multiverse*/#&/g' /etc/apt/sources.list
+			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*restricted*/#&/g' /etc/apt/sources.list
+			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i '/^#.*main #*/s/^#//g' /etc/apt/sources.list
+			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*deb-src*/#&/g' /etc/apt/sources.list
+
+			mv ${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist ${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist_main
+		fi
+        fi
 
 	# Prepare apt to be generically usable
 	chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} update

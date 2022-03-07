@@ -2,6 +2,12 @@ SUMMARY = "A prebuilt Desktop Base image as baseline for custom work"
 require ubuntu-base-image.inc
 SECTION = "devel"
 
+APTGET_EXTRA_PACKAGES += " \
+    libtinfo5 \
+    udhcpc \
+    python \
+"
+
 APTGET_EXTRA_PACKAGES_DESKTOP = " \
     gnome-terminal \
     gnome-shell \

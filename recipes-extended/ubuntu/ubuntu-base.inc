@@ -45,7 +45,7 @@ RPROVIDES:${PN} += "glibc eglibc"
 # do a local apt-get install of major packages.
 APTGET_EXTRA_PACKAGES += "\
 	udev \
-	sudo udhcpc htop iproute2 \
+	sudo htop iproute2 \
 	whiptail \
 	kmod gnupg net-tools netbase \
 "
@@ -64,9 +64,8 @@ APTGET_EXTRA_PACKAGES += "\
     libnss-db \
     libssl-dev \
     openssl \
-	python bc db5.3 \
-	xz-utils bzip2 \
-	libtinfo5 \
+    bc db5.3 \
+    xz-utils bzip2 \
 "
 RPROVIDES:${PN}:ubuntu += " \
 rtld(GNU_HASH) \
