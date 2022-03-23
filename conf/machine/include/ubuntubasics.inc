@@ -3,7 +3,8 @@
 # - 18.04.3
 #UBUNTU_TARGET_VERSION ?= "16.04.5"
 #UBUNTU_TARGET_VERSION ?= "18.04.3"
-UBUNTU_TARGET_VERSION ?= "20.04.3"
+#UBUNTU_TARGET_VERSION ?= "20.04.3"
+UBUNTU_TARGET_VERSION ?= "22.04"
 
 UBUNTU_TARGET_MAJORVERSION ?= "${@d.getVar('UBUNTU_TARGET_VERSION', True).rsplit('.')[0]}"
 UBUNTU_TARGET_MINORVERSION ?= "${@d.getVar('UBUNTU_TARGET_VERSION', True).rsplit('.')[1]}"
@@ -39,7 +40,9 @@ GLIBCVERSION = '${@ \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "16.04", "2.23", \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "18.04", "2.27", \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "20.04", "2.31%", \
+    oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "22.04", "2.34", \
     "unsupportedubuntuversion" \
+    , d) \
     , d) \
     , d) \
     , d)}'
@@ -52,7 +55,9 @@ DISTRO_FEATURES:append = '${@ \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "16.04", "", \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "18.04", "", \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "20.04", " usrmerge", \
+    oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "22.04", " usrmerge", \
    "unsupportedubuntuversion" \
+    , d) \
     , d) \
     , d) \
     , d)}'
