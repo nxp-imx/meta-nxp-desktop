@@ -40,4 +40,5 @@ APTGET_EXTRA_PACKAGES_DESKTOP = " \
 APTGET_EXTRA_PACKAGES_REMOVE += " \
     xwayland \
     libgpod-common \
+    whoopsie \
 "
