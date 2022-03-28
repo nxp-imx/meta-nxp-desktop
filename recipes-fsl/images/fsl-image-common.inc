@@ -11,7 +11,7 @@ export PACKAGE_INSTALL = "${IMAGE_INSTALL}"
 APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
-ROOTFS_POSTPROCESS_COMMAND:append = "do_fix_ldconfig; do_save_graphics; do_aptget_update; do_update_host; do_update_dns; do_config_netplan;"
+ROOTFS_POSTPROCESS_COMMAND:append = "do_fix_ldconfig; do_save_graphics; do_aptget_update; do_update_host; do_config_netplan;"
 IMAGE_PREPROCESS_COMMAND:append = " do_fix_connman_conflict; do_enable_graphics; do_cleanup_rootfs; "
 
 
@@ -82,30 +82,6 @@ fakeroot do_update_host() {
 	echo >>"${APTGET_CHROOT_DIR}/etc/hosts" "ff02::1 ip6-allnodes"
 	echo >>"${APTGET_CHROOT_DIR}/etc/hosts" "ff02::2 ip6-allrouters"
 	echo >>"${APTGET_CHROOT_DIR}/etc/hosts" "ff02::3 ip6-allhosts"
-
-	set +x
-}
-
-fakeroot do_update_dns() {
-	set -x
-
-	if [ ! -L "${APTGET_CHROOT_DIR}/etc/resolv.conf" ]; then
-		if [ -e "${APTGET_CHROOT_DIR}/etc/resolveconf" ]; then
-			mkdir -p "/run/resolveconf"
-			if [ -f "${APTGET_CHROOT_DIR}/etc/resolv.conf" ]; then
-				mv -f "${APTGET_CHROOT_DIR}/etc/resolv.conf" "/run/resolveconf/resolv.conf"
-			fi
-			ln -sf  "/run/resolveconf/resolv.conf" "${APTGET_CHROOT_DIR}/etc/resolv.conf"
-		elif [ -e "${APTGET_CHROOT_DIR}/etc/dhcp/dhclient-enter-hooks.d/resolved" ]; then
-			mkdir -p "/run/systemd/resolve"
-			if [ -f "${APTGET_CHROOT_DIR}/etc/resolv.conf" ]; then
-				mv -f "${APTGET_CHROOT_DIR}/etc/resolv.conf" "/run/systemd/resolve/resolv.conf"
-			fi
-			ln -sf  "/run/systemd/resolve/resolv.conf" "${APTGET_CHROOT_DIR}/etc/resolv.conf"
-		else
-			touch "${APTGET_CHROOT_DIR}/etc/resolv.conf"
-		fi
-	fi
 
 	set +x
 }

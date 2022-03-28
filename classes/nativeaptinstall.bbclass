@@ -837,7 +837,9 @@ fakeroot aptget_update_end() {
 	# Now that we are done in qemu land, we reinstate the original
 	# networking config of our target rootfs.
         aptget_delete_faketool "/etc/hosts" "/__etchosts__"
-        aptget_delete_faketool "/etc/resolv.conf" "/__etcresolvconf__"
+        #aptget_delete_faketool "/etc/resolv.conf" "/__etcresolvconf__"
+        rm -f "${APTGET_CHROOT_DIR}/__etcresolvconf__"
+        aptget_restore_file "/etc/resolv.conf"
 
 	if [ $aptgetfailure -ne 0 ]; then
 		bberror "${APTGET_EXECUTABLE} failed to execute as expected!"
