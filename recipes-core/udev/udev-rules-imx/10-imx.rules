@@ -24,7 +24,7 @@ KERNEL=="galcore",  MODE="0666", GROUP="video"
 
 # gstreamer a/v playback
 KERNEL=="linux,cma", SUBSYSTEM=="dma_heap", MODE="0666"
-KERNEL=="ion", MODE="0666"
+KERNEL=="linux,cma-uncached", SUBSYSTEM=="dma_heap", MODE="0666"
 KERNEL=="mxc_hantro*", MODE="0666"
 
 # Fix for SDMA firmware not loading for two out of 3 dma controllers on imx8mm
