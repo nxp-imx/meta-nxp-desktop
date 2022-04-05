@@ -24,6 +24,8 @@ SRC_URI = "${GNOME_MIRROR}/${BPN}/${@gnome_verdir("${PV}")}/${BPN}-${PV}.tar.${G
            file://0002-disable-viewfinder-sink-a-v-sync-to-get-better-perfo.patch \
            file://0001-disable-global-preset-usage-for-encoder-auto-plugin.patch \
            file://0001-fix-build-break-on-L5.15-desktop-build.patch \
+           file://0001-cheese-limitation-the-max-resolution-to-3840x2160.patch \
+           file://0001-cheese-don-t-get-thumbnail-when-recording-is-on-goin.patch \
 "
 
 SRC_URI:append:mx8qm += " \

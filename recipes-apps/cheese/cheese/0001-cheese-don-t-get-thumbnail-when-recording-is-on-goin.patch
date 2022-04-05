@@ -1,0 +1,118 @@
+From 0ec752f88ee9a2a550c32a4c117f95f29560c8d0 Mon Sep 17 00:00:00 2001
+From: Haihua Hu <jared.hu@nxp.com>
+Date: Tue, 5 Apr 2022 14:43:35 +0800
+Subject: [PATCH] cheese: don't get thumbnail when recording is on going
+
+when video recording is ongoing, the output file is not complete
+and get thumbnail will fail. this will trigger frequently retry and
+cause preview not fluent.
+---
+ src/cheese-window.vala            |  2 ++
+ src/thumbview/cheese-thumb-view.c | 16 ++++++++++++++++
+ src/thumbview/cheese-thumb-view.h |  2 ++
+ src/vapi/cheese-thumbview.vapi    |  2 ++
+ 4 files changed, 22 insertions(+)
+
+diff --git a/src/cheese-window.vala b/src/cheese-window.vala
+index d7dae6bd..fe77c870 100644
+--- a/src/cheese-window.vala
++++ b/src/cheese-window.vala
+@@ -811,6 +811,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+   {
+     if (is_start)
+     {
++      thumb_view.set_recording();
+       camera.start_video_recording (fileutil.get_new_media_filename (this.current_mode));
+       /* Will be called every 1 second while
+        * update_timeout_layer returns true.
+@@ -823,6 +824,7 @@ public class Cheese.MainWindow : Gtk.ApplicationWindow
+     }
+     else
+     {
++      thumb_view.unset_recording();
+       camera.stop_video_recording ();
+       /* The timeout_layer always shows the "00:00:00"
+        * string when not recording, in order to notify
+diff --git a/src/thumbview/cheese-thumb-view.c b/src/thumbview/cheese-thumb-view.c
+index 1d2d88f5..458196ac 100644
+--- a/src/thumbview/cheese-thumb-view.c
++++ b/src/thumbview/cheese-thumb-view.c
+@@ -55,6 +55,7 @@ typedef struct
+   guint n_items;
+   guint idle_id;
+   GQueue *thumbnails;
++  gboolean is_recording;
+ } CheeseThumbViewPrivate;
+ 
+ G_DEFINE_TYPE_WITH_PRIVATE (CheeseThumbView, cheese_thumb_view, GTK_TYPE_ICON_VIEW)
+@@ -102,6 +103,7 @@ cheese_thumb_view_idle_append_item (gpointer data)
+   thumb_view = item->thumb_view;
+   priv = cheese_thumb_view_get_instance_private (thumb_view);
+ 
++  if (priv->is_recording) return TRUE;
+ 
+   GnomeDesktopThumbnailFactory *factory = priv->factory;
+   GFile                        *file    = item->file;
+@@ -207,6 +209,7 @@ cheese_thumb_view_append_item (CheeseThumbView *thumb_view, GFile *file)
+ 
+   info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_SIZE, 0, NULL,
+                             NULL);
++
+   if (!info)
+   {
+     /* This is normal since photos first get created with a tmpname, ie:
+@@ -322,6 +325,18 @@ cheese_thumb_view_append_item (CheeseThumbView *thumb_view, GFile *file)
+   }
+ }
+ 
++void cheese_thumb_view_set_recording (CheeseThumbView *thumbview)
++{
++  CheeseThumbViewPrivate *priv = cheese_thumb_view_get_instance_private (thumbview);
++  priv->is_recording = TRUE;
++}
++
++void cheese_thumb_view_unset_recording (CheeseThumbView *thumbview)
++{
++  CheeseThumbViewPrivate *priv = cheese_thumb_view_get_instance_private (thumbview);
++  priv->is_recording = FALSE;
++}
++
+ void
+ cheese_thumb_view_remove_item (CheeseThumbView *thumb_view, GFile *file)
+ {
+@@ -711,6 +726,7 @@ cheese_thumb_view_init (CheeseThumbView *thumb_view)
+   priv->n_items = 0;
+   priv->idle_id = 0;
+   priv->thumbnails = g_queue_new ();
++  priv->is_recording = FALSE;
+   
+   priv->fileutil = cheese_fileutil_new ();
+   priv->factory = gnome_desktop_thumbnail_factory_new (GNOME_DESKTOP_THUMBNAIL_SIZE_NORMAL);
+diff --git a/src/thumbview/cheese-thumb-view.h b/src/thumbview/cheese-thumb-view.h
+index b7f7c1b1..17d11475 100644
+--- a/src/thumbview/cheese-thumb-view.h
++++ b/src/thumbview/cheese-thumb-view.h
+@@ -39,6 +39,8 @@ void   cheese_thumb_view_remove_item (CheeseThumbView *thumb_view, GFile *file);
+ void   cheese_thumb_view_set_vertical (CheeseThumbView *thumb_view, gboolean vertical);
+ void cheese_thumb_view_start_monitoring_photo_path (CheeseThumbView *thumbview, const char *path_photos);
+ void cheese_thumb_view_start_monitoring_video_path (CheeseThumbView *thumbview, const char *path_videos);
++void cheese_thumb_view_set_recording (CheeseThumbView *thumbview);
++void cheese_thumb_view_unset_recording (CheeseThumbView *thumbview);
+ 
+ G_END_DECLS
+ 
+diff --git a/src/vapi/cheese-thumbview.vapi b/src/vapi/cheese-thumbview.vapi
+index 61b323e0..d3990549 100644
+--- a/src/vapi/cheese-thumbview.vapi
++++ b/src/vapi/cheese-thumbview.vapi
+@@ -12,5 +12,7 @@ namespace Cheese
+     public void            set_vertical (bool vertical);
+     public void            start_monitoring_photo_path (string path_photos);
+     public void            start_monitoring_video_path (string path_videos);
++    public void            set_recording();
++    public void            unset_recording();
+   }
+ }
+-- 
+2.17.1
+
