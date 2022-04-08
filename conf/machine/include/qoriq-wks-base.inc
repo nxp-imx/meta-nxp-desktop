@@ -159,7 +159,7 @@ FLASH_FIP_OFFSET:ls1012afrwy ?= "384"
 PBL_FILE:ls1012a ?= "atf/bl2_qspi.pbl"
 PFE_FILE:ls1012a ?= "engine-pfe-bin/pfe_fw_sbl.itb"
 
-WKS_FILE:ls1012ardb ?= "qoriq-ls1012a.wks.in"
+WKS_FILE:ls1012a ?= "qoriq-ls1012a.wks.in"
 
 # Do not update fstab file when using wic images
 # WIC_CREATE_EXTRA_ARGS ?= "--no-fstab-update"
