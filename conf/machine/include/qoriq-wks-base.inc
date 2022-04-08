@@ -99,21 +99,42 @@ QE_DP_FILE ?= ""
 FMAN_UCODE_FILE ?= ""
 ETH_PHY_FILE ?= ""
 PFE_FILE ?= ""
-MCFW_FILE ?= ""
+MCFW_FILE ?= "mc_app/mc.itb"
 DPL_FILE ?= ""
 DPC_FILE ?= ""
 ITB_FILE ?= "fitImage"
 
 WKS_FILE ?= ""
 
+# lx2162a
+DDR_PHY_FILE:lx2162a ?= "ddr-phy/fip_ddr_all.bin"
+ETH_PHY_FILE:lx2162a ?= "inphi/in112525-phy-ucode.txt"
+DPL_FILE:lx2162a ?= "mc-utils/dpl-18_5-17_2.dtb"
+DPC_FILE:lx2162a ?= "mc-utils/dpc_17_2.dtb"
+
+WKS_FILE:lx2162a ?= "qoriq-lx216xa.wks.in"
+
 # lx2160a
 DDR_PHY_FILE:lx2160a ?= "ddr-phy/fip_ddr_all.bin"
 ETH_PHY_FILE:lx2160a ?= "inphi/in112525-phy-ucode.txt"
-MCFW_FILE:lx2160a ?= "mc_app/mc.itb"
 DPL_FILE:lx2160a ?= "mc-utils/dpl-eth.19.dtb"
 DPC_FILE:lx2160a ?= "mc-utils/dpc-usxgmii.dtb"
 
-WKS_FILE:lx2160a ?= "qoriq-lx2160a.wks.in"
+WKS_FILE:lx2160a ?= "qoriq-lx216xa.wks.in"
+
+# ls1088a
+DPL_FILE:ls1088a ?= "mc-utils/dpl-eth.0x1D_0x0D.dtb"
+DPC_FILE:ls1088a ?= "mc-utils/custom/dpc-bman-4M.0x1D-0x0D.dtb"
+
+WKS_FILE:ls1088a ?= "qoriq-ls1088a.wks.in"
+
+# ls2088a
+ETH_PHY_FILE:ls2088a ?= "ls2-phy/cs4315-cs4340-PHY-ucode.txt"
+PBL_FILE:ls2088a ?= "atf/bl2_nor.pbl"
+DPL_FILE:ls2088a ?= "mc-utils/dpl-eth.0x2A_0x41.dtb"
+DPC_FILE:ls2088a ?= "mc-utils/custom/dpc-bman-4M.0x2A_0x41.dtb"
+
+WKS_FILE:ls2088a ?= "qoriq-ls2088a.wks.in"
 
 # ls1043a
 FMAN_UCODE_FILE:ls1043a ?= "fsl_fman_ucode_ls1043_r1.1_108_4_9.bin"
