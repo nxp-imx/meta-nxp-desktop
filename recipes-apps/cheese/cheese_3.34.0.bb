@@ -28,7 +28,7 @@ SRC_URI = "${GNOME_MIRROR}/${BPN}/${@gnome_verdir("${PV}")}/${BPN}-${PV}.tar.${G
            file://0001-cheese-don-t-get-thumbnail-when-recording-is-on-goin.patch \
 "
 
-SRC_URI:append:mx8qm += " \
+SRC_URI:append:imxdpu += " \
            file://0001-fixate-caps-to-NV12-for-8qm-8qm-encoder-only-support.patch \
 "
 
