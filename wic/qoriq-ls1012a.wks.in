@@ -1,10 +1,12 @@
-# short-description: Create QSPI flash image with a boot partition
+# short-description: Create SD card image with a boot partition
 # long-description:
+# Create an image that can be written onto a SD card using
+# dd for use with Layerscape ls1012a family.
 #
 # The disk layout used is:
-#  ------ --------- --------- ---------
-# | PBL  | FIP     |  PFE    |   ITB   |
-#  ------ --------- --------- ---- ----
+#  ------ --------- --------- --------------------
+# | PBL  | FIP     |  PFE    |   Boot + Rootfs   |
+#  ------ --------- --------- --------------------
 # ^      ^         ^         ^
 # |      |         |         |
 # 0    1MiB       10MiB     16MiB
@@ -16,4 +18,8 @@ part FIP --source rawcopy --sourceparams="file=${FIP_FILE}" --ondisk flash --no-
 
 part PFE --source rawcopy --sourceparams="file=${PFE_FILE}" --ondisk flash --no-table --align ${FLASH_PFE_OFFSET}
 
-part ITB --source rawcopy --sourceparams="file=${ITB_FILE}" --ondisk flash --no-table --align ${FLASH_KERNELITB_OFFSET}
+part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=ext4 --label boot --active --align 16384 --size 128
+
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfs --align 4096
+
+bootloader --ptable msdos
