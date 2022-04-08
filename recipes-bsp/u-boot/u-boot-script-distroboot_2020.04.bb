@@ -22,6 +22,9 @@ SRC_URI:append:lx2160ardb = "file://lx2160ardb_boot.cmd \
 SRC_URI:append:lx2160ardb-rev2 = "file://lx2160ardb-rev2_boot.cmd \
                              file://lx2160ardb-rev2_baremetal_boot.cmd"
 
+SRC_URI:append:ls1012ardb = "file://ls1028ardb_boot.cmd"
+SRC_URI:append:ls1012afrwy = "file://ls1028afrwy_boot.cmd"
+
 inherit deploy
 
 B = "${WORKDIR}"
