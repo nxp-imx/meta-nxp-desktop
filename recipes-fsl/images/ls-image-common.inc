@@ -10,7 +10,23 @@ IMAGE_INSTALL:append = " \
 "
 
 IMAGE_INSTALL:append:ls1012a = " \
+	ceetm \
+	dce \
 	dpdk \
+	dpdk-module \
+	dpdk-tools \
+	keyctl-caam \
+	optee-os-qoriq \
+	optee-client-qoriq \
+	optee-test-qoriq \
+	spc \
+	tsntool \
+"
+
+IMAGE_INSTALL:append:ls1046a = "\
+	kernel-module-nxp89xx \
+	linux-firmware-nxp89xx \
+	nxp-wlan-sdk \
 "
 
 do_enable_enetc_ports() {

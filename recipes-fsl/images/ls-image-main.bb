@@ -37,6 +37,12 @@ YOCTO_NETWORK_TOOLS = " \
 	sysfsutils \
 	watchdog \
 	fio \
+	dpdk-examples \
+	ovs-dpdk \
+	libpkcs11 \
+	pktgen-dpdk \
+	secure-obj \
+	secure-obj-module \
 "
 
 IMAGE_INSTALL:append = " \
