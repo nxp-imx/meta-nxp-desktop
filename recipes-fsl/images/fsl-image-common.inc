@@ -20,6 +20,7 @@ IMAGE_INSTALL += "\
 	kernel-devicetree \
 	kernel-image \
 	${MACHINE_EXTRA_RRECOMMENDS} \
+	perf \
 "
 
 #####
