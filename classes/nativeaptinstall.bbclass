@@ -594,16 +594,18 @@ END_USER
 		fi
 	fi
 
-	if [ -z "${APTGET_EXTRA_PACKAGES_DESKTOP}" ]; then
-		if [ "${APTGET_EXTRA_PACKAGES_MAIN}" = "1" ]; then
-			# Disable other source providers, only keep main package provider
-			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/main/main #/g' /etc/apt/sources.list
-			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*universe*/#&/g' /etc/apt/sources.list
-			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*multiverse*/#&/g' /etc/apt/sources.list
-			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*restricted*/#&/g' /etc/apt/sources.list
-			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i '/^#.*main #*/s/^#//g' /etc/apt/sources.list
-			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*deb-src*/#&/g' /etc/apt/sources.list
+	if [ "${APTGET_EXTRA_PACKAGES_MAIN}" = "1" ]; then
+		cp ${APTGET_CHROOT_DIR}/etc/apt/sources.list ${APTGET_CHROOT_DIR}/etc/apt/sources.list_backup
 
+		# Disable other source providers, only keep main package provider
+		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/main/main #/g' /etc/apt/sources.list
+		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*universe*/#&/g' /etc/apt/sources.list
+		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*multiverse*/#&/g' /etc/apt/sources.list
+		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*restricted*/#&/g' /etc/apt/sources.list
+		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i '/^#.*main #*/s/^#//g' /etc/apt/sources.list
+		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*deb-src*/#&/g' /etc/apt/sources.list
+
+		if [ -e "${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist" ]; then
 			mv ${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist ${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist_main
 		fi
         fi
@@ -825,6 +827,10 @@ fakeroot aptget_update_end() {
 		aptget_run_aptget clean
 		aptget_run_aptget autoremove
 	fi
+
+	if [ "${APTGET_EXTRA_PACKAGES_MAIN}" = "1" ]; then
+		mv ${APTGET_CHROOT_DIR}/etc/apt/sources.list_backup ${APTGET_CHROOT_DIR}/etc/apt/sources.list
+        fi
 
         # Remove any proxy instrumentation
         xf="/__etc_apt_apt.conf.d_01yoctoinstallproxies__"
