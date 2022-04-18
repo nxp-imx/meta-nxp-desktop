@@ -1,4 +1,4 @@
-i.MX Linux Yocto Project BSP for Desktop PoC (Proof of Concept)
+NXP Linux Yocto Project BSP for Desktop PoC (Proof of Concept)
 ===============================================================
 
 This README contains instructions for setting up a Yocto build
@@ -16,7 +16,7 @@ $ chmod a+x ~/bin/repo
 $ PATH=${PATH}:~/bin
 ```
 
-Download the Yocto Project BSP
+Download the Yocto Project BSP for i.MX
 ------------------------------
 
 ```
@@ -53,11 +53,48 @@ $ cd desktop
 $ source setup-environment build-desktop
 ```
 
-Build the image
+Build the image for i.MX
 ---------------
 
 ```
 $ bitbake imx-image-desktop
+```
+
+
+Download the Yocto Project BSP for Layerscape
+------------------------------
+
+```
+$ mkdir distro
+$ cd distro
+$ repo init -u https://source.codeaurora.org/external/qoriq/qoriq-components/yocto-sdk -b honister -m lf-5.15.5-1.0.0_distro.xml
+$ repo sync
+```
+
+Start a layerscape build in distro folder
+------------------------------
+
+```
+$ source  distro-setup-env -m <Machine>
+```
+
+Machine:
+
+    lx2160ardb-rev2
+    ls1028ardb
+    ls1012ardb
+    ls1012afrwy
+
+Build the layerscape image
+---------------
+
+```
+$ bitbake ls-image-main  # for all layerscape boards
+```
+Or
+
+```
+$ bitbake ls-image-desktop  # for ls1028a only
 ```
 
 The default PoC build will create the account "user" with the password "user" for desktop evaluation,
