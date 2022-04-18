@@ -7,6 +7,8 @@ IMAGE_PREPROCESS_COMMAND:append = " do_enable_enetc_ports; "
 
 IMAGE_INSTALL:append = " \
 	packagegroup-fsl-tools-core \
+	ipsec-tools \
+	ipsec-demo \
 "
 
 IMAGE_INSTALL:append:ls1012a = " \
