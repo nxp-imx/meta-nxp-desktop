@@ -11,6 +11,10 @@ require ls-image-common.inc
 
 APTGET_EXTRA_PACKAGES_MAIN = "1"
 
+APTGET_EXTRA_PACKAGES += "\
+	libvirt-daemon-system \
+"
+
 # This must be added first as it provides the foundation for
 # subsequent modifications to the rootfs
 IMAGE_INSTALL += "\
