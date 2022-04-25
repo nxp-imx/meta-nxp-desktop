@@ -24,6 +24,13 @@ POKY_DEFAULT_EXTRA_RDEPENDS:remove = "packagegroup-core-boot"
 INITRAMFS_IMAGE = ""
 #POSTINST_INTERCEPTS_DIR = "<--InVaLiD-->"
 
+GCCVERSION = '${@ \
+    oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "20.04", "9.3.0", \
+    oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "22.04", "11.2.0", \
+    "unsupportedubuntuversion" \
+    , d) \
+    , d)}'
+
 # The Yocto glibc version must not exceed the Desktop glibc version
 # or Yocto-created executables will fail on the Desktop image.
 # We want to be as close as possible to the respective Desktop glibc
@@ -40,14 +47,14 @@ GLIBCVERSION = '${@ \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "16.04", "2.23", \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "18.04", "2.27", \
     oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "20.04", "2.31%", \
-    oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "22.04", "2.34", \
+    oe.utils.conditional("UBUNTU_TARGET_BASEVERSION", "22.04", "2.35", \
     "unsupportedubuntuversion" \
     , d) \
     , d) \
     , d) \
     , d)}'
 PREFERRED_VERSION_cross-localedef-native = "${GLIBCVERSION}"
-BINUVERSION="2.34"
+BINUVERSION="2.38"
 
 # More recent Desktop versions work with symlinks for the base
 # directories. We can't refer to symlink based files
