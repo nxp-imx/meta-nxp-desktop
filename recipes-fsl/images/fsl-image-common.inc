@@ -154,6 +154,9 @@ do_cleanup_rootfs() {
 	# remove apt-get source list, apt-get update can download them
 	rm -rf ${IMAGE_ROOTFS}/var/lib/apt/lists/*
 
+	# remove apt-get package cache, apt-get update can create them
+	rm -rf ${IMAGE_ROOTFS}/var/cache/apt/*.bin
+
 	# imx kernel didn't use udev to load firmware, remove this rules
 	# to avoid login hang when load sdma firmware
 	rm -f ${IMAGE_ROOTFS}/usr/lib/udev/rules.d/50-firmware.rules
