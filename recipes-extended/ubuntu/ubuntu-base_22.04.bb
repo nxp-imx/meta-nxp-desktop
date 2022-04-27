@@ -6,6 +6,8 @@ APTGET_EXTRA_PACKAGES += " \
     libtinfo5 \
     udhcpc \
     python3.10 \
+    freeglut3 \
+    libglu1-mesa \
 "
 
 APTGET_EXTRA_PACKAGES_DESKTOP = " \
