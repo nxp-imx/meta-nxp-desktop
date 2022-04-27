@@ -44,6 +44,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       udev-hwdb iproute2-ip iproute2 glibc-utils \
                       memtester minicom mmc-utils pciutils psmisc ptpd \
                       coreutils openssl-conf libcap merge-files upower \
+                      openssl libssl1.1 libcrypto1.1 \
                       python3-pyelftools slang zstd libdrm-dev pkgconfig \
                       python3-resource sysfsutils sysklogd sysstat lrzsz \
                       python3-stringold python3-numbers python3-numbers \
