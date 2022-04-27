@@ -151,6 +151,8 @@ RPROVIDES:${PN} += " ${YOCTO-DEPENDS-LIST} "
 
 RPROVIDES:${PN}:ubuntu += " libglib-2.0 "
 
+QA_EMPTY_DIRS = ""
+
 python do_package:append() {
     os.environ['PSEUDO_DISABLED'] = '1'
     d.setVar('ERROR_QA', '')
