@@ -44,7 +44,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       udev-hwdb iproute2-ip iproute2 glibc-utils \
                       memtester minicom mmc-utils pciutils psmisc ptpd \
                       coreutils openssl-conf libcap merge-files upower \
-                      openssl libssl1.1 libcrypto1.1 \
+                      openssl libssl1.1 libcrypto1.1 libssl3 libcrypto3 \
                       python3-pyelftools slang zstd libdrm-dev pkgconfig \
                       python3-resource sysfsutils sysklogd sysstat lrzsz \
                       python3-stringold python3-numbers python3-numbers \
@@ -143,6 +143,9 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       hicolor-icon-theme libatk-bridge-2.0-0 libxslt nss \
                       libatspi0 libgtk-3.0 gtk+3 gtk+3-dev gdk-pixbuf \
                       libxfont2-2 libfontenc1 desktop-file-utils \
+                      libunwind libwebp libxcvt libzstd1 \
+                      libcurl4 libusb-1.0-0 libdw1 \
+                      libgcc libxkbcommon0 \
 "
 
 RCONFLICTS:${PN} += " ${YOCTO-DEPENDS-LIST} "
