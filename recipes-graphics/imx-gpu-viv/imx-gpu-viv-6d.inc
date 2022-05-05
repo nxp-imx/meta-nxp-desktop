@@ -18,7 +18,7 @@ DEPENDS += " \
                                                        '', d)} \
 "
 DEPENDS:append:imxdrm = " libdrm wayland"
-DEPENDS:append:mx8 = " patchelf-native"
+DEPENDS:append:mx8-nxp-bsp = " patchelf-native"
 
 # imx-gpu-viv does not provide everything it needs to for virtual/libgl
 # on x11 backend or on Wayland backend with XWayland support.
@@ -31,12 +31,12 @@ EXTRA_PROVIDES:append:imxgpu3d = " \
     virtual/libgles1 \
     virtual/libgles2 \
 "
-EXTRA_PROVIDES:append:mx8 = " \
+EXTRA_PROVIDES:append:mx8-nxp-bsp = " \
     virtual/libgbm \
 "
 PROVIDES:OPENVX       = ""
-PROVIDES:OPENVX:mx8   = "virtual/libopenvx"
-PROVIDES:OPENVX:mx8mm = ""
+PROVIDES:OPENVX:mx8-nxp-bsp   = "virtual/libopenvx"
+PROVIDES:OPENVX:mx8mm-nxp-bsp = ""
 PROVIDES += " \
     imx-gpu-viv \
     libgal-imx \
@@ -55,13 +55,13 @@ PE = "1"
 
 inherit fsl-eula-unpack features_check
 
-REQUIRED_DISTRO_FEATURES:mx8 = "wayland"
+REQUIRED_DISTRO_FEATURES:mx8-nxp-bsp = "wayland"
 
 SRC_URI = "${FSL_BIN_MIRROR}/${BPN}-${PV}.bin;fsl-eula=true"
 
 # Note : If you add a package here, to prevent a naming conflict see the python_anonymous() futher below
 IMX_PACKAGES_GBM     = ""
-IMX_PACKAGES_GBM:mx8 = "libgbm-imx libgbm-imx-dev"
+IMX_PACKAGES_GBM:mx8-nxp-bsp = "libgbm-imx libgbm-imx-dev"
 PACKAGES =+ "libclc-imx libclc-imx-dev \
 	libgl-imx libgl-imx-dev \
 	libgles1-imx libgles1-imx-dev \
@@ -132,30 +132,30 @@ python __anonymous() {
 }
 
 IS_MX6SL = "0"
-IS_MX6SL:mx6sl = "1"
+IS_MX6SL:mx6sl-nxp-bsp = "1"
 
 IS_MX8 = "0"
-IS_MX8:mx8 = "1"
+IS_MX8:mx8-nxp-bsp = "1"
 
 PACKAGE_FP_TYPE = "hardfp"
 
 HAS_GBM     = "false"
-HAS_GBM:mx8 = "true"
+HAS_GBM:mx8-nxp-bsp = "true"
 
 GLES3_HEADER_REMOVALS        = "gl31.h gl32.h"
-GLES3_HEADER_REMOVALS:mx8m   = "gl32.h"
-GLES3_HEADER_REMOVALS:mx8mm  = "gl31.h gl32.h"
-GLES3_HEADER_REMOVALS:mx8qxp = ""
-GLES3_HEADER_REMOVALS:mx8qm  = ""
+GLES3_HEADER_REMOVALS:mx8m-nxp-bsp   = "gl32.h"
+GLES3_HEADER_REMOVALS:mx8mm-nxp-bsp  = "gl31.h gl32.h"
+GLES3_HEADER_REMOVALS:mx8qxp-nxp-bsp = ""
+GLES3_HEADER_REMOVALS:mx8qm-nxp-bsp  = ""
 
 VXC_BINARY_REMOVALS          = "libNNGPUBinary-*.so libNNVXCBinary-*.so libOvx12VXCBinary-*.so"
 
 VXC_BINARY_INSTALLS          = ""
-VXC_BINARY_INSTALLS:mx8qxp   = "libNNGPUBinary-lite.so"
-VXC_BINARY_INSTALLS:mx8qm    = "libNNGPUBinary-evis.so libNNVXCBinary-evis.so libOvx12VXCBinary-evis.so"
-VXC_BINARY_INSTALLS:mx8mp    = "libNNGPUBinary-evis2.so libNNVXCBinary-evis2.so libOvx12VXCBinary-evis2.so libNNGPUBinary-ulite.so"
-VXC_BINARY_INSTALLS:mx8mq    = "libNNGPUBinary-lite.so"
-VXC_BINARY_INSTALLS:mx8mn    = "libNNGPUBinary-ulite.so"
+VXC_BINARY_INSTALLS:mx8qxp-nxp-bsp   = "libNNGPUBinary-lite.so"
+VXC_BINARY_INSTALLS:mx8qm-nxp-bsp    = "libNNGPUBinary-evis.so libNNVXCBinary-evis.so libOvx12VXCBinary-evis.so"
+VXC_BINARY_INSTALLS:mx8mp-nxp-bsp    = "libNNGPUBinary-evis2.so libNNVXCBinary-evis2.so libOvx12VXCBinary-evis2.so libNNGPUBinary-ulite.so"
+VXC_BINARY_INSTALLS:mx8mq-nxp-bsp    = "libNNGPUBinary-lite.so"
+VXC_BINARY_INSTALLS:mx8mn-nxp-bsp    = "libNNGPUBinary-ulite.so"
 
 do_install () {
     install -d ${D}${libdir}
@@ -279,9 +279,9 @@ INSANE_SKIP:libgal-imx += "build-deps"
 
 FILES:libvsc-imx = "${libdir}/libVSC${SOLIBS}"
 
-FILES:libgbm-imx:mx8 = "${libdir}/libgbm${REALSOLIBS} ${libdir}/libgbm${SOLIBSDEV} ${libdir}/libgbm_viv${SOLIBSDEV}"
-FILES:libgbm-imx-dev:mx8 = "${libdir}/pkgconfig/gbm.pc ${includedir}/gbm.h"
-RDEPENDS:libgbm-imx:append:mx8 = " libdrm"
+FILES:libgbm-imx:mx8-nxp-bsp = "${libdir}/libgbm${REALSOLIBS} ${libdir}/libgbm${SOLIBSDEV} ${libdir}/libgbm_viv${SOLIBSDEV}"
+FILES:libgbm-imx-dev:mx8-nxp-bsp = "${libdir}/pkgconfig/gbm.pc ${includedir}/gbm.h"
+RDEPENDS:libgbm-imx:append:mx8-nxp-bsp = " libdrm"
 INSANE_SKIP:libgbm-imx += "dev-so"
 
 FILES:libvulkan-imx = "${libdir}/libvulkan${SOLIBS} ${libdir}/libvulkan${REALSOLIBS} ${libdir}/libSPIRV_viv${SOLIBS}"
@@ -352,4 +352,4 @@ FILES:libgc-wayland-protocol-imx-dev = "${libdir}/libgc_wayland_protocol${SOLIBS
 
 FILES:imx-gpu-viv-tools = "${bindir}/gmem_info"
 
-# COMPATIBLE_MACHINE = "(mx6q|mx6dl|mx6sx|mx6sl|mx8)"
+# COMPATIBLE_MACHINE = "(mx6q-nxp-bsp|mx6dl-nxp-bsp|mx6sx-nxp-bsp|mx6sl-nxp-bsp|mx8-nxp-bsp)"

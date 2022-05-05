@@ -88,13 +88,13 @@ IMAGE_INSTALL += " \
     gputop \
 "
 # isp
-IMAGE_INSTALL:append:mx8mp = " \
+IMAGE_INSTALL:append:mx8mp-nxp-bsp = " \
     isp-imx \
     basler-camera \
     kernel-module-isp-vvcam \
 "
 
-IMAGE_INSTALL:remove:mx8mm = " \
+IMAGE_INSTALL:remove:mx8mm-nxp-bsp = " \
     libgles3-imx-dev \
     libclc-imx libclc-imx-dev \
     libopencl-imx \

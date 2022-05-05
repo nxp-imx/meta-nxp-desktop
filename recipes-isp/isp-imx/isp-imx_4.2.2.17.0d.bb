@@ -81,5 +81,5 @@ INSANE_SKIP:${PN} = "rpaths"
 
 RDEPENDS:${PN} = "libdrm libpython2 bash"
 
-COMPATIBLE_MACHINE = "(mx8mp)"
+COMPATIBLE_MACHINE = "(mx8mp-nxp-bsp)"
 
