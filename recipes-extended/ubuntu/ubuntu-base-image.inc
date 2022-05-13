@@ -29,6 +29,10 @@ RPROVIDES:${PN}:ubuntu += " \
     /bin/dash \
 "
 
+APTGET_EXTRA_PACKAGES += " \
+    libdebuginfod1 \
+"
+
 # Extra packages that Desktop will replace and thus enables the use of 
 # Yocto packages such as gstreamer to be used in Desktop without package conflitcs
 YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core python3-dev \
@@ -144,8 +148,9 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       libatspi0 libgtk-3.0 gtk+3 gtk+3-dev gdk-pixbuf \
                       libxfont2-2 libfontenc1 desktop-file-utils \
                       libunwind libwebp libxcvt libzstd1 \
-                      libcurl4 libusb-1.0-0 libdw1 \
-                      libgcc libxkbcommon0 \
+                      libcurl4 usbutils libusb-1.0-0 libdw1 \
+                      libgcc libxkbcommon0 libdebuginfod1 \
+                      libssl libcrypto \
 "
 
 RCONFLICTS:${PN} += " ${YOCTO-DEPENDS-LIST} "

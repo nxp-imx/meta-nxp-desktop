@@ -52,7 +52,7 @@ APTGET_EXTRA_PACKAGES += "\
 	net-tools \
 	nfs-common \
 	openssh-server \
-	python3.9 libtool autoconf pkg-config \
+	libtool autoconf pkg-config \
 	bluez \
 	python-is-python3 \
 	netplan.io \
