@@ -78,7 +78,7 @@ APTGET_NETWORK_TOOLS = " \
 
 APTGET_EXTRA_PACKAGES += "\
        ${APTGET_NETWORK_TOOLS} \
-       ntpdate connman patchelf \
+       ntpdate patchelf \
        weston \
 "
 

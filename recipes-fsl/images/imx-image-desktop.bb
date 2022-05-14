@@ -41,7 +41,7 @@ IMAGE_INSTALL += "\
 	${ML_NNSTREAMER_PKGS} \
 "
 APTGET_EXTRA_PACKAGES += "\
-	ntpdate connman patchelf \
+	ntpdate patchelf \
 	libcairo2 libpixman-1-0 libpango-1.0-0 libpangocairo-1.0-0 \
 	squashfs-tools golang-github-snapcore-snapd-dev golang-github-ubuntu-core-snappy-dev \
 	snap-confine snapd-xdg-open snapd ubuntu-core-launcher ubuntu-core-snapd-units ubuntu-snappy-cli ubuntu-snappy \

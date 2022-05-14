@@ -12,7 +12,7 @@ APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
 ROOTFS_POSTPROCESS_COMMAND:append = "do_fix_ldconfig; do_save_graphics; do_aptget_update; do_update_host; do_config_netplan;"
-IMAGE_PREPROCESS_COMMAND:append = " do_fix_connman_conflict; do_enable_graphics; do_cleanup_rootfs; "
+IMAGE_PREPROCESS_COMMAND:append = " do_enable_graphics; do_cleanup_rootfs; "
 
 
 # Without the kernel, modules, and firmware we can't really use the Linux
@@ -43,8 +43,8 @@ IMAGE_FEATURES += " \
 #######
 
 APTGET_EXTRA_PACKAGES_SERVICES_DISABLED += "\
-	network-manager \
 "
+
 APTGET_EXTRA_PACKAGES += "\
 	console-setup locales \
 	apt vim \
@@ -57,6 +57,7 @@ APTGET_EXTRA_PACKAGES += "\
 	python-is-python3 \
 	netplan.io \
 "
+
 APTGET_EXTRA_SOURCE_PACKAGES += "\
 "
 
@@ -93,18 +94,6 @@ do_config_netplan() {
 	echo >>"${APTGET_CHROOT_DIR}/etc/netplan/network-manage-all.yaml" "network:"
 	echo >>"${APTGET_CHROOT_DIR}/etc/netplan/network-manage-all.yaml" "  version: 2"
 	echo >>"${APTGET_CHROOT_DIR}/etc/netplan/network-manage-all.yaml" "  renderer: NetworkManager"
-
-	set +x
-}
-
-do_fix_connman_conflict() {
-	set -x
-
-	#rm ${IMAGE_ROOTFS}/etc/systemd/system/network-online.target.wants/NetworkManager-wait-online.service
-	#rm ${IMAGE_ROOTFS}/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-	#rm ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/NetworkManager.service
-	rm ${IMAGE_ROOTFS}/etc/systemd/system/dbus-org.freedesktop.resolve1.service
-	rm ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/systemd-resolved.service
 
 	set +x
 }

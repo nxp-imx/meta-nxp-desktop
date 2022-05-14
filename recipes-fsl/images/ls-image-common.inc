@@ -34,14 +34,6 @@ IMAGE_INSTALL:append:ls1046a = "\
 do_enable_enetc_ports() {
 	set -x
 
-	if [ -e ${IMAGE_ROOTFS}/usr/lib/systemd/system/connman.service ]; then
-		rm ${IMAGE_ROOTFS}/usr/lib/systemd/system/connman.service
-		rm ${IMAGE_ROOTFS}/usr/lib/systemd/system/connman-wait-online.service
-
-		rm ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/connman.service
-		rm ${IMAGE_ROOTFS}/etc/systemd/system/network-online.target.wants/connman-wait-online.service
-	fi
-
 #	if [ -e ${IMAGE_ROOTFS}/usr/lib/systemd/system/NetworkManager.service ]; then
 #		rm ${IMAGE_ROOTFS}/usr/lib/systemd/system/NetworkManager.service
 #		rm ${IMAGE_ROOTFS}/usr/lib/systemd/system/NetworkManager-dispatcher.service
