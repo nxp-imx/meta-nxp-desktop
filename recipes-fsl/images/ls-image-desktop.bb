@@ -49,7 +49,6 @@ IMAGE_INSTALL += " \
     libvulkan-imx \
     libopenvx-imx libopenvx-imx-dev \
     libnn-imx \
-    libdrm-vivante \
     imx-gpu-viv-tools \
     apitrace \
 "
