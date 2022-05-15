@@ -159,6 +159,8 @@ RPROVIDES:${PN} += " ${YOCTO-DEPENDS-LIST} "
 
 RPROVIDES:${PN}:ubuntu += " libglib-2.0 "
 
+do_install[network] = "1"
+
 QA_EMPTY_DIRS = ""
 
 python do_package:append() {
