@@ -53,33 +53,23 @@ IMAGE_INSTALL += " \
     apitrace \
 "
 
-APTGET_NETWORK_TOOLS = " \
-	iozone3 \
-	iperf \
-	lmbench \
-	netperf \
-	cpufrequtils \
-	makedev \
-	mmc-utils \
-	netdata \
-	i2c-tools \
-	usbutils \
-	lm-sensors \
-	linuxptp \
-	rt-tests \
-	can-utils \
-	blktrace \
-	sysfsutils \
-	watchdog \
-	fio \
+IMAGE_INSTALL += " \
+    ${LAYERSCAPE_DEMO_SAMPLES} \
 "
 
 #######
 
 APTGET_EXTRA_PACKAGES += "\
-       ${APTGET_NETWORK_TOOLS} \
+       ${LAYERSCAPE_NETWORK_TOOLS} \
+       libvirt-daemon-system \
+       makedev lm-sensors \
        ntpdate patchelf \
        weston \
 "
+
+SOC_DEFAULT_IMAGE_FSTYPES:append = " wic.bmap wic.bz2 tar.gz"
+SOC_DEFAULT_IMAGE_FSTYPES:remove = " tar.bz2"
+
+IMAGE_ROOTFS_SIZE ?= "6291456"
 
 COMPATIBLE_MACHINE = "(ls1028a)"

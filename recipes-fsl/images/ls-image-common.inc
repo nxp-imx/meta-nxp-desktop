@@ -8,8 +8,6 @@ IMAGE_PREPROCESS_COMMAND:append = " do_enable_enetc_ports; do_update_rootfs; "
 IMAGE_INSTALL:append = " \
 	packagegroup-fsl-tools-core \
 	ipsec-tools \
-	ipsec-demo \
-	dpdk-examples \
 	ovs-dpdk \
 	libpkcs11 \
 	pktgen-dpdk \
@@ -36,6 +34,30 @@ IMAGE_INSTALL:append:ls1046a = "\
 	kernel-module-nxp89xx \
 	linux-firmware-nxp89xx \
 	nxp-wlan-sdk \
+"
+
+LAYERSCAPE_NETWORK_TOOLS = " \
+	iozone3 \
+	iperf3 \
+	lmbench \
+	netperf \
+	cpufrequtils \
+	mmc-utils \
+	netdata \
+	i2c-tools \
+	usbutils \
+	linuxptp \
+	rt-tests \
+	can-utils \
+	blktrace \
+	sysfsutils \
+	watchdog \
+	fio \
+"
+
+LAYERSCAPE_DEMO_SAMPLES = " \
+	dpdk-examples \
+        ipsec-demo \
 "
 
 do_enable_enetc_ports() {

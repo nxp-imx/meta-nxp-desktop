@@ -89,13 +89,22 @@ Build the layerscape image
 ---------------
 
 ```
-$ bitbake ls-image-main  # for all layerscape boards
+$ bitbake ls-image-main  # build main image for networking feature
 ```
 Or
 
 ```
-$ bitbake ls-image-desktop  # for ls1028a only
+$ bitbake ls-image-desktop  # build desktop image for ls1028a only
 ```
+
+```
+$ bitbake ls-image-lite # build image without sdk demo and examples
+```
+
+```
+$ bitbake ls-image-tiny # build yocto tiny image with limited tools
+```
+
 
 The default PoC build will create the account "user" with the password "user" for desktop evaluation,
 In order to change the account or password, uncomment and update APTGET_ADD_USERS in <build_dir>/conf/local.conf.
