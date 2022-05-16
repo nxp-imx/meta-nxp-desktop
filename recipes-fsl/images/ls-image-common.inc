@@ -3,7 +3,7 @@
 
 require fsl-image-common.inc
 
-IMAGE_PREPROCESS_COMMAND:append = " do_enable_enetc_ports; "
+IMAGE_PREPROCESS_COMMAND:append = " do_enable_enetc_ports; do_update_rootfs; "
 
 IMAGE_INSTALL:append = " \
 	packagegroup-fsl-tools-core \
@@ -15,6 +15,7 @@ IMAGE_INSTALL:append = " \
 	pktgen-dpdk \
 	secure-obj \
 	secure-obj-module \
+	openssl-engines \
 "
 
 IMAGE_INSTALL:append:ls1012a = " \
@@ -67,6 +68,19 @@ do_enable_enetc_ports() {
 	echo >>"${APTGET_CHROOT_DIR}/etc/systemd/network/eno2.network" ""
 	echo >>"${APTGET_CHROOT_DIR}/etc/systemd/network/eno2.network" "[Network]"
 	echo >>"${APTGET_CHROOT_DIR}/etc/systemd/network/eno2.network" "LinkLocalAddressing=yes"
+
+	set +x
+}
+
+do_update_rootfs() {
+	set -x
+
+	if [ -e ${IMAGE_ROOTFS}/usr/lib/engines-3/devcrypto.so ]; then
+		if [ -e ${IMAGE_ROOTFS}/usr/lib/aarch64-linux-gnu/engines-3 ]; then
+			mv ${IMAGE_ROOTFS}/usr/lib/engines-3/devcrypto.so ${IMAGE_ROOTFS}/usr/lib/aarch64-linux-gnu/engines-3/
+			rm -rf ${IMAGE_ROOTFS}/usr/lib/engines-3
+		fi
+	fi
 
 	set +x
 }
