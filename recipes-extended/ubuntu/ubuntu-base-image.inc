@@ -150,7 +150,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       libunwind libwebp libxcvt libzstd1 \
                       libcurl4 usbutils libusb-1.0-0 libdw1 \
                       libgcc libxkbcommon0 libdebuginfod1 \
-                      libssl libcrypto \
+                      libssl libcrypto wpa-supplicant \
 "
 
 RCONFLICTS:${PN} += " ${YOCTO-DEPENDS-LIST} "
