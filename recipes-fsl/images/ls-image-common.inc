@@ -9,6 +9,12 @@ IMAGE_INSTALL:append = " \
 	packagegroup-fsl-tools-core \
 	ipsec-tools \
 	ipsec-demo \
+	dpdk-examples \
+	ovs-dpdk \
+	libpkcs11 \
+	pktgen-dpdk \
+	secure-obj \
+	secure-obj-module \
 "
 
 IMAGE_INSTALL:append:ls1012a = " \
