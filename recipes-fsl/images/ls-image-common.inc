@@ -5,15 +5,23 @@ require fsl-image-common.inc
 
 IMAGE_PREPROCESS_COMMAND:append = " do_enable_enetc_ports; do_update_rootfs; "
 
-IMAGE_INSTALL:append = " \
-	packagegroup-fsl-tools-core \
-	ipsec-tools \
+DPDK_SECURE_OBJ = " \
 	ovs-dpdk \
 	libpkcs11 \
 	pktgen-dpdk \
 	secure-obj \
 	secure-obj-module \
+"
+
+IMAGE_INSTALL:append = " \
+	packagegroup-fsl-tools-core \
+	${DPDK_SECURE_OBJ} \
 	openssl-engines \
+	ipsec-tools \
+"
+
+IMAGE_INSTALL:remove:ls1021atwr = " \
+	${DPDK_SECURE_OBJ} \
 "
 
 IMAGE_INSTALL:append:ls1012a = " \
@@ -57,7 +65,11 @@ LAYERSCAPE_NETWORK_TOOLS = " \
 
 LAYERSCAPE_DEMO_SAMPLES = " \
 	dpdk-examples \
-        ipsec-demo \
+	ipsec-demo \
+"
+
+LAYERSCAPE_DEMO_SAMPLES:remove:ls1021atwr = " \
+	dpdk-examples \
 "
 
 do_enable_enetc_ports() {
