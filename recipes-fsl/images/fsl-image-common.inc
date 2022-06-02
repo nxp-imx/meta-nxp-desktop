@@ -12,7 +12,7 @@ APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
 ROOTFS_POSTPROCESS_COMMAND:append = "do_fix_ldconfig; do_save_graphics; do_aptget_update; do_update_host; do_config_netplan;"
-IMAGE_PREPROCESS_COMMAND:append = " do_enable_graphics; do_cleanup_rootfs; "
+IMAGE_PREPROCESS_COMMAND:append = " do_config_systemd_resolved; do_enable_graphics; do_cleanup_rootfs; "
 
 
 # Without the kernel, modules, and firmware we can't really use the Linux
@@ -174,6 +174,15 @@ fakeroot do_fix_ldconfig() {
 #    rm ${IMAGE_ROOTFS}/usr/lib/libpng*
 #    rm ${IMAGE_ROOTFS}/usr/lib/libfontconfig*
 #    rm ${IMAGE_ROOTFS}/etc/fonts/fonts.conf
+
+	set +x
+}
+
+do_config_systemd_resolved() {
+	set -x
+
+	rm -f ${IMAGE_ROOTFS}/etc/resolv.conf
+	ln /usr/lib/systemd/resolv.conf -s ${IMAGE_ROOTFS}/etc/resolv.conf
 
 	set +x
 }
