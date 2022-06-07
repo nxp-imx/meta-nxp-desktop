@@ -38,6 +38,7 @@ IMAGE_INSTALL += "\
 	xwayland \
 	chromium-ozone-wayland \
 	tensorflow-lite \
+	tensorflow-lite-vx-delegate \
 	${ML_NNSTREAMER_PKGS} \
 "
 APTGET_EXTRA_PACKAGES += "\
@@ -102,6 +103,7 @@ IMAGE_INSTALL:remove:mx8mm-nxp-bsp = " \
     libopenvx-imx libopenvx-imx-dev \
     libnn-imx \
     tensorflow-lite \
+    tensorflow-lite-vx-delegate \
     ${ML_NNSTREAMER_PKGS} \
 "
 
