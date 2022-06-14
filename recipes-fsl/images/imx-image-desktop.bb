@@ -35,6 +35,7 @@ IMAGE_INSTALL += "\
 	alsa-state \
 	libcogl \
 	clutter-gst-3.0 \
+	cheese \
 	xwayland \
 	chromium-ozone-wayland \
 	tensorflow-lite \
@@ -111,7 +112,7 @@ fakeroot do_save_cheese() {
 	set -x
 
 	# backup cheese exe
-#	mv ${IMAGE_ROOTFS}/usr/bin/cheese ${IMAGE_ROOTFS}/usr/bin/cheese_imx
+	mv ${IMAGE_ROOTFS}/usr/bin/cheese ${IMAGE_ROOTFS}/usr/bin/cheese_imx
 
 	set +x
 }
@@ -119,7 +120,7 @@ fakeroot do_save_cheese() {
 fakeroot do_enable_cheese() {
 	set -x
 
-#	cp -f ${IMAGE_ROOTFS}/usr/bin/cheese_imx ${IMAGE_ROOTFS}/usr/bin/cheese
+	cp -f ${IMAGE_ROOTFS}/usr/bin/cheese_imx ${IMAGE_ROOTFS}/usr/bin/cheese
 
 	set +x
 }
