@@ -38,6 +38,7 @@ IMAGE_INSTALL += "\
 	cheese \
 	xwayland \
 	chromium-ozone-wayland \
+	gtk+3-gles \
 	tensorflow-lite \
 	tensorflow-lite-vx-delegate \
 	${ML_NNSTREAMER_PKGS} \

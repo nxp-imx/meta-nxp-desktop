@@ -122,6 +122,10 @@ do_enable_graphics() {
 		# to run on Wayland anyway.
 		echo >>"${IMAGE_ROOTFS}/etc/environment" "QT_QPA_PLATFORM=wayland"
 
+		# video playback use gtkglsink as default sink, need chose GDK_GL = gles
+		# to use gles backend in gtk
+		echo >>"${IMAGE_ROOTFS}/etc/environment" "GDK_GL=gles"
+
 		# disable xsession startup
 		rm -f ${IMAGE_ROOTFS}/usr/share/xsessions/*
 
