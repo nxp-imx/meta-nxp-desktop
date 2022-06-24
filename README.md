@@ -80,10 +80,17 @@ $ source  distro-setup-env -m <Machine>
 
 Machine:
 
-    lx2160ardb-rev2
-    ls1028ardb
-    ls1012ardb
     ls1012afrwy
+    ls1012ardb
+    ls1021atwr
+    ls1028ardb
+    ls1043ardb
+    ls1046afrwy
+    ls1046ardb
+    ls1088ardb
+    ls2088ardb
+    lx2160ardb-rev2
+    lx2162aqds
 
 Build the layerscape image
 ---------------
