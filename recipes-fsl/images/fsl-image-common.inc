@@ -56,6 +56,7 @@ APTGET_EXTRA_PACKAGES += "\
 	bluez \
 	python-is-python3 \
 	netplan.io \
+	network-manager \
 "
 
 APTGET_EXTRA_SOURCE_PACKAGES += "\
