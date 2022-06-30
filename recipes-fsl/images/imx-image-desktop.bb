@@ -7,7 +7,7 @@ PV = "${@d.getVar('PREFERRED_VERSION_ubuntu-base', True) or '1.0'}"
 
 require fsl-image-common.inc
 
-ROOTFS_POSTPROCESS_COMMAND:append = "do_save_cheese;"
+ROOTFS_POSTPROCESS_COMMAND:append = "do_save_cheese; do_rm_opencv_test_and_sample;"
 IMAGE_PREPROCESS_COMMAND:append = "do_enable_cheese;"
 
 REQUIRED_DISTRO_FEATURES = "wayland"
@@ -41,6 +41,7 @@ IMAGE_INSTALL += "\
 	tensorflow-lite \
 	tensorflow-lite-vx-delegate \
 	${ML_NNSTREAMER_PKGS} \
+	opencv \
 "
 APTGET_EXTRA_PACKAGES += "\
 	ntpdate patchelf \
@@ -121,6 +122,15 @@ fakeroot do_enable_cheese() {
 	set -x
 
 	cp -f ${IMAGE_ROOTFS}/usr/bin/cheese_imx ${IMAGE_ROOTFS}/usr/bin/cheese
+
+	set +x
+}
+
+do_rm_opencv_test_and_sample() {
+	set -x
+
+	rm -r ${IMAGE_ROOTFS}/usr/share/opencv4
+	rm -r ${IMAGE_ROOTFS}/usr/share/OpenCV
 
 	set +x
 }
