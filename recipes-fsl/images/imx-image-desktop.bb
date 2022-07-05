@@ -17,7 +17,6 @@ ML_NNSTREAMER_PKGS = " \
     nnstreamer-tensorflow-lite \
     nnstreamer-python3 \
     nnstreamer-protobuf \
-    nnshark \
 "
 
 # This must be added first as it provides the foundation for
