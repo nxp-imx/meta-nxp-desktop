@@ -2,8 +2,8 @@ DESCRIPTION = "A library to retrieve i.MX GPU performance data"
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d3c315c6eaa43e07d8c130dc3a04a011"
 
-SRC_URI[aarch64-wayland.md5sum] = "8bdb8b56a195604d192ccbeb363dd5d4"
-SRC_URI[aarch64-wayland.sha256sum] = "6ce60fc015f636c3b6a4f0ed3d4fffb9ca85ce363226e286c27e57c0961854ae"
+SRC_URI[aarch64-wayland.md5sum] = "acd555b5f4ec20d0336ae141246cc405"
+SRC_URI[aarch64-wayland.sha256sum] = "7edf9ffc261076bb7ff3c44755ced0dda9022d64cda010b4c096e66d2a59fcab"
 
 inherit fsl-eula-unpack2 fsl-eula-graphics
 
