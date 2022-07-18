@@ -9,4 +9,6 @@ SRC_URI[sha256sum] = "3b29a9b0199106ee4cad91e8fca44ce1d6c64c395bf0841c7cef53f87a
 
 inherit fsl-eula2-unpack2
 
+SRC_URI = "${FSL_BIN_MIRROR}/${BP}.bin;fsl-eula=true"
+
 COMPATIBLE_MACHINE = "(mx8mp-nxp-bsp)"
