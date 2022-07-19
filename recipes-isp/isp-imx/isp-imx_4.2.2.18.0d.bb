@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d3c315c6eaa43e07d8c130dc3a04a011"
 
 DEPENDS = "libdrm virtual/libg2d libtinyxml2"
 
-SRC_URI = "${FSL_MIRROR}/${BP}.bin;fsl-eula=true"
+SRC_URI = "${FSL_BIN_MIRROR}/${BP}.bin;fsl-eula=true"
 SRC_URI[md5sum] = "994af98af681b3a8f6318fd60898674c"
 SRC_URI[sha256sum] = "b4da8a718b945be63e7f67887f807bb1a4aa687da4e579e3eadbfc064ec21ded"
 
