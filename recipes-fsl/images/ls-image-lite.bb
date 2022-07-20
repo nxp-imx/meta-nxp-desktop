@@ -19,6 +19,7 @@ IMAGE_INSTALL += "\
 
 IMAGE_INSTALL:append = " \
 	${LAYERSCAPE_NETWORK_TOOLS} \
+	iperf2 \
 	makedevs lmsensors-sensors \
 "
 
