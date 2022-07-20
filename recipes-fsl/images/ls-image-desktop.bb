@@ -61,6 +61,7 @@ IMAGE_INSTALL += " \
 
 APTGET_EXTRA_PACKAGES += "\
        ${LAYERSCAPE_NETWORK_TOOLS} \
+       iperf \
        libvirt-daemon-system \
        makedev lm-sensors \
        ntpdate patchelf \
