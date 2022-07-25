@@ -22,7 +22,7 @@ Download the Yocto Project BSP for i.MX
 ```
 $ mkdir desktop
 $ cd desktop
-$ repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-honister -m imx-5.15.5-1.0.0_desktop.xml
+$ repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-kirkstone -m imx-5.15.32-2.0.0_desktop.xml
 $ repo sync
 ```
 
@@ -67,7 +67,7 @@ Download the Yocto Project BSP for Layerscape
 ```
 $ mkdir distro
 $ cd distro
-$ repo init -u https://source.codeaurora.org/external/qoriq/qoriq-components/yocto-sdk -b honister -m lf-5.15.5-1.0.0_distro.xml
+$ repo init -u https://source.codeaurora.org/external/qoriq/qoriq-components/yocto-sdk -b kirkstone -m ls-5.15.32-2.0.0.xml
 $ repo sync
 ```
 
@@ -105,7 +105,7 @@ $ bitbake ls-image-desktop  # build desktop image for ls1028a only
 ```
 
 ```
-$ bitbake ls-image-lite # build image without sdk demo and examples
+$ bitbake ls-image-lite # build lite image with the optimized config
 ```
 
 ```
