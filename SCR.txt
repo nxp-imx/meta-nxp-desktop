@@ -3,7 +3,7 @@ NXP Software Content Register
 Release - Desktop Release with Linux 5.15.32_2.0.0
   Aug 2022
 
-Outgoing License: LA_OPT_NXP_Software_License v34 October 2022 - No distribution permitted, license in Section 2.2 applies
+Outgoing License: LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
 License File: EULA.txt
 
 Yocto Project recipe manifest:
@@ -18,8 +18,8 @@ Release tag: rel_lf_5.15.32_2.0.0_desktop
 PACKAGES FOR META-NXP-DESKTOP_RELEASE
 --------------------------------------------
 
-Package:                     imx-gpu-viv-6.4.3.p4.0d-aarch64.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
+Package:                     imx-gpu-viv-6.4.3.p4.2d-aarch64.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary and source
@@ -36,8 +36,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     imx-gpu-g2d-6.4.3.p4.0d-aarch64.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
+Package:                     imx-gpu-g2d-6.4.3.p4.2d-aarch64.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary
@@ -47,8 +47,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     imx-dpu-g2d-2.0.0d.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
+Package:                     imx-dpu-g2d-2.1.0d.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary
@@ -58,8 +58,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     libgpuperfcnt-6.4.3.p4.0d-aarch64-wayland.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
+Package:                     libgpuperfcnt-6.4.3.p4.2d-aarch64-wayland.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary
@@ -69,8 +69,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     isp-imx-4.2.2.17.0d.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
+Package:                     isp-imx-4.2.2.18.0d.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary and source
@@ -80,8 +80,8 @@ Origin:                      VeriSilicon Holdings Co., Ltd. (proprietary)
 
 --------------------------------------------
 
-Package:                     imx-vpu-hantro-vc-1.7.0d.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License - No distribution permitted, license in Section 2.2 applies
+Package:                     imx-vpu-hantro-vc-1.8.0d.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
 License Files:               COPYING
 Package Category:            Multimedia
 Type of content:             Source, recipes
@@ -96,7 +96,7 @@ PATCHES IN META-NXP-DESKTOP_RELEASE
 --------------------------------------------
 
 Patches for:               gcc
-Source Location:           ftp://gcc.gnu.org/pub/gcc/releases/gcc/gcc-9.3.0/gcc-9.3.0.tar.xz
+Source Location:           ftp://gcc.gnu.org/pub/gcc/releases/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz
 Patch Location:            recipes-devtools/gcc
 Outgoing License:          GPL-3.0
 License File:              COPYING3
@@ -107,8 +107,8 @@ Origin of patches:         Gcc (GPL-3.0) https://gcc.gnu.org/git/gcc.git
 --------------------------------------------
 
 Patches for:               glibc
-Source Location:           git://sourceware.org/git/glibc.git -b release/2.31/master
-Patch Location:            recipes-core/glibc2.31
+Source Location:           git://sourceware.org/git/glibc.git -b release/2.35/master
+Patch Location:            recipes-core/glibc2.35
 Outgoing License:          GPL-2.0
 License File:              COPYING
 Package Category:          Core
@@ -117,9 +117,9 @@ Origin of patches:         Glibc (GPL-2.0) https://sourceware.org/git/glibc.git
 
 --------------------------------------------
 
-Patches for:               binutils2.34
-Source Location:           git://sourceware.org/git/binutils-gdb.git -b binutils-2_34
-Patch Location:            recipes-devtools/binutils2.34/
+Patches for:               binutils2.38
+Source Location:           git://sourceware.org/git/binutils-gdb.git -b binutils-2_38
+Patch Location:            recipes-devtools/binutils2.38/
 Outgoing License:          GPL-2.0/GPL-3.0
 License File:              COPYING COPYING3
 Package Category:          Devtools
@@ -157,7 +157,7 @@ Origin of patches:         NXP (GPL-2.0)
 --------------------------------------------
 
 Patches for:               cheese
-Source Location:           https://ftp.acc.umu.se/pub/GNOME/sources/cheese/3.34/
+Source Location:           https://ftp.acc.umu.se/pub/GNOME/sources/cheese/41.1/
 Patch Location:            recipes-apps/cheese
 Outgoing License:          GPL-2.0
 License File:              COPYING
