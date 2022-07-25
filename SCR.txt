@@ -1,18 +1,18 @@
 NXP Software Content Register
 
-Release - Desktop Release with Linux 5.15.5_1.0.0
-  May 2022
+Release - Desktop Release with Linux 5.15.32_2.0.0
+  Aug 2022
 
 Outgoing License: LA_OPT_NXP_Software_License v34 October 2022 - No distribution permitted, license in Section 2.2 applies
 License File: EULA.txt
 
 Yocto Project recipe manifest:
 i.MX
-    repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-honister -m imx-linux-honister -m imx-5.15.5-1.0.0_desktop.xml
+    repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-honister -m imx-linux-kirkstone -m imx-5.15.32-2.0.0_desktop.xml
 Layerscape
-    repo init -u https://source.codeaurora.org/external/qoriq/qoriq-components/yocto-sdk -b honister -m lf-5.15.5-1.0.0_distro.xml
+    repo init -u https://source.codeaurora.org/external/qoriq/qoriq-components/yocto-sdk -b kirkstone -m ls-5.15.32-2.0.0.xml
 
-Release tag: rel_lf_5.15.5_1.0.0_desktop
+Release tag: rel_lf_5.15.32_2.0.0_desktop
 
 --------------------------------------------
 PACKAGES FOR META-NXP-DESKTOP_RELEASE

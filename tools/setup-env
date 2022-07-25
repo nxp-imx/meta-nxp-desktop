@@ -36,7 +36,7 @@ if [ -f conf/local.conf ]; then
     echo ""
     echo "$ bitbake ls-image-desktop  # build desktop image for ls1028a only"
     echo ""
-    echo "$ bitbake ls-image-lite  # build image without sdk demo and examples"
+    echo "$ bitbake ls-image-lite  # build lite image with the optimized config"
     echo ""
     echo "$ bitbake ls-image-tiny  # build yocto tiny image with limited tools"
     echo ""
