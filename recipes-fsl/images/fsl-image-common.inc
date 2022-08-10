@@ -160,6 +160,11 @@ do_cleanup_rootfs() {
 		mv ${IMAGE_ROOTFS}/usr/bin/vsidaemon ${IMAGE_ROOTFS}/usr/bin/vsidaemon.bak
 	fi
 
+	# remove libpython3.* to fix rhythmbox startup Fail
+	if [ -e ${IMAGE_ROOTFS}/usr/lib/libpython3.* ]; then
+		rm -f ${IMAGE_ROOTFS}/usr/lib/libpython3.*
+	fi
+
 	set +x
 }
 
