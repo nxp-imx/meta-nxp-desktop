@@ -67,7 +67,7 @@ Download the Yocto Project BSP for Layerscape
 ```
 $ mkdir distro
 $ cd distro
-$ repo init -u https://source.codeaurora.org/external/qoriq/qoriq-components/yocto-sdk -b kirkstone -m ls-5.15.32-2.0.0.xml
+$ repo init -u https://source.codeaurora.org/external/qoriq/qoriq-components/yocto-sdk -b kirkstone -m ls-5.15.32-2.0.0_distro.xml
 $ repo sync
 ```
 
