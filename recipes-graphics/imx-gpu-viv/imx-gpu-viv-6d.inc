@@ -214,8 +214,8 @@ do_install () {
     # Handle backend specific drivers
     cp -r ${S}/gpu-core/usr/lib/${backend}/* ${D}${libdir}
     if [ "${IS_MX8}" = "1" ]; then
-        ln -sf libvulkan.so.1.1.6 ${D}${libdir}/libvulkan.so.1
-        ln -sf libvulkan.so.1.1.6 ${D}${libdir}/libvulkan.so
+        ln -sf libvulkan_VSI.so.1.2.1 ${D}${libdir}/libvulkan.so.1
+        ln -sf libvulkan_VSI.so.1.2.1 ${D}${libdir}/libvulkan.so
     fi
     for header in ${GLES3_HEADER_REMOVALS}; do
         rm -f ${D}${includedir}/GLES3/${header}
@@ -284,7 +284,7 @@ FILES:libgbm-imx-dev:mx8-nxp-bsp = "${libdir}/pkgconfig/gbm.pc ${includedir}/gbm
 RDEPENDS:libgbm-imx:append:mx8-nxp-bsp = " libdrm"
 INSANE_SKIP:libgbm-imx += "dev-so"
 
-FILES:libvulkan-imx = "${libdir}/libvulkan${SOLIBS} ${libdir}/libvulkan${REALSOLIBS} ${libdir}/libSPIRV_viv${SOLIBS}"
+FILES:libvulkan-imx = "${libdir}/libvulkan${SOLIBS}.1 ${libdir}/libvulkan${SOLIBS} ${libdir}/libvulkan_VSI${REALSOLIBS} ${libdir}/libSPIRV_viv${SOLIBS}"
 FILES:libvulkan-imx-dev = "${includedir}/vulkan ${libdir}/libvulkan${SOLIBSDEV}"
 INSANE_SKIP:libvulkan-imx += "dev-so"
 
