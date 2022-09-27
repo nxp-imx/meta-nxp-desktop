@@ -23,6 +23,9 @@ IMAGE_INSTALL:append = " \
 IMAGE_INSTALL:remove:ls1021atwr = " \
 	${DPDK_SECURE_OBJ} \
 "
+IMAGE_INSTALL:remove:ls1012afrwy = " \
+	${DPDK_SECURE_OBJ} \
+"
 
 IMAGE_INSTALL:append:ls1012a = " \
 	ceetm \
@@ -31,9 +34,6 @@ IMAGE_INSTALL:append:ls1012a = " \
 	dpdk-module \
 	dpdk-tools \
 	keyctl-caam \
-	optee-os-qoriq \
-	optee-client-qoriq \
-	optee-test-qoriq \
 	spc \
 	tsntool \
 "
