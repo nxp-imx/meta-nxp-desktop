@@ -37,14 +37,14 @@ APTGET_EXTRA_PACKAGES += " \
 # Yocto packages such as gstreamer to be used in Desktop without package conflitcs
 YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core python3-dev \
                       python3-distutils python3-pickle python3-xml \
-                      update-alternatives-opkg pam-plugin-unix \
+                      update-alternatives-opkg \
                       libpam-runtime shadow-base shadow dbus polkit \
                       systemd systemd-dev iso-codes-dev file gptfdisk \
                       shared-mime-info-dev bluez5 dtc e2fsprogs kmod \
                       e2fsprogs-e2fsck e2fsprogs-tune2fs e2fsprogs-badblocks \
                       procps procps-sysctl pstree fuser killall elfutils \
                       fio i2c-tools ifenslave keyutils libkmod2 libelf1 \
-                      libasm1 libpci3 libsysfs2 libtinfo5 udev \
+                      libasm1 libpci3 libsysfs2 udev \
                       udev-hwdb iproute2-ip iproute2 glibc-utils \
                       memtester minicom mmc-utils pciutils psmisc ptpd \
                       coreutils openssl-conf libcap merge-files upower \
@@ -76,7 +76,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      libgmp10 libgmpxx4 libgnutls-openssl27 libgnutls30 libgnutlsxx28 libgudev-1.0-0 \
                      libharfbuzz0 libical libice6 libicudata64 libicui18n64 libicuio64 libicutu64 \
                      libicuuc64 libidn2-0 libltdl7 liblzma5 libmount1 libmp3lame0 \
-                     libnss-db2 libogg0 liborc-0.4-0 liborc-test-0.4-0 libpam libpciaccess0 \
+                     libogg0 liborc-0.4-0 liborc-test-0.4-0 libpam libpciaccess0 \
                      libpcrecpp0 libpcreposix0 libpixman-1-0 libpng16-16 libpsl5 \
                      libreadline8 libsbc1 libsm6 libsmartcols1 libsoup-2.4 libspeex1 \
                      libspeexdsp1 libsqlite3-0 libstdc++6 libsystemd0 libtag-c0 libtag1 \
@@ -98,12 +98,12 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      cracklib-dev cryptodev-linux-dev curl-devflac-dev \
                      flex-dev glib-networking gobject-introspection-dev \
                       icu-dev lame-dev libatomic-dev libatomic-ops-dev \
-                      libc6-dbg libc6-dev libcap-dbg libcap-dev libcap-ng-dev \
+                      libc6-dbg libcap-dbg libcap-dev libcap-ng-dev \
                       perl perl-dev libcrypt libcrypt-dbg libcrypt-dev \
                       libdaemon-dev libdbus-glib-1-dev libexpat-dbg libexpat-dev \
                       libffi-dbg libffi-dev libfontconfig-dbg libfontconfig-dev \
                       libfreetype-dbg libfreetype-dev libfribidi-dbg libfribidi-dev \
-                      libgcc-s-dbg libgcc-s-dev libgdk-pixbuf-2.0-dbg libgdk-pixbuf-2.0-dev \
+                      libgcc-s-dbg cpp libgdk-pixbuf-2.0-dbg libgdk-pixbuf-2.0-dev \
                       libglib-2.0-dbg libglib-2.0-dev libgmp-dbg libgmp-dev libgnutls-dev \
                       libgudev-1.0-dbg libgudev-1.0-dev libical-dev libice-dev libidn2-dbg libidn2-dev \
                       libjpeg-dbg libjpeg-dev libmp3lame-dev libnss-mdns libogg-dbg libogg-dev libpam-dev \
@@ -148,7 +148,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       libatspi0 libgtk-3.0 gtk+3 gtk+3-dev gdk-pixbuf \
                       libxfont2-2 libfontenc1 desktop-file-utils \
                       libunwind libwebp libxcvt libzstd1 \
-                      libcurl4 usbutils libusb-1.0-0 libdw1 \
+                      usbutils libusb-1.0-0 libdw1 \
                       libgcc libxkbcommon0 libdebuginfod1 \
                       libssl libcrypto wpa-supplicant \
                       libpython3.10 bash-dev \

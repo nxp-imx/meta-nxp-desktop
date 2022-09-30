@@ -15,6 +15,7 @@ DPDK_SECURE_OBJ = " \
 
 IMAGE_INSTALL:append = " \
 	packagegroup-fsl-tools-core \
+	packagegroup-fsl-tools-extended \
 	${DPDK_SECURE_OBJ} \
 	openssl-engines \
 	ipsec-tools \
@@ -25,23 +26,6 @@ IMAGE_INSTALL:remove:ls1021atwr = " \
 "
 IMAGE_INSTALL:remove:ls1012afrwy = " \
 	${DPDK_SECURE_OBJ} \
-"
-
-IMAGE_INSTALL:append:ls1012a = " \
-	ceetm \
-	dce \
-	dpdk \
-	dpdk-module \
-	dpdk-tools \
-	keyctl-caam \
-	spc \
-	tsntool \
-"
-
-IMAGE_INSTALL:append:ls1046a = "\
-	kernel-module-nxp89xx \
-	linux-firmware-nxp89xx \
-	nxp-wlan-sdk \
 "
 
 LAYERSCAPE_NETWORK_TOOLS = " \
