@@ -32,6 +32,9 @@ IMAGE_INSTALL:append = " \
 "
 
 SOC_DEFAULT_IMAGE_FSTYPES:append = " wic.bmap wic.bz2 tar.gz"
+SOC_DEFAULT_IMAGE_FSTYPES:remove:ls2088ardb = "wic.bmap wic.bz2"
+SOC_DEFAULT_IMAGE_FSTYPES:remove:ls1012ardb = "wic.bmap wic.bz2"
+SOC_DEFAULT_IMAGE_FSTYPES:remove:ls1012afrwy = "wic.bmap wic.bz2"
 SOC_DEFAULT_IMAGE_FSTYPES:remove = " tar.bz2"
 
 IMAGE_ROOTFS_SIZE ?= "6291456"
