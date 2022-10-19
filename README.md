@@ -22,7 +22,7 @@ Download the Yocto Project BSP for i.MX
 ```
 $ mkdir desktop
 $ cd desktop
-$ repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-kirkstone -m imx-5.15.32-2.0.0_desktop.xml
+$ repo init -u https://github.com/nxp-imx/imx-manifest.git -b imx-linux-kirkstone -m imx-5.15.52-2.1.0_desktop.xml
 $ repo sync
 ```
 
@@ -67,7 +67,7 @@ Download the Yocto Project BSP for Layerscape
 ```
 $ mkdir distro
 $ cd distro
-$ repo init -u https://source.codeaurora.org/external/qoriq/qoriq-components/yocto-sdk -b kirkstone -m ls-5.15.32-2.0.0.xml
+$ repo init -u https://github.com/nxp-qoriq/yocto-sdk.git -b kirkstone -m ls-5.15.52-2.1.0_distro.xml
 $ repo sync
 ```
 
