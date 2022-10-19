@@ -1,25 +1,25 @@
 NXP Software Content Register
 
-Release - Desktop Release with Linux 5.15.32_2.0.0
+Release - Desktop Release with Linux 5.15.52_2.1.0
   Aug 2022
 
-Outgoing License: LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
+Outgoing License: LA_OPT_NXP_SOFTWARE_License v39 August 2022 - No distribution permitted, license in Section 2.2 applies
 License File: EULA.txt
 
 Yocto Project recipe manifest:
 i.MX
-    repo init -u https://source.codeaurora.org/external/imx/imx-manifest -b imx-linux-honister -m imx-linux-kirkstone -m imx-5.15.32-2.0.0_desktop.xml
+    repo init -u https://github.com/nxp-imx/imx-manifest.git -b imx-linux-kirkstone -m imx-5.15.52-2.1.0_desktop.xml
 Layerscape
-    repo init -u https://source.codeaurora.org/external/qoriq/qoriq-components/yocto-sdk -b kirkstone -m ls-5.15.32-2.0.0.xml
+    repo init -u https://github.com/nxp-qoriq/yocto-sdk.git -b kirkstone -m ls-5.15.52-2.1.0_distro.xml
 
-Release tag: rel_lf_5.15.32_2.0.0_desktop
+Release tag: rel_lf_5.15.52_2.1.0_desktop
 
 --------------------------------------------
 PACKAGES FOR META-NXP-DESKTOP_RELEASE
 --------------------------------------------
 
-Package:                     imx-gpu-viv-6.4.3.p4.2d-aarch64.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
+Package:                     imx-gpu-viv-6.4.3.p4.4d-aarch64.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v39 August 2022 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary and source
@@ -36,8 +36,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     imx-gpu-g2d-6.4.3.p4.2d-aarch64.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
+Package:                     imx-gpu-g2d-6.4.3.p4.4d-aarch64.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v39 August 2022 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary
@@ -47,8 +47,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     imx-dpu-g2d-2.1.0d.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
+Package:                     imx-dpu-g2d-2.1.2d.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v39 August 2022 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary
@@ -58,8 +58,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     libgpuperfcnt-6.4.3.p4.2d-aarch64-wayland.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
+Package:                     libgpuperfcnt-6.4.3.p4.4d-aarch64-wayland.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v39 August 2022 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary
@@ -69,8 +69,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     isp-imx-4.2.2.18.0d.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
+Package:                     isp-imx-4.2.2.19.0d.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v39 August 2022 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary and source
@@ -80,8 +80,8 @@ Origin:                      VeriSilicon Holdings Co., Ltd. (proprietary)
 
 --------------------------------------------
 
-Package:                     imx-vpu-hantro-vc-1.8.0d.bin
-Outgoing License:            LA_OPT_NXP_SOFTWARE_License v35 May 2022 - No distribution permitted, license in Section 2.2 applies
+Package:                     imx-vpu-hantro-vc-1.9.0d.bin
+Outgoing License:            LA_OPT_NXP_SOFTWARE_License v39 August 2022 - No distribution permitted, license in Section 2.2 applies
 License Files:               COPYING
 Package Category:            Multimedia
 Type of content:             Source, recipes
