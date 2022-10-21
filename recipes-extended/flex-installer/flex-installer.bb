@@ -12,7 +12,7 @@ RDEPENDS:${PN} += "bash"
 
 do_install () {
     install -d ${D}/${bindir}
-    install ${TOPDIR}/../sources/meta-qoriq/scripts/flex-installer ${D}/${bindir}
+    install ${TOPDIR}/../sources/meta-nxp-desktop/scripts/flex-installer ${D}/${bindir}
 }
 
 FILES_${PN} += "${bindir}"
