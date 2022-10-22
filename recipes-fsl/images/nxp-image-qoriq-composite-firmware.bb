@@ -14,7 +14,6 @@ KERNEL_ITS   ?= "${TOPDIR}/../sources/meta-qoriq/recipes-fsl/images/fsl-image-ke
 KERNEL_IMAGE ?= "${KERNEL_IMAGETYPE}"
 ROOTFS_IMAGE ?= "nxp-image-poky-tiny"
 
-
 DEPENDS = "u-boot-mkimage-native qoriq-cst-native qoriq-atf"
 DEPENDS_ls1021atwr = "u-boot-mkimage-native qoriq-cst-native u-boot"
 do_deploy[depends] += "u-boot-mkimage-native:do_populate_sysroot virtual/kernel:do_deploy ${ROOTFS_IMAGE}:do_build"
@@ -41,12 +40,20 @@ do_compile[noexec] = "1"
 inherit composite-firmware
 
 do_deploy() {
-    cp -f ${KERNEL_ITS} kernel.its
-    sed -i -e "s,\$deploydir,${DEPLOY_DIR_IMAGE}," kernel.its
-    tinyrfs=$(basename ${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}*.cpio.gz)
-    sed -i -e "s,rootfs.cpio.gz,${tinyrfs}," kernel.its
+    for DTS_FILE in ${KERNEL_DEVICETREE}; do
+        DTB_FILE=`basename ${DTS_FILE} |sed -e 's,.dtb$,,'`
+        break;
+    done
+    ITB_BASENAME=${DEPLOY_DIR_IMAGE}/kernel-$DTB_FILE.itb
+
+#    cp -f ${KERNEL_ITS} kernel.its
+#    sed -i -e "s,\$deploydir,${DEPLOY_DIR_IMAGE}," kernel.its
+#    tinyrfs=$(basename ${DEPLOY_DIR_IMAGE}/${ROOTFS_IMAGE}*.cpio.gz)
+#    sed -i -e "s,rootfs.cpio.gz,${tinyrfs}," kernel.its
 #    mkimage -f kernel.its linux_layerscape_tiny_${DESTARCH}.itb
 #    install -m 644 linux_layerscape_tiny_${DESTARCH}.itb ${DEPLOY_DIR_IMAGE}
+    ln -s ${ITB_BASENAME} linux_layerscape_tiny_${DESTARCH}.itb
+    install -m 644 linux_layerscape_tiny_${DESTARCH}.itb ${DEPLOY_DIR_IMAGE}
     create_composite_firmware
 }
 
