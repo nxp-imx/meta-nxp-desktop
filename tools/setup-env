@@ -8,8 +8,6 @@ if [ -f conf/local.conf ]; then
         echo "# Switch to rpm packaging to avoid rootfs build break"                  >> conf/local.conf
         echo "PACKAGE_CLASSES = \"package_rpm\""                                      >> conf/local.conf
         echo ""                                                                       >> conf/local.conf
-        echo "# Save lots of disk space"                                              >> conf/local.conf
-        echo "INHERIT += \"rm_work\""                                                 >> conf/local.conf
         echo ""                                                                       >> conf/local.conf
         echo "# Set your proxy if necessary"                                          >> conf/local.conf
         echo "#ENV_HOST_PROXIES = \"http_proxy=\""                                    >> conf/local.conf
