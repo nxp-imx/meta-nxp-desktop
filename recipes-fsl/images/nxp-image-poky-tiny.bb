@@ -29,24 +29,31 @@ IMAGE_INSTALL:append = " \
     rng-tools \
 "
 
-
 IMAGE_INSTALL:append:fsl-lsch2 += " \
     fmc \
 "
 
-
 IMAGE_INSTALL:append:fsl-lsch3 += " \
     restool \
     tsntool \
+"
+IMAGE_INSTALL:append:ls1088a += " \
     gpp-aioptool \
     mc-utils-image \
 "
-
-
+IMAGE_INSTALL:append:ls2088a += " \
+    gpp-aioptool \
+    mc-utils-image \
+"
+IMAGE_INSTALL:append:ls2160a += " \
+    mc-utils-image \
+"
+IMAGE_INSTALL:append:ls2162a += " \
+    mc-utils-image \
+"
 IMAGE_INSTALL:append:ls2084abbmini += " \
     kvaser \
 "
-
 
 IMAGE_INSTALL:append:ls1012a = " \
     kernel-modules \
