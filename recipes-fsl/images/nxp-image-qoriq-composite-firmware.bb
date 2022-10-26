@@ -52,7 +52,7 @@ do_deploy() {
 #    sed -i -e "s,rootfs.cpio.gz,${tinyrfs}," kernel.its
 #    mkimage -f kernel.its linux_layerscape_tiny_${DESTARCH}.itb
 #    install -m 644 linux_layerscape_tiny_${DESTARCH}.itb ${DEPLOY_DIR_IMAGE}
-    rm ${DEPLOY_DIR_IMAGE}/linux_layerscape_tiny_${DESTARCH}.itb
+    rm -f ${DEPLOY_DIR_IMAGE}/linux_layerscape_tiny_${DESTARCH}.itb
     ln -s ${ITB_BASENAME} linux_layerscape_tiny_${DESTARCH}.itb
     install -m 644 linux_layerscape_tiny_${DESTARCH}.itb ${DEPLOY_DIR_IMAGE}
     create_composite_firmware
