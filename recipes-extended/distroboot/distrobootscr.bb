@@ -16,11 +16,16 @@ do_install () {
 	echo "${distro_boot_script}" > distroscr.tmp
 	mkimage -A arm64 -O linux -T script -C none -a 0 -e 0 -n "boot.scr" \
 		-d distroscr.tmp ${D}/boot/${MACHINE}_boot.scr
-	mkdir -p ${DEPLOY_DIR_IMAGE}/boot_scr/
-	install ${D}/boot/${MACHINE}_boot.scr ${DEPLOY_DIR_IMAGE}/boot_scr/
     fi
 }
+do_deploy () {
+	if [ -f "${D}/boot/${MACHINE}_boot.scr" ]; then
+		mkdir -p ${DEPLOY_DIR_IMAGE}/boot_scr/
+		install -m 644 ${D}/boot/${MACHINE}_boot.scr ${DEPLOY_DIR_IMAGE}/boot_scr/
+	fi
+}
 
+addtask deploy after do_install before do_build
 
 FILES:${PN} += "/boot/"
 INSANE_SKIP:${PN} += "arch already-stripped"
