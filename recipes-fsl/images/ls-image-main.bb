@@ -24,11 +24,6 @@ IMAGE_INSTALL += "\
 	ubuntu-main-doc \
 "
 
-IMAGE_INSTALL:append:qoriq = " \
-	distrobootscr \
-	flex-installer \
-"
-
 IMAGE_INSTALL:append = " \
 	${LAYERSCAPE_NETWORK_TOOLS} \
 	iperf2 \
