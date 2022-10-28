@@ -5,8 +5,8 @@ LICENSE = "MIT"
 inherit deploy
 
 DESTARCH ?= "arm64"
-DESTARCH_armv7a = "arm32"
-DESTARCH_aarch64 = "arm64"
+DESTARCH:armv7a = "arm32"
+DESTARCH:aarch64 = "arm64"
 
 # KERNEL_ITS   ?= "${TOPDIR}/../sources/meta-qoriq/recipes-kernel/linux/linux-qoriq-all-${DESTARCH}.its"
 KERNEL_ITS   ?= "${TOPDIR}/../sources/meta-qoriq/recipes-fsl/images/fsl-image-kernelitb/kernel-arm64.its"
@@ -15,7 +15,7 @@ KERNEL_IMAGE ?= "${KERNEL_IMAGETYPE}"
 ROOTFS_IMAGE ?= "nxp-image-poky-tiny"
 
 DEPENDS = "u-boot-mkimage-native qoriq-cst-native qoriq-atf"
-DEPENDS_ls1021atwr = "u-boot-mkimage-native qoriq-cst-native u-boot"
+DEPENDS:ls1021atwr = "u-boot-mkimage-native qoriq-cst-native u-boot"
 do_deploy[depends] += "u-boot-mkimage-native:do_populate_sysroot virtual/kernel:do_deploy ${ROOTFS_IMAGE}:do_build"
 
 BOOT_TYPE ??= ""
