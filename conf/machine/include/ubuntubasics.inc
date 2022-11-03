@@ -80,10 +80,6 @@ IMAGE_CMD_TAR = "tar --xattrs --xattrs-include=*"
 do_image_tar[depends] += "tar-replacement-native:do_populate_sysroot"
 EXTRANATIVEPATH += "tar-native"
 
-# We influence the setup to match Desktop more properly as otherwise
-# Yocto behavior may conflict with the Desktop rootfs.
-INIT_MANAGER = "systemd"
-
 # Turns out that we want the Yocto recipes as default provider, but
 # then we must ensure they do not get deployed to avoid pollution of
 # the target rootfs.
