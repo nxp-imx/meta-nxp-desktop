@@ -8,7 +8,6 @@ PV = "${@d.getVar('PREFERRED_VERSION_ubuntu-base', True) or '1.0'}"
 require fsl-image-common.inc
 
 ROOTFS_POSTPROCESS_COMMAND:append = "do_save_cheese; do_rm_opencv_test_and_sample;"
-IMAGE_PREPROCESS_COMMAND:append = "do_enable_cheese;"
 
 REQUIRED_DISTRO_FEATURES = "wayland"
 
@@ -112,16 +111,10 @@ IMAGE_INSTALL:remove:mx8mm-nxp-bsp = " \
 fakeroot do_save_cheese() {
 	set -x
 
-	# backup cheese exe
-	mv ${IMAGE_ROOTFS}/usr/bin/cheese ${IMAGE_ROOTFS}/usr/bin/cheese_imx
-
-	set +x
-}
-
-fakeroot do_enable_cheese() {
-	set -x
-
-	cp -f ${IMAGE_ROOTFS}/usr/bin/cheese_imx ${IMAGE_ROOTFS}/usr/bin/cheese
+	if [ -e "${IMAGE_ROOTFS}/usr/bin/cheese" ]; then
+		# backup cheese bin
+		mv ${IMAGE_ROOTFS}/usr/bin/cheese ${IMAGE_ROOTFS}/usr/bin/cheese_imx
+	fi
 
 	set +x
 }
