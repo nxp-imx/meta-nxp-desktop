@@ -1,0 +1,39 @@
+# [general]
+machine=ls1046ardb
+
+BOOT_TYPE="sd qspi emmc"
+BOOTLOADER_TYPE="uboot uefi"
+
+COMPOSITE_IMG1_FILE_sd=atf/bl2_sd.pbl
+COMPOSITE_IMG1_FILE_sd_sec=atf/bl2_sd_sec.pbl
+COMPOSITE_IMG1_FILE_qspi=atf/bl2_qspi.pbl
+COMPOSITE_IMG1_FILE_qspi_sec=atf/bl2_qspi_sec.pbl
+COMPOSITE_IMG1_FILE_emmc=atf/bl2_emmc.pbl
+COMPOSITE_IMG2_FILE=atf/fip_uboot.bin
+COMPOSITE_IMG2_FILE_sec=atf/fip_uboot_sec.bin
+COMPOSITE_IMG2_FILE_uefi=atf/fip_uefi.bin
+COMPOSITE_IMG3_FILE_uefi=uefi/ls1046ardb/LS1046ARDBNV_EFI_QSPIBOOT.fd
+COMPOSITE_IMG4_FILE_sd_sec=secboot_hdrs/secboot_hdrs_sdboot.bin
+COMPOSITE_IMG4_FILE_qspi_sec=secboot_hdrs/secboot_hdrs_qspiboot.bin
+COMPOSITE_IMG7_FILE=fsl_fman_ucode_ls1046_r1.0_106_4_18.bin
+COMPOSITE_IMG8_FILE=boot/iram_Type_A_LS1021a_r1.0.bin
+COMPOSITE_IMG9_FILE=ls2-phy/cs4315-cs4340-PHY-ucode.txt
+COMPOSITE_IMG14_FILE=fsl-ls1046a-rdb-sdk.dtb
+COMPOSITE_IMG15_FILE=kernel-fsl-ls1046a-rdb-sdk.itb
+
+# [linux, dtb, rfs]
+kernel_img=Image
+device_tree=fsl-ls1046a-rdb-sdk.dtb
+kernel_itb=kernel-fsl-ls1046a-rdb-sdk.itb
+
+distro_boot_script=\
+'env exists dtb || setenv dtb fsl-ls1046a-rdb-sdk.dtb;'\
+'env exists kernel_image || setenv kernel_image Image;'\
+'env exists devpart_boot || setenv devpart_boot 1;'\
+'env exists devpart_root || setenv devpart_root 4;'\
+'part uuid $devtype $devnum:$devpart_root partuuidr;'\
+'setenv bootargs console=ttyS0,115200 earlycon=uart8250,mmio,0x21c0500 root=PARTUUID=\$partuuidr rw rootwait $othbootargs;'\
+'load $devtype $devnum:$devpart_root $kernel_addr_r boot/$kernel_image;'\
+'load $devtype $devnum:$devpart_root $fdt_addr_r boot/$dtb;'\
+'env exists secureboot && echo validating secureboot && run secureboot_validate;'\
+'booti $kernel_addr_r - $fdt_addr_r'
