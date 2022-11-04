@@ -15,6 +15,12 @@ do_install () {
     install ${TOPDIR}/../sources/meta-nxp-desktop/scripts/flex-installer ${D}/${bindir}
 }
 
+do_deploy () {
+    install -m 644 ${TOPDIR}/../sources/meta-nxp-desktop/scripts/flex-installer ${DEPLOY_DIR_IMAGE}/
+}
+
+addtask deploy after do_install before do_build
+
 FILES_${PN} += "${bindir}"
 INSANE_SKIP_${PN} += "arch already-stripped"
 INHIBIT_PACKAGE_STRIP = "1"
