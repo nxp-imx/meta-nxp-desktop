@@ -36,12 +36,13 @@ $ DISTRO=imx-desktop-xwayland MACHINE=imx8mpevk source imx-setup-desktop.sh -b b
 ```
 
 Note: The available build MACHINEs for below boards:
-	imx8mpevk -  i.MX8MP-EVK
-	imx8mqevk -  i.MX8MQ-EVK
-	imx8mmevk -  i.MX8MM-EVK
-	imx8mnevk -  i.MX8MN-EVK
-	imx8qmmek -  i.MX8QM-MEK
-	imx8qxpc0mek -  i.MX8QXP-MEK with silicon revision C0 chip
+
+    imx8mpevk -  i.MX8MP-EVK
+    imx8mqevk -  i.MX8MQ-EVK
+    imx8mmevk -  i.MX8MM-EVK
+    imx8mnevk -  i.MX8MN-EVK
+    imx8qmmek -  i.MX8QM-MEK
+    imx8qxpc0mek -  i.MX8QXP-MEK with silicon revision C0 chip
 
 Use an _existing_ build folder
 ------------------------------
