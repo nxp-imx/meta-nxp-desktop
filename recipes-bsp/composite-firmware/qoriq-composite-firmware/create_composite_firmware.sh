@@ -88,7 +88,7 @@ generate_qoriq_composite_firmware(){
                     fi
                 fi
             done
-            [ -f ${fw_img} ] && echo -e "${fw_img} [Done]"
+#            [ -f ${fw_img} ] && echo -e "${fw_img} [Done]"
         done
     done
     done
