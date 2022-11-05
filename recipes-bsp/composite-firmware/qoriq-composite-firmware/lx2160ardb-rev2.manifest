@@ -30,7 +30,7 @@ kernel_img=Image
 device_tree=fsl-lx2160a-rdb.dtb
 kernel_itb=kernel-fsl-lx2160a-rdb.itb
 
-distro_boot_script =\
+distro_boot_script=\
 'env exists dtb || setenv dtb fsl-lx2160a-rdb.dtb;'\
 'env exists kernel_image || setenv kernel_image Image;'\
 'env exists devpart_boot || setenv devpart_boot 1;'\
