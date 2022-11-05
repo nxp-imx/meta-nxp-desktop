@@ -113,5 +113,9 @@ $ echo "INIT_MANAGER=\"none\"" >> conf/local.conf  #set firmware-only config
 $ bitbake qoriq-composite-firmware  # build composite firmware for flex-installer
 ```
 
+
+Notice
+---------------
+
 The default PoC build will create the account "user" with the password "user" for desktop evaluation,
 In order to change the account or password, uncomment and update APTGET_ADD_USERS in <build_dir>/conf/local.conf.
