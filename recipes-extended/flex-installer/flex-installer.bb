@@ -16,6 +16,7 @@ do_install () {
 }
 
 do_deploy () {
+    mkdir -p ${DEPLOY_DIR_IMAGE}
     install -m 644 ${TOPDIR}/../sources/meta-nxp-desktop/scripts/flex-installer ${DEPLOY_DIR_IMAGE}/
 }
 
