@@ -35,4 +35,8 @@ if [ -f conf/local.conf ]; then
     echo ""
     echo "$ bitbake ls-image-lite  # build lite image with the optimized config"
     echo ""
+    echo "$ echo \"INIT_MANAGER=\\\"none\\\"\" >> conf/local.conf  # set firmware-only config"
+    echo "$ bitbake qoriq-composite-firmware  # build composite firmware for flex-installer"
+    echo ""
+
 fi

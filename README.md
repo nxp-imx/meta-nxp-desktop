@@ -98,7 +98,6 @@ Build the layerscape image
 ```
 $ bitbake ls-image-main  # build main image for networking feature
 ```
-Or
 
 ```
 $ bitbake ls-image-desktop  # build desktop image for ls1028a only
@@ -106,6 +105,11 @@ $ bitbake ls-image-desktop  # build desktop image for ls1028a only
 
 ```
 $ bitbake ls-image-lite # build lite image with the optimized config
+```
+
+```
+$ echo "INIT_MANAGER=\"none\"" >> conf/local.conf  #set firmware-only config
+$ bitbake qoriq-composite-firmware  # build composite firmware for flex-installer
 ```
 
 The default PoC build will create the account "user" with the password "user" for desktop evaluation,
