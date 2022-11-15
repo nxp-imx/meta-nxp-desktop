@@ -229,7 +229,7 @@ partition_format_disk() {
     optimal_io_size=$(sudo cat /sys/block/$devname/queue/optimal_io_size)
     minimum_io_size=$(sudo cat /sys/block/$devname/queue/minimum_io_size)
     [ "$optimal_io_size" = "0" ] && aligntype=minimal || aligntype=optimal
-    [ $pnum -le 2 ] && parttable=gpt || parttable=msdos
+    [ $pnum -le 1 ] && parttable=gpt || parttable=msdos
 
     umount_device
     sudo rm -rf $mntdir/${devpartname}*/*
@@ -398,6 +398,7 @@ flex_install_distro() {
 
     echo syncing data ...
     sync
+    [ $intinyrfs = n ] && umount_device
 
     if [ $instruction = auto -o -n "$bootimg" -o -n "$rootfsimg" ]; then
 	if [ -f $bootmountfile ] && ! grep -q $uuid_boot $bootmountfile; then
