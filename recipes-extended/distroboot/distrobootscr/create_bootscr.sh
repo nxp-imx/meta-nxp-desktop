@@ -32,8 +32,13 @@ generate_distro_bootscr(){
     if [ -n "${distro_boot_script}" ]; then
         mkdir -p ${D}/boot
         echo "${distro_boot_script}" > distroscr.tmp
-        mkimage -A arm64 -O linux -T script -C none -a 0 -e 0 -n "boot.scr" \
-            -d distroscr.tmp ${D}/boot/${MACHINE}_boot.scr
+        if [ "${MACHINE}" != "lx2160ardb-rev2" ];then
+            mkimage -A arm64 -O linux -T script -C none -a 0 -e 0 -n "boot.scr" \
+                -d distroscr.tmp ${D}/boot/${MACHINE}_boot.scr
+        else
+            mkimage -A arm64 -O linux -T script -C none -a 0 -e 0 -n "boot.scr" \
+                -d distroscr.tmp ${D}/boot/lx2160ardb_boot.scr
+        fi
     fi
 }
 

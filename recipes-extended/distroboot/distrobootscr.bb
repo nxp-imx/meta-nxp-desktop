@@ -24,6 +24,10 @@ do_deploy () {
         mkdir -p ${DEPLOY_DIR_IMAGE}/boot_scr/
         install -m 644 ${D}/boot/${MACHINE}_boot.scr ${DEPLOY_DIR_IMAGE}/boot_scr/
     fi
+    if [ -f "${D}/boot/lx2160ardb_boot.scr" ]; then
+        mkdir -p ${DEPLOY_DIR_IMAGE}/boot_scr/
+        install -m 644 ${D}/boot/lx2160ardb_boot.scr ${DEPLOY_DIR_IMAGE}/boot_scr/
+    fi
 }
 
 addtask deploy after do_install before do_build
