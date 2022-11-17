@@ -12,7 +12,7 @@ inherit deploy
 ITB_IMAGE = "fsl-image-kernelitb"
 DEPENDS = "u-boot-mkimage-native qoriq-cst-native qoriq-atf"
 DEPENDS:ls1021atwr = "u-boot-mkimage-native qoriq-cst-native u-boot"
-do_deploy[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build distrobootscr:do_build"
+do_deploy[depends] += "virtual/kernel:do_deploy ${ITB_IMAGE}:do_build distrobootscr:do_deploy flex-installer:do_deploy"
 
 do_deploy[nostamp] = "1"
 do_patch[noexec] = "1"
