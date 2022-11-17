@@ -1,30 +1,19 @@
 SUMMARY = "A flexible distro installer"
-LICENSE = "BSD"
+LICENSE = "BSD-3-Clause"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/BSD-3-Clause;md5=550794465ba0ec5312d6919e203a55f9"
 
-S = "${WORKDIR}"
-do_deploy[nostamp] = "1"
-do_patch[noexec] = "1"
-do_configure[noexec] = "1"
-do_compile[noexec] = "1"
+SRC_URI = "file://flex-installer.sh"
 
-INHIBIT_DEFAULT_DEPS = "1"
+inherit deploy
+
+do_install[noexec] = "1"
+
 RDEPENDS:${PN} += "bash"
-
-do_install () {
-    install -d ${D}/${bindir}
-    install ${TOPDIR}/../sources/meta-nxp-desktop/scripts/flex-installer ${D}/${bindir}
-}
 
 do_deploy () {
     mkdir -p ${DEPLOY_DIR_IMAGE}
-    install -m 644 ${TOPDIR}/../sources/meta-nxp-desktop/scripts/flex-installer ${DEPLOY_DIR_IMAGE}/
+    install -m 644 ${WORKDIR}/flex-installer.sh ${DEPLOY_DIR_IMAGE}/
 }
-
 addtask deploy after do_install before do_build
-
-FILES_${PN} += "${bindir}"
-INSANE_SKIP_${PN} += "arch already-stripped"
-INHIBIT_PACKAGE_STRIP = "1"
-INHIBIT_SYSROOT_STRIP = "1"
 
 COMPATIBLE_MACHINE = "(qoriq)"
