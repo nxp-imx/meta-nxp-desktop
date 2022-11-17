@@ -22,7 +22,6 @@ IMAGE_INSTALL:append = " \
 "
 IMAGE_INSTALL:append:qoriq = " \
 	distrobootscr \
-	flex-installer \
 "
 IMAGE_INSTALL:remove:ls1021atwr = " \
 	${DPDK_SECURE_OBJ} \
