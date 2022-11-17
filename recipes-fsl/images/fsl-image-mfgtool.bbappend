@@ -1,6 +1,3 @@
-IMAGE_INSTALL:append:qoriq = " \
-        flex-installer \
-"
 IMAGE_INSTALL:append = " \
     dhcpcd \
     coreutils \
