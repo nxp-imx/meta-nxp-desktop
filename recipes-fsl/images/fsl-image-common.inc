@@ -155,11 +155,6 @@ do_cleanup_rootfs() {
 	# to avoid login hang when load sdma firmware
 	rm -f ${IMAGE_ROOTFS}/usr/lib/udev/rules.d/50-firmware.rules
 
-	# remove vsidaemon to disable hantro v4l2 decoder/encoder
-	if [ -e ${IMAGE_ROOTFS}/usr/bin/vsidaemon ]; then
-		mv ${IMAGE_ROOTFS}/usr/bin/vsidaemon ${IMAGE_ROOTFS}/usr/bin/vsidaemon.bak
-	fi
-
 	# remove libpython3.* to fix rhythmbox startup Fail
 	if [ -e ${IMAGE_ROOTFS}/usr/lib/libpython3.* ]; then
 		rm -f ${IMAGE_ROOTFS}/usr/lib/libpython3.*
