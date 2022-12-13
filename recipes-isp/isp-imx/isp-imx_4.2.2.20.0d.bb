@@ -4,11 +4,11 @@ DESCRIPTION = "i.MX Verisilicon Software ISP"
 LICENSE = "Proprietary"
 LIC_FILES_CHKSUM = "file://COPYING;md5=add2d392714d3096ed7e0f7e2190724b"
 
-DEPENDS = "libdrm virtual/libg2d libtinyxml2"
+DEPENDS = "boost libdrm virtual/libg2d libtinyxml2"
 
 SRC_URI = "${FSL_BIN_MIRROR}/${BP}.bin;fsl-eula=true"
-SRC_URI[md5sum] = "2b6afde8d8a6134147fd844ad56a24c6"
-SRC_URI[sha256sum] = "c3004c9a2a7552ffbc6ee757b1c323d6ec6656c7b07ce5100808a4be699a0b0c"
+SRC_URI[md5sum] = "4189045abacaddfaaecf0400d1ec7c79"
+SRC_URI[sha256sum] = "25f18224a72a463962cd4b45a4e34e910b5a6169238f7cb5a274a40a03e590bb"
 
 inherit fsl-eula-unpack cmake systemd use-imx-headers
 
@@ -43,11 +43,13 @@ do_install() {
     install -d ${D}/${libdir}
     install -d ${D}/${includedir}
     install -d ${D}/opt/imx8-isp/bin
+    install -d ${D}/opt/imx8-isp/bin/dewarp_config
 
     cp -r ${WORKDIR}/build/generated/release/bin/*_test ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/*2775* ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/*.xml ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/*.drv ${D}/opt/imx8-isp/bin
+    cp -r ${WORKDIR}/${BP}/dewarp/dewarp_config/ ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/isp_media_server ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/vvext ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/lib/*.so* ${D}/${libdir}
@@ -72,6 +74,9 @@ do_install() {
 FILES_SOLIBSDEV = ""
 FILES_SOLIBS_VERSIONED = " \
     ${libdir}/libar1335.so \
+    ${libdir}/libcppnetlib-client-connections.so \
+    ${libdir}/libcppnetlib-server-parsers.so \
+    ${libdir}/libcppnetlib-uri.so \
     ${libdir}/libjsoncpp.so \
     ${libdir}/libos08a20.so \
     ${libdir}/libov2775.so \
