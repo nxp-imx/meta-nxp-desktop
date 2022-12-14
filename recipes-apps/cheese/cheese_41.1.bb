@@ -23,7 +23,10 @@ SRC_URI = "${GNOME_MIRROR}/${BPN}/${@gnome_verdir("${PV}")}/${BPN}-${PV}.tar.${G
            file://0001-cheese-camera-support-max-framerate-to-60.patch \
            file://0002-disable-viewfinder-sink-a-v-sync-to-get-better-perfo.patch \
            file://0001-disable-global-preset-usage-for-encoder-auto-plugin.patch \
-           file://0001-cheese-limitation-the-max-resolution-to-3840x2160.patch \
+           file://0001-cheese-limitation-the-max-resolution-to-3840x2160.patch \ 
+           file://0001-Revert-Enable-cameras-with-only-MJPEG-output.patch \ 
+           file://0002-Revert-Preserve-video-x-raw-over-image-jpeg.patch \ 
+           file://0003-Revert-Support-camera-video-formats-with-MJPEG-outpu.patch \
 "
 
 SRC_URI:append:imxdpu += " \
