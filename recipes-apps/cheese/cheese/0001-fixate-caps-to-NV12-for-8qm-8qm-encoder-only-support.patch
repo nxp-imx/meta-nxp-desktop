@@ -1,24 +1,24 @@
-From 462d39e6fa56c3af6fb18ce894f7e7a4fc6b0d81 Mon Sep 17 00:00:00 2001
-From: Haihua Hu <jared.hu@nxp.com>
-Date: Mon, 25 Jul 2022 15:14:08 +0800
+From 150a25ed86f3774d0d1ea9dbc307a8aa98822d39 Mon Sep 17 00:00:00 2001
+From: Chao Guo <chao.guo@nxp.com>
+Date: Thu, 15 Dec 2022 13:06:12 +0800
 Subject: [PATCH] fixate caps to NV12 for 8qm, 8qm encoder only support NV12
  input
 
 unlike 20.04, on 22.04 release need fix the caps of video_source_filter
 
-Signed-off-by: Haihua Hu <jared.hu@nxp.com>
+Signed-off-by: Chao Guo <chao.guo@nxp.com>
 ---
  libcheese/cheese-camera.c | 9 ++++++---
  1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/libcheese/cheese-camera.c b/libcheese/cheese-camera.c
-index 72e59e5a..7674452c 100644
+index 626fc1d6..40c8a3bb 100644
 --- a/libcheese/cheese-camera.c
 +++ b/libcheese/cheese-camera.c
-@@ -771,6 +771,12 @@ cheese_camera_set_new_caps (CheeseCamera *camera)
-   {
-         guint i;
+@@ -746,15 +746,18 @@ cheese_camera_set_new_caps (CheeseCamera *camera)
  
+   if (!gst_caps_is_empty (caps))
+   {
 +    /* GStreamer >= 1.1.4 expects fully-specified video-capture-source caps. */
 +    caps = gst_caps_fixate (caps);
 +    if (gst_caps_is_fixed (caps)) {
@@ -28,7 +28,6 @@ index 72e59e5a..7674452c 100644
      GST_INFO_OBJECT (camera, "SETTING caps %" GST_PTR_FORMAT, caps);
      g_object_set (gst_bin_get_by_name (GST_BIN (priv->video_source),
                    "video_source_filter"), "caps", caps, NULL);
-@@ -789,9 +795,6 @@ cheese_camera_set_new_caps (CheeseCamera *camera)
      g_object_set (priv->camerabin, "viewfinder-caps", caps,
                    "image-capture-caps", caps, NULL);
  
@@ -39,5 +38,5 @@ index 72e59e5a..7674452c 100644
  
      gst_caps_unref (caps);
 -- 
-2.17.1
+2.17.0
 
