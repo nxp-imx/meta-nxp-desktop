@@ -1,27 +1,44 @@
-From 183fa3a65f15863c190e7e9c1f1a614e6f667252 Mon Sep 17 00:00:00 2001
+From a20d7f9e59d36bb880fd00aeaea51d5756f9f5ce Mon Sep 17 00:00:00 2001
 From: Hou Qi <qi.hou@nxp.com>
-Date: Thu, 30 Sep 2021 08:53:48 +0800
-Subject: [PATCH] v4l2videoenc: Set encoder output mode to DMABUF_IMPORT if
- received dmabuf
+Date: Tue, 15 Nov 2022 09:01:25 +0800
+Subject: [PATCH 1/2] v4l2videoenc: Set encoder output mode to DMABUF_IMPORT if
+ receive dmabuf
 
-If v4l2 encoder receives dmabuf, set output mode to DMABUF_IMPORT to avoid
-memory copy.
+When output-io-mode is none auto, set output mode to DMABUF_IMPORT to avoid
+memory copy if encoder receives dmabuf. Check buffer type for each input
+buffer and drop non-dmabuf in DMABUF_IMPORT mode.
 
 Part-of: <https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/-/merge_requests/1095>
 ---
- sys/v4l2/gstv4l2videoenc.c | 3 +++
- 1 file changed, 3 insertions(+)
+ sys/v4l2/gstv4l2videoenc.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
 diff --git a/sys/v4l2/gstv4l2videoenc.c b/sys/v4l2/gstv4l2videoenc.c
-index 8d0e55c52..f804fb906 100644
+index d77320fe8..a505a228f 100644
 --- a/sys/v4l2/gstv4l2videoenc.c
 +++ b/sys/v4l2/gstv4l2videoenc.c
-@@ -736,6 +736,9 @@ gst_v4l2_video_enc_handle_frame (GstVideoEncoder * encoder,
+@@ -750,6 +750,25 @@ gst_v4l2_video_enc_handle_frame (GstVideoEncoder * encoder,
    if (G_UNLIKELY (!g_atomic_int_get (&self->active)))
      goto flushing;
  
-+  if (gst_is_dmabuf_memory (gst_buffer_peek_memory (frame->input_buffer, 0)))
-+    self->v4l2output->mode = GST_V4L2_IO_DMABUF_IMPORT;
++  if (self->v4l2output->req_mode == GST_V4L2_IO_AUTO) {
++    GstV4l2IOMode mode = self->v4l2output->mode;
++
++    if (gst_is_dmabuf_memory (gst_buffer_peek_memory (frame->input_buffer, 0))
++        && (frame->system_frame_number == 0)) {
++      self->v4l2output->mode = GST_V4L2_IO_DMABUF_IMPORT;
++      if (!gst_v4l2_object_try_import (self->v4l2output, frame->input_buffer))
++        self->v4l2output->mode = mode;
++    }
++  }
++  /* It is possible that a system buffer is received when the number of
++   * buffers runs low. */
++  if (self->v4l2output->mode == GST_V4L2_IO_DMABUF_IMPORT
++      && !gst_is_dmabuf_memory (gst_buffer_peek_memory (frame->input_buffer,
++              0))) {
++    frame->output_buffer = NULL;
++    goto drop;
++  }
 +
    task_state = gst_pad_get_task_state (GST_VIDEO_ENCODER_SRC_PAD (self));
    if (task_state == GST_TASK_STOPPED || task_state == GST_TASK_PAUSED) {
