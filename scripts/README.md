@@ -2,7 +2,7 @@
 
 Step1: Install flex-installer shell srcipt
 ```
-    $ git clone https://github.com/nxp-imx/meta-nxp-desktop.git -b lf-5.15.52-2.1.0-kirkstone
+    $ git clone https://github.com/nxp-imx/meta-nxp-desktop.git -b lf-5.15.71-2.2.0-kirkstone
     $ cp meta-nxp-desktop/scripts/flex-installer /usr/bin/
     $ sudo chmod a+x /usr/bin/flex-installer
     $ which flex-installer
