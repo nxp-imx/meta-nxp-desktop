@@ -20,9 +20,7 @@ IMAGE_INSTALL:append = " \
 	openssl-engines \
 	ipsec-tools \
 "
-IMAGE_INSTALL:append:qoriq = " \
-	distrobootscr \
-"
+
 IMAGE_INSTALL:remove:ls1021atwr = " \
 	${DPDK_SECURE_OBJ} \
 "
