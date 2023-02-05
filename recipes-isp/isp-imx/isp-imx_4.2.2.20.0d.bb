@@ -8,8 +8,8 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=f9e5e25d5cd2c987e952e59552a344ac \
 DEPENDS = "boost libdrm virtual/libg2d libtinyxml2"
 
 SRC_URI = "${FSL_BIN_MIRROR}/${BP}.bin;fsl-eula=true"
-SRC_URI[md5sum] = "8ad9f435ac28382e2586e676c8b18e88"
-SRC_URI[sha256sum] = "bf0ecfc9b0ed62517f2b2bc73f953619f9ba9f35025e7e4614b993683419f3a4"
+SRC_URI[md5sum] = "3723c930b06460fad7bd44aad6146a1b"
+SRC_URI[sha256sum] = "ad834df38eff625f1d9e37cf33eeec812b029b96bd3efe8503f1f8b31d67ad41"
 
 inherit fsl-eula-unpack cmake systemd use-imx-headers
 
@@ -47,7 +47,7 @@ do_install() {
     install -d ${D}/opt/imx8-isp/bin/dewarp_config
 
     cp -r ${WORKDIR}/build/generated/release/bin/*_test ${D}/opt/imx8-isp/bin
-    cp -r ${WORKDIR}/build/generated/release/bin/*2775* ${D}/opt/imx8-isp/bin
+    #cp -r ${WORKDIR}/build/generated/release/bin/*2775* ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/*.xml ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/*.drv ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/${BP}/dewarp/dewarp_config/ ${D}/opt/imx8-isp/bin
