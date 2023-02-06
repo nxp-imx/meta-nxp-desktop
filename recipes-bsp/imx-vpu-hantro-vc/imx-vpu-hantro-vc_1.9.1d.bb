@@ -2,10 +2,10 @@
 
 DESCRIPTION = "i.MX vc8000e encoder library for Kenrel 5.15"
 LICENSE = "Proprietary"
-LIC_FILES_CHKSUM = "file://COPYING;md5=add2d392714d3096ed7e0f7e2190724b"
+LIC_FILES_CHKSUM = "file://COPYING;md5=f9e5e25d5cd2c987e952e59552a344ac"
 
-SRC_URI[md5sum] = "a9ea12bff4f45e4cfa6707b128ff89dd"
-SRC_URI[sha256sum] = "ae4022d9446a76f325ecf978a799559dcb1b79fb4417311ee940b3bb195cad6e"
+SRC_URI[md5sum] = "5856e1cc4debf9186f2110335d0458b9"
+SRC_URI[sha256sum] = "ea79e2f99250c9e77012134e633c92d4022adafe36e18f42e51a2fbef949f162"
 
 inherit fsl-eula2-unpack2
 
