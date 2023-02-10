@@ -71,7 +71,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                      libcap2 libdaemon0 libdbus-1-3 libdbus-glib-1-2 \
                      libdrm-radeon libdrm-nouveau libdrm-omap \
                      libdrm-intel libdrm-exynos libdrm-freedreno libdrm-amdgpu libdrm-etnaviv \
-                     libexpat1 libfdisk1 libffi7 libflac libflac++6 libflac8 libfontconfig1 \
+                     libexpat1 libfdisk1 libffi7 libfontconfig1 \
                      libfreetype6 libfribidi0 libgcc1 libgdk-pixbuf-2.0-0 libgdk-pixbuf-xlib-2.0-0 \
                      libgmp10 libgmpxx4 libgnutls-openssl27 libgnutls30 libgnutlsxx28 libgudev-1.0-0 \
                      libharfbuzz0 libical libice6 libicudata64 libicui18n64 libicuio64 libicutu64 \
@@ -154,6 +154,8 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       libpython3.10 bash-dev \
                       libgtk-4.0  util-linux-lsblk util-linux-blkid \
                       update-rc.d \
+                      linux-firmware-nxp89xx \
+                      init-system-helpers-service \
 "
 
 RCONFLICTS:${PN} += " ${YOCTO-DEPENDS-LIST} "
