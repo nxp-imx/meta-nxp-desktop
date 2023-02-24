@@ -4,8 +4,8 @@ SECTION = "devel"
 
 APTGET_EXTRA_PACKAGES_MAIN = "1"
 
-# Desktop 22.04.1 baseline
-SRC_URI[md5sum] = "6e63b79b2e3ae7cc67ef4bab7ad2a037"
-SRC_URI[sha256sum] = "e5503aa925f5d4fd432bb3a89cf266807dabee66877b15ef825efd2dd9c60227"
+# Desktop 22.04.2 baseline
+SRC_URI[md5sum] = "2b45cd48b94d3fe89624e4a4e238ef0f"
+SRC_URI[sha256sum] = "244e2d2a95d8fa1481c67138012b6ffedd684fc37a53b890f8c29e6abf02e14d"
 
 COMPATIBLE_MACHINE = "(ls1021atwr)"

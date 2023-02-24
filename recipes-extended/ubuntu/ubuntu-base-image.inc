@@ -3,8 +3,8 @@ require ubuntu-license.inc
 SECTION = "devel"
 
 # Desktop 22.04 baseline
-SRC_URI[md5sum] = "0adbe1552f1eda71b3c9930ea3e574bb"
-SRC_URI[sha256sum] = "b2259205f2e94971e9e146ad1e30925d05d05e6575685cc0125b83746105ec45"
+SRC_URI[md5sum] = "ad795d8ef6da675ad7571e1b0d1c090a"
+SRC_URI[sha256sum] = "4180f82e41fc42d24fa6cf43f7ea592b63833520e43687b3012cbc60550d579c"
 
 require ubuntu-base.inc
 
