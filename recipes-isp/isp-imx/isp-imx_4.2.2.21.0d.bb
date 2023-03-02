@@ -1,14 +1,14 @@
-# Copyright 2020-2022 NXP
+# Copyright 2023 NXP
 
 DESCRIPTION = "i.MX Verisilicon Software ISP"
 LICENSE = "Proprietary"
-LIC_FILES_CHKSUM = "file://COPYING;md5=d3c315c6eaa43e07d8c130dc3a04a011"
+LIC_FILES_CHKSUM = "file://COPYING;md5=ea25d099982d035af85d193c88a1b479"
 
-DEPENDS = "libdrm virtual/libg2d libtinyxml2"
+DEPENDS = "boost libdrm virtual/libg2d libtinyxml2"
 
 SRC_URI = "${FSL_BIN_MIRROR}/${BP}.bin;fsl-eula=true"
-SRC_URI[md5sum] = "994af98af681b3a8f6318fd60898674c"
-SRC_URI[sha256sum] = "b4da8a718b945be63e7f67887f807bb1a4aa687da4e579e3eadbfc064ec21ded"
+SRC_URI[md5sum] = "c317841993fdcb8b477fd9ae6e132bbb"
+SRC_URI[sha256sum] = "cdcf35c2684ccd0d9d8a60385a9414cebcff0a94dede3f628d55c76dc438da39"
 
 inherit fsl-eula-unpack cmake systemd use-imx-headers
 
@@ -43,11 +43,13 @@ do_install() {
     install -d ${D}/${libdir}
     install -d ${D}/${includedir}
     install -d ${D}/opt/imx8-isp/bin
+    install -d ${D}/opt/imx8-isp/bin/dewarp_config
 
     cp -r ${WORKDIR}/build/generated/release/bin/*_test ${D}/opt/imx8-isp/bin
-    cp -r ${WORKDIR}/build/generated/release/bin/*2775* ${D}/opt/imx8-isp/bin
+    #cp -r ${WORKDIR}/build/generated/release/bin/*2775* ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/*.xml ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/*.drv ${D}/opt/imx8-isp/bin
+    cp -r ${WORKDIR}/${BP}/dewarp/dewarp_config/ ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/isp_media_server ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/bin/vvext ${D}/opt/imx8-isp/bin
     cp -r ${WORKDIR}/build/generated/release/lib/*.so* ${D}/${libdir}
@@ -72,6 +74,9 @@ do_install() {
 FILES_SOLIBSDEV = ""
 FILES_SOLIBS_VERSIONED = " \
     ${libdir}/libar1335.so \
+    ${libdir}/libcppnetlib-client-connections.so \
+    ${libdir}/libcppnetlib-server-parsers.so \
+    ${libdir}/libcppnetlib-uri.so \
     ${libdir}/libjsoncpp.so \
     ${libdir}/libos08a20.so \
     ${libdir}/libov2775.so \
