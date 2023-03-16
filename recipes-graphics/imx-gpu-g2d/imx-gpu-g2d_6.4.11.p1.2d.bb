@@ -1,5 +1,5 @@
 # Copyright (C) 2016 Freescale Semiconductor
-# Copyright 2017-2021 NXP
+# Copyright 2017-2021,2023 NXP
 # Copyright 2018 (C) O.S. Systems Software LTDA.
 # Released under the MIT license (see COPYING.MIT for the terms)
 
@@ -12,8 +12,8 @@ PROVIDES += "virtual/libg2d"
 FSLBIN_NAME     = "${PN}-${PV}-${TARGET_ARCH}"
 
 SRC_URI = "${FSL_BIN_MIRROR}/${FSLBIN_NAME}.bin;name=${TARGET_ARCH};fsl-eula=true"
-SRC_URI[aarch64.md5sum] = "b5b817548ff186b77bc0dde76a3ad4da"
-SRC_URI[aarch64.sha256sum] = "ec40603a17e6ae34945a4bed1af57db3f53b5feca1a0c7e3c248fd2ffe2f4c27"
+SRC_URI[aarch64.md5sum] = "87dd7388180b4fe5f8bf6dab88dfc0ba"
+SRC_URI[aarch64.sha256sum] = "d9047feb4a9045f781a59c8706eb5f5476f4459b3fece6e6af41f4f78ce2ace8"
 
 S = "${WORKDIR}/${FSLBIN_NAME}"
 
