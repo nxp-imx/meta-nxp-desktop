@@ -22,7 +22,7 @@ Download the Yocto Project BSP for i.MX
 ```
 $ mkdir desktop
 $ cd desktop
-$ repo init -u https://github.com/nxp-imx/imx-manifest -b imx-linux-kirkstone -m imx-5.15.71-2.2.0_desktop.xml
+$ repo init -u https://github.com/nxp-imx/imx-manifest -b imx-linux-kirkstone -m imx-6.1.0-1.0.0_desktop.xml
 $ repo sync
 ```
 
@@ -69,7 +69,7 @@ Download the Yocto Project BSP for Layerscape
 ```
 $ mkdir distro
 $ cd distro
-$ repo init -u https://github.com/nxp-qoriq/yocto-sdk.git -b kirkstone -m ls-5.15.71-2.2.0_distro.xml
+$ repo init -u https://github.com/nxp-qoriq/yocto-sdk.git -b kirkstone -m ls-6.1.0-1.0.0_distro.xml
 $ repo sync
 ```
 
@@ -110,8 +110,8 @@ $ bitbake ls-image-lite # build lite image with the optimized config
 ```
 
 ```
-$ echo "INIT_MANAGER=\"none\"" >> conf/local.conf  #set firmware-only config
-$ bitbake qoriq-composite-firmware  # build composite firmware for flex-installer
+# generate composite firmware for  LS machines
+$ bitbake qoriq-composite-firmware
 ```
 
 
