@@ -35,7 +35,6 @@ LAYERSCAPE_NETWORK_TOOLS = " \
 	netperf \
 	cpufrequtils \
 	mmc-utils \
-	netdata \
 	i2c-tools \
 	usbutils \
 	linuxptp \
