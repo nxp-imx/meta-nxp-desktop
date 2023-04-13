@@ -22,7 +22,7 @@ Download the Yocto Project BSP for i.MX
 ```
 $ mkdir desktop
 $ cd desktop
-$ repo init -u https://github.com/nxp-imx/imx-manifest -b imx-linux-kirkstone -m imx-6.1.0-1.0.0_desktop.xml
+$ repo init -u https://github.com/nxp-imx/imx-manifest -b imx-linux-kirkstone -m imx-6.1.1-1.0.0_desktop.xml
 $ repo sync
 ```
 
