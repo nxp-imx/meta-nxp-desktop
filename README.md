@@ -110,8 +110,9 @@ $ bitbake ls-image-lite # build lite image with the optimized config
 ```
 
 ```
-# generate composite firmware for  LS machines
+# generate composite firmware for  Layerscape machines
 $ bitbake qoriq-composite-firmware
+$ bitbake generate-boottgz
 ```
 
 
@@ -120,3 +121,11 @@ Notice
 
 The default PoC build will create the account "user" with the password "user" for desktop evaluation,
 In order to change the account or password, uncomment and update APTGET_ADD_USERS in <build_dir>/conf/local.conf.
+If you want to add multiple user accounts, you can set as bellow in <build_dir>/conf/local.conf. (every user setting should be splitted by a space)
+```
+APTGET_ADD_USERS = "alex:${USER_PASSWD_USER}:${USER_SHELL_BASH} alex1:${USER_PASSWD_USER}:${USER_SHELL_BASH} user:${USER_PASSWD_USER}:${USER_SHELL_BASH}"
+```
+Then login with <account>:user. Such as alex:user. All accounts passwd is "user", You  can change password after login.
+```
+$ sudo passwd <account>
+```
