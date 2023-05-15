@@ -154,7 +154,6 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       libpython3.10 bash-dev \
                       libgtk-4.0  util-linux-lsblk util-linux-blkid \
                       update-rc.d \
-                      linux-firmware-nxp89xx \
                       init-system-helpers-service \
 "
 
