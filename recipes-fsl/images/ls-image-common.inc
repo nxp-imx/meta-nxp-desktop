@@ -8,7 +8,6 @@ IMAGE_PREPROCESS_COMMAND:append = " do_enable_enetc_ports; do_update_rootfs; "
 DPDK_SECURE_OBJ = " \
 	ovs-dpdk \
 	libpkcs11 \
-	pktgen-dpdk \
 	secure-obj \
 	secure-obj-module \
 "
