@@ -1,4 +1,4 @@
-From 3d18975e6264a0267176dc61a9bc94bf29c9edd6 Mon Sep 17 00:00:00 2001
+From 32208ec0c26307679f9419e5dfbd67604961d359 Mon Sep 17 00:00:00 2001
 From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
 Date: Fri, 21 Dec 2018 16:20:43 +0200
 Subject: [PATCH] pseudo: Now handles chroot scripts and executables
@@ -14,16 +14,17 @@ Catalin provided.
 Signed-off-by: nxa15299 <Heinz.Wrobel@nxp.com>
 Signed-off-by: Catalin Udma <catalin-dan.udma@nxp.com>
 Signed-off-by: Costea Ciprian <ciprianmarian.costea@nxp.com>
+
 ---
- pseudo_client.c | 265 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ pseudo_client.c | 265 +++++++++++++++++++++++++++++++++++++++++++++++-
  pseudo_util.c   |   1 +
  2 files changed, 261 insertions(+), 5 deletions(-)
 
 diff --git a/pseudo_client.c b/pseudo_client.c
-index 3939c9b..adaa75d 100644
+index 8da3b33..841dc17 100644
 --- a/pseudo_client.c
 +++ b/pseudo_client.c
-@@ -2092,13 +2092,219 @@ static ssize_t isexecutable(const char *filename, char *buf, ssize_t bufsize)
+@@ -2263,13 +2263,219 @@ static ssize_t isexecutable(const char *filename, char *buf, ssize_t bufsize)
  	return foundexecutable;
  }
  
@@ -243,7 +244,7 @@ index 3939c9b..adaa75d 100644
  	char aliasbuf[NAME_MAX];
  	char *xtranslation = getenv("PSEUDO_CHROOT_XTRANSLATION");
  
-@@ -2147,6 +2353,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+@@ -2318,6 +2524,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
  		else
  			candidate = pseudo_fix_path(NULL, filename, 0, 0, NULL, 0);
  
@@ -257,7 +258,7 @@ index 3939c9b..adaa75d 100644
  		pseudo_debug(PDBGF_CLIENT, "exec_path absolute: %s => %s\n", filename, candidate);
  		pseudo_magic();
  		return candidate;
-@@ -2158,6 +2371,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+@@ -2329,6 +2542,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
  		else
  			candidate = pseudo_fix_path(pseudo_cwd, filename, 0, pseudo_cwd_len, NULL, 0);
  
@@ -271,7 +272,7 @@ index 3939c9b..adaa75d 100644
  		/* executable or not, it's the only thing we can try */
  		pseudo_debug(PDBGF_CLIENT, "exec_path no PATH: %s => %s\n", filename, candidate);
  		pseudo_magic();
-@@ -2166,16 +2386,27 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+@@ -2337,16 +2557,27 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
  
  	for (i = 0; path_segs[i]; ++i) {
  		path = path_segs[i];
@@ -304,7 +305,7 @@ index 3939c9b..adaa75d 100644
  				char *dir = pseudo_root_path(__func__, __LINE__, AT_FDCWD, path, 0);
  				if (dir)
  					candidate = pseudo_fix_path(dir, filename, 0, strlen(dir), NULL, 0);
-@@ -2206,6 +2437,23 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+@@ -2377,6 +2608,23 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
  				candidate = NULL;
  			}
  		}
@@ -328,7 +329,7 @@ index 3939c9b..adaa75d 100644
  		if (candidate && isexecutable(candidate, NULL, 0)) {
  			pseudo_debug(PDBGF_CLIENT, "exec_path: %s => %s\n", filename, candidate);
  			pseudo_magic();
-@@ -2216,6 +2464,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+@@ -2387,6 +2635,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
  	candidate = filename;
  	if (candidate && forcechroot)
  		candidate = pseudo_root_path(__func__, __LINE__, AT_FDCWD, candidate, 0);
@@ -343,10 +344,10 @@ index 3939c9b..adaa75d 100644
  	pseudo_magic();
  	return candidate;
 diff --git a/pseudo_util.c b/pseudo_util.c
-index 74d1d33..5efa64d 100644
+index 2f8f5d8..51782a7 100644
 --- a/pseudo_util.c
 +++ b/pseudo_util.c
-@@ -59,6 +59,7 @@ static struct pseudo_variables pseudo_env[] = {
+@@ -49,6 +49,7 @@ static struct pseudo_variables pseudo_env[] = {
  	{ "PSEUDO_CHROOT_EXCEPTIONS", 24, NULL },
  	{ "PSEUDO_CHROOT_FORCED", 20, NULL },
  	{ "PSEUDO_CHROOT_XTRANSLATION", 26, NULL },
@@ -354,6 +355,3 @@ index 74d1d33..5efa64d 100644
  	{ "PSEUDO_UIDS", 11, NULL },
  	{ "PSEUDO_GIDS", 11, NULL },
  	{ "PSEUDO_OPTS", 11, NULL },
--- 
-1.9.1
-

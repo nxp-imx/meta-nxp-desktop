@@ -1,7 +1,7 @@
-From 73d5a2186636af18c7d5be1e8b81f7d17ac66be1 Mon Sep 17 00:00:00 2001
+From 3e76e2b7f4e44a60cbcceaae9ad0ea7c263a176f Mon Sep 17 00:00:00 2001
 From: r39252 <Heinz.Wrobel@freescale.com>
 Date: Thu, 19 Oct 2017 07:07:55 +0200
-Subject: [PATCH 04/15] pseudo: Ensure by adding the right headers that the
+Subject: [PATCH] pseudo: Ensure by adding the right headers that the
  [f]stat[v]fs() wrappers compile properly
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 04/15] pseudo: Ensure by adding the right headers that the
  1 file changed, 2 insertions(+)
 
 diff --git a/pseudo_wrappers.c b/pseudo_wrappers.c
-index 34d7f23..4567989 100644
+index 9ae1200..9f0be9d 100644
 --- a/pseudo_wrappers.c
 +++ b/pseudo_wrappers.c
-@@ -31,6 +31,8 @@
+@@ -22,6 +22,8 @@
  #include <unistd.h>
  #include <fcntl.h>
  #include <sys/stat.h>
@@ -21,6 +21,3 @@ index 34d7f23..4567989 100644
  #include <sys/time.h>
  #include <sys/wait.h>
  #include <dlfcn.h>
--- 
-1.8.3.1
-

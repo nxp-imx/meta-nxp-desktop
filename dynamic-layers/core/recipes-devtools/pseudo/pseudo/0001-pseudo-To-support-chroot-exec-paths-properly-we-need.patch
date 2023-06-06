@@ -1,4 +1,4 @@
-From 538a6240e92ea24ce259385ab9e208adf7971c2b Mon Sep 17 00:00:00 2001
+From 1b2401bb13af3c323a61a87361db46c0679f596b Mon Sep 17 00:00:00 2001
 From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
 Date: Fri, 21 Dec 2018 15:35:09 +0200
 Subject: [PATCH] pseudo: To support chroot exec paths properly, we need to
@@ -6,19 +6,20 @@ Subject: [PATCH] pseudo: To support chroot exec paths properly, we need to
 
 Signed-off-by: nxa15299 <Heinz.Wrobel@nxp.com>
 Signed-off-by: Costea Ciprian <ciprianmarian.costea@nxp.com>
+
 ---
- ports/common/guts/execv.c  | 39 +++++++++++++++++++--------------------
- ports/common/guts/execve.c | 35 ++++++++++++++++-------------------
- ports/common/guts/execvp.c | 37 +++++++++++++++++--------------------
+ ports/common/guts/execv.c  | 39 +++++++++++++++++++-------------------
+ ports/common/guts/execve.c | 35 ++++++++++++++++------------------
+ ports/common/guts/execvp.c | 37 +++++++++++++++++-------------------
  pseudo_client.c            |  6 +++---
  pseudo_client.h            |  2 +-
  5 files changed, 56 insertions(+), 63 deletions(-)
 
 diff --git a/ports/common/guts/execv.c b/ports/common/guts/execv.c
-index c071626..6a2df49 100644
+index 7819911..5459d08 100644
 --- a/ports/common/guts/execv.c
 +++ b/ports/common/guts/execv.c
-@@ -6,27 +6,26 @@
+@@ -8,27 +8,26 @@
   * wrap_execv(const char *file, char *const *argv) {
   *	int rc = -1;
   */
@@ -66,10 +67,10 @@ index c071626..6a2df49 100644
  /*	return rc;
   * }
 diff --git a/ports/common/guts/execve.c b/ports/common/guts/execve.c
-index 24cc177..94ea931 100644
+index 1144f7c..7a4f5eb 100644
 --- a/ports/common/guts/execve.c
 +++ b/ports/common/guts/execve.c
-@@ -6,28 +6,25 @@
+@@ -8,28 +8,25 @@
   * wrap_execve(const char *file, char *const *argv, char *const *envp) {
   *	int rc = -1;
   */
@@ -115,10 +116,10 @@ index 24cc177..94ea931 100644
   * }
   */
 diff --git a/ports/common/guts/execvp.c b/ports/common/guts/execvp.c
-index e6bf09f..dc6e5ed 100644
+index acc9fdc..7632799 100644
 --- a/ports/common/guts/execvp.c
 +++ b/ports/common/guts/execvp.c
-@@ -6,28 +6,25 @@
+@@ -8,28 +8,25 @@
   * wrap_execvp(const char *file, char *const *argv) {
   *	int rc = -1;
   */
@@ -165,10 +166,10 @@ index e6bf09f..dc6e5ed 100644
   * }
   */
 diff --git a/pseudo_client.c b/pseudo_client.c
-index 30f9cb6..3939c9b 100644
+index 20ca361..8da3b33 100644
 --- a/pseudo_client.c
 +++ b/pseudo_client.c
-@@ -2093,9 +2093,9 @@ static ssize_t isexecutable(const char *filename, char *buf, ssize_t bufsize)
+@@ -2264,9 +2264,9 @@ static ssize_t isexecutable(const char *filename, char *buf, ssize_t bufsize)
  }
  
  const char *
@@ -182,10 +183,10 @@ index 30f9cb6..3939c9b 100644
  	int i;
  	int forcechroot = 0;
 diff --git a/pseudo_client.h b/pseudo_client.h
-index 28b23dc..c9f6b1a 100644
+index d7944ce..7170fb6 100644
 --- a/pseudo_client.h
 +++ b/pseudo_client.h
-@@ -70,7 +70,7 @@ extern int (*pseudo_real_execv)(const char *, char * const *);
+@@ -62,7 +62,7 @@ extern int (*pseudo_real_execv)(const char *, char * const *);
  extern int pseudo_client_getcwd(void);
  extern int pseudo_client_chroot(const char *);
  extern char *pseudo_root_path(const char *, int, int, const char *, int);
@@ -194,6 +195,3 @@ index 28b23dc..c9f6b1a 100644
  #define PSEUDO_ROOT_PATH(x, y, z) pseudo_root_path(__func__, __LINE__, (x), (y), (z));
  extern char *pseudo_cwd;
  extern size_t pseudo_cwd_len;
--- 
-1.9.1
-

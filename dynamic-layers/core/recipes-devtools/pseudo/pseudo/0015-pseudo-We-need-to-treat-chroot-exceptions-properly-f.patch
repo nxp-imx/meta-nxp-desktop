@@ -1,22 +1,23 @@
-From 5b8f1a1fdbab9efcd4293f0912e2d2aa981eaada Mon Sep 17 00:00:00 2001
+From ef3eb2adeae5db5c48e882ea2d3de1cf5a0a9539 Mon Sep 17 00:00:00 2001
 From: r39252 <Heinz.Wrobel@freescale.com>
 Date: Thu, 19 Oct 2017 07:36:53 +0200
-Subject: [PATCH 15/15] pseudo: We need to treat chroot exceptions properly for
- std paths.
+Subject: [PATCH] pseudo: We need to treat chroot exceptions properly for std
+ paths.
 
 The problem to solve is that our pseudo_path_exec() gets called through
 the exec functions from shell code which did its own path search.
 So "normal" searches need to lead to the same exceptions that our
 searches do.
+
 ---
  pseudo_client.c | 18 ++++++++++++++----
  1 file changed, 14 insertions(+), 4 deletions(-)
 
 diff --git a/pseudo_client.c b/pseudo_client.c
-index 08ce170..4ea5515 100644
+index 841dc17..84614b5 100644
 --- a/pseudo_client.c
 +++ b/pseudo_client.c
-@@ -1445,10 +1445,20 @@ base_path(int dirfd, const char *path, int leave_last) {
+@@ -1603,10 +1603,20 @@ base_path(int dirfd, const char *path, int leave_last) {
  		if (ischrootpath(basepath))
  			minlen = pseudo_chroot_len;
  	} else if (pseudo_chroot_len) {
@@ -41,6 +42,3 @@ index 08ce170..4ea5515 100644
  	}
  
  	newpath = pseudo_fix_path(basepath, path, minlen, baselen, NULL, leave_last);
--- 
-1.8.3.1
-
