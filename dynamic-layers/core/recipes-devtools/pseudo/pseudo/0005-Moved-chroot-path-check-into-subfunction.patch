@@ -1,18 +1,21 @@
-From 82600c680fce1cb04680f51167bbf976340d1bad Mon Sep 17 00:00:00 2001
-From: r39252 <Heinz.Wrobel@freescale.com>
-Date: Thu, 19 Oct 2017 07:13:15 +0200
-Subject: [PATCH 06/15] pseudo: Moved chroot path check into subfunction to
- support subsequent changes
+From e9f8627784dfbfd81e9c3e60a15a2cf5c29b2626 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 8 Nov 2022 11:36:28 +0100
+Subject: [PATCH 05/20] Moved chroot path check into subfunction
 
+This is to support subsequent changes that require a lot of the same
+checks.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
 ---
  pseudo_client.c | 17 ++++++++++++-----
  1 file changed, 12 insertions(+), 5 deletions(-)
 
 diff --git a/pseudo_client.c b/pseudo_client.c
-index 674d61c..86ee5d2 100644
+index 0510097..355b4ef 100644
 --- a/pseudo_client.c
 +++ b/pseudo_client.c
-@@ -1398,6 +1398,17 @@ static char *patternlistmatchespath(const char *patternlist, const char *path, c
+@@ -1552,6 +1552,17 @@ static char *patternlistmatchespath(const char *patternlist, const char *path, c
  	return foundpath;
  }
  
@@ -30,7 +33,7 @@ index 674d61c..86ee5d2 100644
  static char *
  base_path(int dirfd, const char *path, int leave_last) {
  	char *basepath = 0;
-@@ -1431,12 +1442,8 @@ base_path(int dirfd, const char *path, int leave_last) {
+@@ -1589,12 +1600,8 @@ base_path(int dirfd, const char *path, int leave_last) {
  		/* if there's a chroot path, and it's the start of basepath,
  		 * flag it for pseudo_fix_path
  		 */
@@ -45,5 +48,5 @@ index 674d61c..86ee5d2 100644
  		/* "absolute" is really relative to chroot path */
  		basepath = pseudo_chroot;
 -- 
-1.8.3.1
+2.34.1
 

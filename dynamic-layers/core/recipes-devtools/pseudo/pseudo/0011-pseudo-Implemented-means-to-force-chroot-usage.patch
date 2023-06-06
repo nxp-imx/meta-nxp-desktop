@@ -1,23 +1,29 @@
-From d3a2dfc1cf635995475758323161166590ad0b02 Mon Sep 17 00:00:00 2001
-From: r39252 <Heinz.Wrobel@freescale.com>
-Date: Thu, 19 Oct 2017 07:28:38 +0200
-Subject: [PATCH 12/15] pseudo: Implemented means to force chroot usage for
- executables with exceptions
+From cacecf9a8d41b1fa054e9b2e8283a129ad47ca32 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 8 Nov 2022 11:49:52 +0100
+Subject: [PATCH 11/20] pseudo: Implemented means to force chroot usage
 
-Hmm. I also removed one unused variable now that I should have removed in a prior commit.
-The idea here is you may want to be able to run specific things from the chroot
-because neither host nor sysroot provides it properly. You are asking about the difference
-in architecture for scripts and target binaries? Just wait for a subsequent commit
+This is for executables with exceptions and special needs.
+
+Hmm. I also removed one unused variable now that I should have removed
+in a prior commit.
+
+The idea here is you may want to be able to run specific things from
+the chroot because neither host nor sysroot provides it properly. You
+are asking about the difference in architecture for scripts and target
+binaries? Just wait for a subsequent commit
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
 ---
- pseudo_client.c | 55 +++++++++++++++++++++++++++++++++++++++++++++++++------
+ pseudo_client.c | 55 +++++++++++++++++++++++++++++++++++++++++++------
  pseudo_util.c   |  2 ++
  2 files changed, 51 insertions(+), 6 deletions(-)
 
 diff --git a/pseudo_client.c b/pseudo_client.c
-index 1036e57..3991fb1 100644
+index 99e6fd0..747e4a8 100644
 --- a/pseudo_client.c
 +++ b/pseudo_client.c
-@@ -2007,7 +2007,7 @@ pseudo_exec_path(const char *filename, int search_path) {
+@@ -2269,7 +2269,7 @@ pseudo_exec_path(const char *filename, int search_path) {
  	char *path = getenv("PATH");
  	const char *candidate;
  	int i;
@@ -26,7 +32,7 @@ index 1036e57..3991fb1 100644
  	char aliasbuf[NAME_MAX];
  	char *xtranslation = getenv("PSEUDO_CHROOT_XTRANSLATION");
  
-@@ -2036,16 +2036,37 @@ pseudo_exec_path(const char *filename, int search_path) {
+@@ -2298,16 +2298,37 @@ pseudo_exec_path(const char *filename, int search_path) {
  		filename = s;
  	}
  
@@ -66,7 +72,7 @@ index 1036e57..3991fb1 100644
  		/* executable or not, it's the only thing we can try */
  		pseudo_debug(PDBGF_CLIENT, "exec_path no PATH: %s => %s\n", filename, candidate);
  		pseudo_magic();
-@@ -2057,15 +2078,35 @@ pseudo_exec_path(const char *filename, int search_path) {
+@@ -2319,15 +2340,35 @@ pseudo_exec_path(const char *filename, int search_path) {
  		pseudo_debug(PDBGF_CLIENT, "exec_path: checking %s for %s\n", path, filename);
  		if (!*path || (*path == '.' && path_lens[i] == 1)) {
  			/* empty path or . is cwd */
@@ -105,7 +111,7 @@ index 1036e57..3991fb1 100644
  			if (dir) {
  				candidate = pseudo_fix_path(dir, filename, 0, len, NULL, 0);
  				pseudo_debug(PDBGF_CLIENT, "exec_path: got %s for non-absolute path\n", candidate);
-@@ -2082,6 +2123,8 @@ pseudo_exec_path(const char *filename, int search_path) {
+@@ -2344,6 +2385,8 @@ pseudo_exec_path(const char *filename, int search_path) {
  	}
  	/* blind guess being as good as anything */
  	candidate = filename;
@@ -115,11 +121,11 @@ index 1036e57..3991fb1 100644
  	pseudo_magic();
  	return candidate;
 diff --git a/pseudo_util.c b/pseudo_util.c
-index 51ff456..200569b 100644
+index 289ece2..3ebf15f 100644
 --- a/pseudo_util.c
 +++ b/pseudo_util.c
-@@ -55,6 +55,8 @@ static struct pseudo_variables pseudo_env[] = {
- 	{ "PSEUDO_LOCALSTATEDIR", 20, NULL },
+@@ -46,6 +46,8 @@ static struct pseudo_variables pseudo_env[] = {
+ 	{ "PSEUDO_IGNORE_PATHS", 19, NULL },
  	{ "PSEUDO_PASSWD", 13, NULL },
  	{ "PSEUDO_CHROOT", 13, NULL },
 +	{ "PSEUDO_CHROOT_EXCEPTIONS", 24, NULL },
@@ -128,5 +134,5 @@ index 51ff456..200569b 100644
  	{ "PSEUDO_UIDS", 11, NULL },
  	{ "PSEUDO_GIDS", 11, NULL },
 -- 
-1.8.3.1
+2.34.1
 

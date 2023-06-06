@@ -1,19 +1,21 @@
-From 4d0711070f1bf9145da359eb65dfa3a85c5e59f2 Mon Sep 17 00:00:00 2001
-From: r39252 <Heinz.Wrobel@freescale.com>
-Date: Thu, 19 Oct 2017 07:10:35 +0200
-Subject: [PATCH 05/15] pseudo: Added support function for fnmatch.
+From 9bcc1b2f41fa20b2b21c8283a8c402798416eee7 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 8 Nov 2022 11:33:55 +0100
+Subject: [PATCH 04/20] pseudo: Added support function for fnmatch.
 
 This function will be needed in subsequent commits to enable changes
-to execution path checks
+to execution path checks.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
 ---
  pseudo_client.c | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
  1 file changed, 49 insertions(+)
 
 diff --git a/pseudo_client.c b/pseudo_client.c
-index 4eb91df..674d61c 100644
+index a03d6b1..0510097 100644
 --- a/pseudo_client.c
 +++ b/pseudo_client.c
-@@ -36,6 +36,7 @@
+@@ -26,6 +26,7 @@
  #include <fcntl.h>
  #include <pwd.h>
  #include <grp.h>
@@ -21,7 +23,7 @@ index 4eb91df..674d61c 100644
  
  #ifdef PSEUDO_XATTRDB
  #include <sys/xattr.h>
-@@ -1349,6 +1350,54 @@ pseudo_client_shutdown(void) {
+@@ -1503,6 +1504,54 @@ pseudo_client_shutdown(int wait_on_socket) {
  	return 0;
  }
  
@@ -77,5 +79,5 @@ index 4eb91df..674d61c 100644
  base_path(int dirfd, const char *path, int leave_last) {
  	char *basepath = 0;
 -- 
-1.8.3.1
+2.34.1
 

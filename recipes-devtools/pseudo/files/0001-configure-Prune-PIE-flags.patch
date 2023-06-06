@@ -1,7 +1,7 @@
-From b5545c08e6c674c49aef14b47a56a3e92df4d2a7 Mon Sep 17 00:00:00 2001
+From 1fbddd66d33859afc456f2dae81d6e8a39612890 Mon Sep 17 00:00:00 2001
 From: Khem Raj <raj.khem@gmail.com>
 Date: Wed, 17 Feb 2016 07:36:34 +0000
-Subject: [pseudo][PATCH] configure: Prune PIE flags
+Subject: [PATCH] configure: Prune PIE flags
 
 LDFLAGS are not taken from environment and CFLAGS is used for LDFLAGS
 however when using security options -fpie and -pie options are coming
@@ -23,22 +23,18 @@ Helps with errors like
 | make: *** [lib/pseudo/lib64/libpseudo.so] Error 1
 
 Signed-off-by: Khem Raj <raj.khem@gmail.com>
----
-Upstream-Status: Submitted
 
+---
  configure | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/configure b/configure
-index e5ef9ce..83b0890 100755
+index 39b5fbe..d596a35 100755
 --- a/configure
 +++ b/configure
-@@ -339,3 +339,5 @@ sed -e '
+@@ -349,3 +349,5 @@ sed -e '
    s,@ARCH@,'"$opt_arch"',g
    s,@BITS@,'"$opt_bits"',g
  ' < Makefile.in > Makefile
 +
 +sed -i -e 's/\-[f]*pie//g' Makefile
--- 
-1.8.3.1
-

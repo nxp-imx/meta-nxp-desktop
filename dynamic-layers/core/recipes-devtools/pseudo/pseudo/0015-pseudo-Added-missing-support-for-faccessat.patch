@@ -1,0 +1,51 @@
+From 8638f7a5044bc0f5b792e015199dbc6810c22f29 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 8 Nov 2022 13:07:36 +0100
+Subject: [PATCH 15/20] pseudo: Added missing support for faccessat()
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ ports/linux/guts/faccessat.c | 18 ++++++++++++++++++
+ ports/linux/wrapfuncs.in     |  1 +
+ 2 files changed, 19 insertions(+)
+ create mode 100644 ports/linux/guts/faccessat.c
+
+diff --git a/ports/linux/guts/faccessat.c b/ports/linux/guts/faccessat.c
+new file mode 100644
+index 0000000..1e80eb8
+--- /dev/null
++++ b/ports/linux/guts/faccessat.c
+@@ -0,0 +1,18 @@
++/*
++ * Copyright (c) 2022 Peter Seebach/Seebs <seebs@seebs.net>; see
++ * guts/COPYRIGHT for information.
++ *
++ * [Note: copyright added by code generator, may be
++ * incorrect. Remove this if you fix it.]
++ *
++ * SPDX-License-Identifier: LGPL-2.1-only
++ *
++ * int faccessat(int dirfd, const char *path, int mode, int flags)
++ *	int rc = -1;
++ */
++
++	rc = real_faccessat(dirfd, path, mode, flags);
++
++/*	return rc;
++ * }
++ */
+diff --git a/ports/linux/wrapfuncs.in b/ports/linux/wrapfuncs.in
+index 241cf52..e191a6a 100644
+--- a/ports/linux/wrapfuncs.in
++++ b/ports/linux/wrapfuncs.in
+@@ -6,6 +6,7 @@ int __fxstat(int ver, int fd, struct stat *buf);
+ int lchmod(const char *path, mode_t mode); /* flags=AT_SYMLINK_NOFOLLOW */
+ int lchown(const char *path, uid_t owner, gid_t group); /* flags=AT_SYMLINK_NOFOLLOW */
+ int __fxstatat(int ver, int dirfd, const char *path, struct stat *buf, int flags);
++int faccessat(int dirfd, const char *path, int mode, int flags);
+ int openat(int dirfd, const char *path, int flags, ...{mode_t mode}); /* flags=flags&O_NOFOLLOW, noignore_path=1 */
+ int __openat_2(int dirfd, const char *path, int flags); /* flags=flags&O_NOFOLLOW, noignore_path=1 */
+ int mknod(const char *path, mode_t mode, dev_t dev); /* real_func=pseudo_mknod */
+-- 
+2.34.1
+

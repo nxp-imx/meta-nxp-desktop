@@ -1,18 +1,20 @@
-From ef08bb56d1bc275d437472693baf2e7c3179c403 Mon Sep 17 00:00:00 2001
-From: r39252 <Heinz.Wrobel@freescale.com>
-Date: Thu, 19 Oct 2017 07:23:49 +0200
-Subject: [PATCH 11/15] pseudo: Executable check is now cleaner subfunction for
- later use
+From 2ccb35b89bbf1295a297a41b666ca4a81e040750 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 8 Nov 2022 11:48:29 +0100
+Subject: [PATCH 10/20] pseudo: Clean up executable check
 
+We need this also as subfunction for later use
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
 ---
  pseudo_client.c | 36 +++++++++++++++++++++++++++++++++++-
  1 file changed, 35 insertions(+), 1 deletion(-)
 
 diff --git a/pseudo_client.c b/pseudo_client.c
-index dcd1c3f..1036e57 100644
+index 2199ae4..99e6fd0 100644
 --- a/pseudo_client.c
 +++ b/pseudo_client.c
-@@ -1967,6 +1967,40 @@ populate_path_segs(void) {
+@@ -2229,6 +2229,40 @@ populate_path_segs(void) {
  	path_lens[c] = 0;
  }
  
@@ -52,8 +54,8 @@ index dcd1c3f..1036e57 100644
 +
  const char *
  pseudo_exec_path(const char *filename, int search_path) {
-     char *s;
-@@ -2040,7 +2074,7 @@ pseudo_exec_path(const char *filename, int search_path) {
+ 	char *s;
+@@ -2302,7 +2336,7 @@ pseudo_exec_path(const char *filename, int search_path) {
  				candidate = NULL;
  			}
  		}
@@ -63,5 +65,5 @@ index dcd1c3f..1036e57 100644
  			pseudo_magic();
  			return candidate;
 -- 
-1.8.3.1
+2.34.1
 

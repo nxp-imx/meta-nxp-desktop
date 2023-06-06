@@ -1,7 +1,7 @@
-From 3d18975e6264a0267176dc61a9bc94bf29c9edd6 Mon Sep 17 00:00:00 2001
+From 6f8f55d6e331ee85c131bca506cea35db02fc2b5 Mon Sep 17 00:00:00 2001
 From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
-Date: Fri, 21 Dec 2018 16:20:43 +0200
-Subject: [PATCH] pseudo: Now handles chroot scripts and executables
+Date: Tue, 8 Nov 2022 12:25:51 +0100
+Subject: [PATCH 13/20] seudo: Now handles chroot scripts and executables
 
 We rewrite paths and arguments as needed to enable chroot execution.
 The problem is that argv0 needs to be rewritten properly for chroot
@@ -11,19 +11,19 @@ that interpreter is not searching PATH ... which most don't.
 This patch also adds in a buffer size correction and check that
 Catalin provided.
 
-Signed-off-by: nxa15299 <Heinz.Wrobel@nxp.com>
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
 Signed-off-by: Catalin Udma <catalin-dan.udma@nxp.com>
 Signed-off-by: Costea Ciprian <ciprianmarian.costea@nxp.com>
 ---
- pseudo_client.c | 265 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ pseudo_client.c | 260 +++++++++++++++++++++++++++++++++++++++++++++++-
  pseudo_util.c   |   1 +
- 2 files changed, 261 insertions(+), 5 deletions(-)
+ 2 files changed, 258 insertions(+), 3 deletions(-)
 
 diff --git a/pseudo_client.c b/pseudo_client.c
-index 3939c9b..adaa75d 100644
+index cbd165a..9346e6d 100644
 --- a/pseudo_client.c
 +++ b/pseudo_client.c
-@@ -2092,13 +2092,219 @@ static ssize_t isexecutable(const char *filename, char *buf, ssize_t bufsize)
+@@ -2263,6 +2263,209 @@ static ssize_t isexecutable(const char *filename, char *buf, ssize_t bufsize)
  	return foundexecutable;
  }
  
@@ -230,24 +230,24 @@ index 3939c9b..adaa75d 100644
 +    return 0;
 +}
 +
-+
  const char *
  pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
      const char *filename = *filenamep;
+@@ -2270,7 +2473,9 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
      char *path = getenv("PATH");
  	const char *candidate;
  	int i;
-+    int checkscript;
++	int checkscript;
  	int forcechroot = 0;
-+    int pforcechroot = 0;
++	int pforcechroot = 0;
  	char aliasbuf[NAME_MAX];
  	char *xtranslation = getenv("PSEUDO_CHROOT_XTRANSLATION");
  
-@@ -2147,6 +2353,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+@@ -2319,6 +2524,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
  		else
  			candidate = pseudo_fix_path(NULL, filename, 0, 0, NULL, 0);
  
-+        if (pseudo_chroot_len) {
++		if (pseudo_chroot_len) {
 +			checkscript = exec_chroot_scriptcheck(filenamep, argvp, filename, candidate);
 +			if (checkscript) {
 +				pseudo_magic();
@@ -257,11 +257,11 @@ index 3939c9b..adaa75d 100644
  		pseudo_debug(PDBGF_CLIENT, "exec_path absolute: %s => %s\n", filename, candidate);
  		pseudo_magic();
  		return candidate;
-@@ -2158,6 +2371,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+@@ -2330,6 +2542,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
  		else
  			candidate = pseudo_fix_path(pseudo_cwd, filename, 0, pseudo_cwd_len, NULL, 0);
  
-+        if (pseudo_chroot_len) {
++		if (pseudo_chroot_len) {
 +			checkscript = exec_chroot_scriptcheck(filenamep, argvp, filename, candidate);
 +			if (checkscript) {
 +				pseudo_magic();
@@ -271,12 +271,11 @@ index 3939c9b..adaa75d 100644
  		/* executable or not, it's the only thing we can try */
  		pseudo_debug(PDBGF_CLIENT, "exec_path no PATH: %s => %s\n", filename, candidate);
  		pseudo_magic();
-@@ -2166,16 +2386,27 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+@@ -2338,16 +2557,27 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
  
  	for (i = 0; path_segs[i]; ++i) {
  		path = path_segs[i];
 -		pseudo_debug(PDBGF_CLIENT, "exec_path: checking %s for %s\n", path, filename);
--		if (!*path || (*path == '.' && path_lens[i] == 1)) {
 +		/* The following logic is equivalent to the initial check
 +		 * above. Here we check the path segments though because
 +		 * rather than what the user specified. This way, we can
@@ -289,12 +288,11 @@ index 3939c9b..adaa75d 100644
 +		     !patternlistmatchespath(getenv("PSEUDO_CHROOT_EXCEPTIONS"), path, NULL, 0, 0)))
 +			pforcechroot = 1;
 +		pseudo_debug(PDBGF_CLIENT, "exec_path: checking %s for %s %s %s\n", path, filename, (forcechroot) ? "(chroot)" : "", (pforcechroot) ? "(pchroot)" : "");
-+        if (!*path || (*path == '.' && path_lens[i] == 1)) {
+ 		if (!*path || (*path == '.' && path_lens[i] == 1)) {
  			/* empty path or . is cwd */
 -			if (forcechroot)
--				candidate = pseudo_root_path(__func__, __LINE__, AT_FDCWD, filename, 0);
 +			if (forcechroot || pforcechroot)
-+                candidate = pseudo_root_path(__func__, __LINE__, AT_FDCWD, filename, 0);
+ 				candidate = pseudo_root_path(__func__, __LINE__, AT_FDCWD, filename, 0);
  			else
  				candidate = pseudo_fix_path(pseudo_cwd, filename, 0, pseudo_cwd_len, NULL, 0);
  			pseudo_debug(PDBGF_CLIENT, "exec_path: in cwd, got %s\n", candidate);
@@ -304,13 +302,13 @@ index 3939c9b..adaa75d 100644
  				char *dir = pseudo_root_path(__func__, __LINE__, AT_FDCWD, path, 0);
  				if (dir)
  					candidate = pseudo_fix_path(dir, filename, 0, strlen(dir), NULL, 0);
-@@ -2206,6 +2437,23 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+@@ -2378,6 +2608,23 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
  				candidate = NULL;
  			}
  		}
-+        if (pseudo_chroot_len) {
++		if (pseudo_chroot_len) {
 +			char *fullpath = malloc(strlen(path) + 1 + strlen(filename) + 1);
-+			
++
 +			if(!fullpath) {
 +				pseudo_diag("couldn't allocate intermediate full path.\n");
 +				return -1;
@@ -328,11 +326,11 @@ index 3939c9b..adaa75d 100644
  		if (candidate && isexecutable(candidate, NULL, 0)) {
  			pseudo_debug(PDBGF_CLIENT, "exec_path: %s => %s\n", filename, candidate);
  			pseudo_magic();
-@@ -2216,6 +2464,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
+@@ -2388,6 +2635,13 @@ pseudo_exec_path(const char **filenamep, int search_path, char * const**argvp) {
  	candidate = filename;
  	if (candidate && forcechroot)
  		candidate = pseudo_root_path(__func__, __LINE__, AT_FDCWD, candidate, 0);
-+    if (pseudo_chroot_len) {
++		if (pseudo_chroot_len) {
 +		checkscript = exec_chroot_scriptcheck(filenamep, argvp, filename, candidate);
 +		if (checkscript) {
 +			pseudo_magic();
@@ -343,10 +341,10 @@ index 3939c9b..adaa75d 100644
  	pseudo_magic();
  	return candidate;
 diff --git a/pseudo_util.c b/pseudo_util.c
-index 74d1d33..5efa64d 100644
+index 3ebf15f..0ce9095 100644
 --- a/pseudo_util.c
 +++ b/pseudo_util.c
-@@ -59,6 +59,7 @@ static struct pseudo_variables pseudo_env[] = {
+@@ -49,6 +49,7 @@ static struct pseudo_variables pseudo_env[] = {
  	{ "PSEUDO_CHROOT_EXCEPTIONS", 24, NULL },
  	{ "PSEUDO_CHROOT_FORCED", 20, NULL },
  	{ "PSEUDO_CHROOT_XTRANSLATION", 26, NULL },
@@ -355,5 +353,5 @@ index 74d1d33..5efa64d 100644
  	{ "PSEUDO_GIDS", 11, NULL },
  	{ "PSEUDO_OPTS", 11, NULL },
 -- 
-1.9.1
+2.34.1
 

@@ -1,0 +1,67 @@
+From fb1d414c1530d6ec819295765f57f641a3783dbd Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Mon, 21 Nov 2022 15:39:47 +0100
+Subject: [PATCH 1/2] pseudo: Added dup3() support
+
+More recent code actually uses it to implement, e.g., redirects.
+Without dup3(), the database gets messed up and we get weird aborts
+then because suddenly paths no longer match expectations.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ ports/unix/guts/dup3.c  | 30 ++++++++++++++++++++++++++++++
+ ports/unix/wrapfuncs.in |  1 +
+ 2 files changed, 31 insertions(+)
+ create mode 100644 ports/unix/guts/dup3.c
+
+diff --git a/ports/unix/guts/dup3.c b/ports/unix/guts/dup3.c
+new file mode 100644
+index 0000000..9877355
+--- /dev/null
++++ b/ports/unix/guts/dup3.c
+@@ -0,0 +1,30 @@
++/* 
++ * Copyright (c) 2022 NXP; see
++ * guts/COPYRIGHT for information.
++ *
++ * SPDX-License-Identifier: LGPL-2.1-only
++ *
++ * static int
++ * wrap_dup3(int oldfd, int newfd, int flags) {
++ *	int rc = -1;
++ */
++	int save_errno;
++
++	/* Shortcut avoids messing up our database */
++	if (oldfd == newfd) {
++		errno = EINVAL;
++		return -1;
++	}
++
++	/* close existing one first - this also causes the socket to the
++	 * server to get moved around if someone tries to overwrite it. */
++	pseudo_debug(PDBGF_CLIENT | PDBGF_VERBOSE, "dup3: %d->%d (%d)\n", oldfd, newfd, flags);
++	pseudo_client_op(OP_CLOSE, 0, newfd, -1, 0, 0);
++	rc = real_dup3(oldfd, newfd, flags);
++	save_errno = errno;
++	pseudo_client_op(OP_DUP, 0, oldfd, newfd, 0, 0);
++	errno = save_errno;
++
++/*	return rc;
++ * }
++ */
+diff --git a/ports/unix/wrapfuncs.in b/ports/unix/wrapfuncs.in
+index 4d7a887..46d5e38 100644
+--- a/ports/unix/wrapfuncs.in
++++ b/ports/unix/wrapfuncs.in
+@@ -6,6 +6,7 @@ int fchmod(int fd, mode_t mode);
+ int fchown(int fd, uid_t owner, gid_t group);
+ int lchown(const char *path, uid_t owner, gid_t group); /* flags=AT_SYMLINK_NOFOLLOW */
+ int dup2(int oldfd, int newfd); /* noignore_path=1 */
++int dup3(int oldfd, int newfd, int flags); /* noignore_path=1 */
+ int dup(int fd); /* noignore_path=1 */
+ int chdir(const char *path); /* noignore_path=1 */
+ int fchdir(int dirfd); /* noignore_path=1 */
+-- 
+2.34.1
+

@@ -1,19 +1,21 @@
-From cd0f63efbef2f79c032abbee0dc8db84e46cb1d8 Mon Sep 17 00:00:00 2001
-From: r39252 <Heinz.Wrobel@freescale.com>
-Date: Thu, 19 Oct 2017 07:02:06 +0200
-Subject: [PATCH 01/15] pseudo: Enabled utimensat/ftimens
+From 4a2164cb2182b6e7fd551374a6aea85a35469070 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 8 Nov 2022 10:55:16 +0100
+Subject: [PATCH 01/20] pseudo: Enabled utimensat/ftimens
 
 This required a makewrappers change to permit array arguments to wrappers
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
 ---
  makewrappers            | 18 ++++++++++--------
  ports/unix/wrapfuncs.in |  2 ++
  2 files changed, 12 insertions(+), 8 deletions(-)
 
 diff --git a/makewrappers b/makewrappers
-index e9191ed..d149b17 100755
+index cf5ad60..a1d0aef 100755
 --- a/makewrappers
 +++ b/makewrappers
-@@ -131,27 +131,28 @@ class Argument:
+@@ -121,27 +121,28 @@ class Argument:
              else:
                  # nothing to do.
                  self.vararg_wraps = None
@@ -40,14 +42,14 @@ index e9191ed..d149b17 100755
              # where an arg is '...'
              if match:
 -                self.type, self.name = match.group(1).rstrip(), match.group(2)
-+                self.type, self.name, self.array = match.group(1).rstrip(), match.group(2), match.group(3) 
++                self.type, self.name, self.array = match.group(1).rstrip(), match.group(2), match.group(3)
              else:
 -                self.type, self.name = None, None
 +                self.type, self.name, self.array = None, None, None
  
          # spacing between type and name, needed if type ends with a character
          # which could be part of an identifier
-@@ -159,12 +160,13 @@ class Argument:
+@@ -149,12 +150,13 @@ class Argument:
              self.spacer = ' '
  
      def decl(self, comment=False, wrap=False):
@@ -65,18 +67,18 @@ index e9191ed..d149b17 100755
          if self.vararg:
              if self.vararg_wraps:
 diff --git a/ports/unix/wrapfuncs.in b/ports/unix/wrapfuncs.in
-index 5f30ae6..78fa855 100644
+index 7724fc7..4d7a887 100644
 --- a/ports/unix/wrapfuncs.in
 +++ b/ports/unix/wrapfuncs.in
-@@ -27,6 +27,8 @@ char *tmpnam(char *s);
+@@ -29,6 +29,8 @@ char *tmpnam(char *s);
  int truncate(const char *path, off_t length);
  int utime(const char *path, const struct utimbuf *buf);
  int utimes(const char *path, const struct timeval *times);
 +int utimensat(int dirfd, const char *path, const struct timespec times[2], int flags);
 +int futimens(int fd, const struct timespec times[2]);
  # needed because libc stdio does horrible things with inline asm syscalls
- FILE *fopen(const char *path, const char *mode);
- int fclose(FILE *fp);
+ FILE *fopen(const char *path, const char *mode); /* noignore_path=1 */
+ int fclose(FILE *fp);  /* noignore_path=1 */
 -- 
-1.8.3.1
+2.34.1
 

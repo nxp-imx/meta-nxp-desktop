@@ -1,0 +1,58 @@
+From 5869536385600be6127e190213bfa4ce8c74aede Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Thu, 10 Nov 2022 13:06:43 +0100
+Subject: [PATCH] pseudo: Critical chroot readlink fix
+
+The prior patches missed something. In a chroot environment, the
+special readlink wrappers return absolute host paths.
+So when resolving a path, this needs to be taken account or the
+chroot path appears twice suddenly in the resulting path, leading
+to failure.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ pseudo_util.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/pseudo_util.c b/pseudo_util.c
+index 4dc1215..d6255f3 100644
+--- a/pseudo_util.c
++++ b/pseudo_util.c
+@@ -691,8 +691,9 @@ pseudo_append_element(char *newpath, char *root, size_t allocated, char **pcurre
+ 			char linkbuf[pseudo_path_max() + 1];
+ 			ssize_t linklen;
+ 			int retval;
++			readlinkptr_t realreadlinkp = (readlinkp) ? readlinkp : readlink;
+ 
+-			linklen = (*readlinkp)(newpath, linkbuf, pseudo_path_max());
++			linklen = (*realreadlinkp)(newpath, linkbuf, pseudo_path_max());
+ 			if (linklen == -1) {
+ 				pseudo_debug(PDBGF_PATH, "uh-oh!  '%s' seems to be a symlink, but I can't read it.  Ignoring.\n", newpath);
+ 				*pcurrent = current;
+@@ -702,7 +703,13 @@ pseudo_append_element(char *newpath, char *root, size_t allocated, char **pcurre
+ 			linkbuf[linklen] = '\0';
+ 			/* absolute symlink means go back to root */
+ 			if (*linkbuf == '/') {
+-				current = root;
++				// We don't really go back to root.
++				// If we work with chroot enabled
++				// readlink functions, then we replace
++				// the full path because we know that
++				// the enabled functions return the full
++				// host path.
++				current = (readlinkp) ? newpath : root;
+ 			} else {
+ 				/* point back at the end of the previous path... */
+ 				current -= (elen + 1);
+@@ -809,8 +816,6 @@ pseudo_fix_path(const char *base, const char *path, size_t rootlen, size_t basel
+ 	char *effective_root;
+ 	int trailing_slash = 0;
+ 	
+-	if (!readlinkp)
+-		readlinkp = readlink;
+ 	if (!path) {
+ 		pseudo_diag("can't fix empty path.\n");
+ 		return 0;
+-- 
+2.34.1
+

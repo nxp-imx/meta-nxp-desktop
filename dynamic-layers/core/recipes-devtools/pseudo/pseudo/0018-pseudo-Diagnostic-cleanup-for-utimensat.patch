@@ -1,0 +1,31 @@
+From 02ae5a9d6591ed46c8c8bbb339f8dbcd31a1527d Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 8 Nov 2022 13:56:45 +0100
+Subject: [PATCH 18/20] pseudo: Diagnostic cleanup for utimensat()
+
+The pseudo diagnostics didn't print dirfd. This patch attempts to
+generate a bit more useful output
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ pseudo_client.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/pseudo_client.c b/pseudo_client.c
+index 31b4d76..171aa31 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -849,8 +849,9 @@ pseudo_root_path(const char *func, int line, int dirfd, const char *path, int le
+ 		pseudo_diag("couldn't allocate absolute path for '%s'.\n",
+ 			path ? path : "null");
+ 	}
+-	pseudo_debug(PDBGF_CHROOT, "root_path [%s, %d]: '%s' from '%s'\n",
++	pseudo_debug(PDBGF_CHROOT, "root_path [%s, %d]: dirfd %d, '%s' from '%s'\n",
+ 		func, line,
++		dirfd,
+ 		rc ? rc : "<nil>",
+ 		path ? path : "<nil>");
+ 	return rc;
+-- 
+2.34.1
+

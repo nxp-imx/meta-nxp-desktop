@@ -1,0 +1,29 @@
+From 5f7ca5f8818b4f77d0187f0b1c8fa4659bf1590e Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 8 Nov 2022 14:00:01 +0100
+Subject: [PATCH 19/20] pseudo: realpath wrapper did not do chroot translation
+ properly
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ ports/unix/guts/realpath.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/ports/unix/guts/realpath.c b/ports/unix/guts/realpath.c
+index 8d8118b..df5bbf6 100644
+--- a/ports/unix/guts/realpath.c
++++ b/ports/unix/guts/realpath.c
+@@ -21,7 +21,9 @@
+ 			*(ep--) = '\0';
+ 		}
+ 
+-		if (len >= pseudo_sys_path_max()) {
++	len = pseudo_dechroot(rname, len);
++
++	if (len >= pseudo_sys_path_max()) {
+ 		errno = ENAMETOOLONG;
+ 		return NULL;
+ 	}
+-- 
+2.34.1
+

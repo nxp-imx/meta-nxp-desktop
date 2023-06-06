@@ -1,0 +1,205 @@
+From 96478c8487014fdcd2196edc78692a1a32077b79 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 22 Nov 2022 07:28:44 +0100
+Subject: [PATCH 2/2] pseudo: Fix fxstatat*() calls for non fs file handles
+
+This is a really ugly one because it shows a deficiency in how
+pseudo currently handles paths. When you fstatat, e.g., stdout,
+there may not be a real path going with it. This means that
+pseudo_root_path() via base_path() converts the original path "" to
+0. There are two problems with that. The real functions still want to
+see the "" instead of the 0 or they return EFAULT which confuses
+callers when they just expect to check on stdout redirection.
+The second problem is that there is no differentiation between an
+error returned by base_path and a 0 path. We also can't just go from
+0 to "" in that case because that messes up our path databases as the
+code is not currently designed to deal with that. To really properly
+differentiate between pseudo path vs real path vs 0 vs error needs
+much more thought and smart ideas than I currently have.
+
+So for now we fix it with a hack. First, we second guess base_path to
+determine if the 0 really is an error or not to not print spurious
+diagnostics when a 0 return may well be legitimate.
+Second, we mutilate the two fstatat*() variants to convert back from
+0 to "" so that the function works. Technically this changes the
+semantics of the wrappers but it isn't all bad as pseudo would have
+checked 0 paths earlier even.
+
+All in all, I am not really happy with this patch, but it will do the
+job and while ugly at least it isn't overly obscure or clever.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ ports/linux/guts/__fxstatat.c   | 26 ++++++++++++++++++---
+ ports/linux/guts/__fxstatat64.c | 25 +++++++++++++++++----
+ pseudo_client.c                 | 40 ++++++++++++++++++++++-----------
+ 3 files changed, 71 insertions(+), 20 deletions(-)
+
+diff --git a/ports/linux/guts/__fxstatat.c b/ports/linux/guts/__fxstatat.c
+index 23dfa73..21c76e3 100644
+--- a/ports/linux/guts/__fxstatat.c
++++ b/ports/linux/guts/__fxstatat.c
+@@ -10,19 +10,39 @@
+  */
+ 
+ 	struct stat64 buf64;
++	char *realpath;
++
+ 	/* populate buffer with complete data */
+ #ifdef PSEUDO_NO_REAL_AT_FUNCTIONS
+ 	if (dirfd != AT_FDCWD) {
+ 		errno = ENOSYS;
+ 		return -1;
+ 	}
++#endif
++
++	/* This hack is needed when someone calls the *at() functions
++	 * for a file handle that is not *normally* linked to a path,
++	 * e.g., stdout when redirected. The problem occurs because
++	 * base_path then doesn't know about a path and turns this to
++	 * 0 from "", but the real function still wants to see the ""
++	 * or it returns an error that messes with the caller. So we
++	 * pretend "" for 0, just in case. This is ugly and
++	 * the handling of pseudo_root_path and base_path should be
++	 * updated, but that is a much more complex topic. FIX
++	 */
++	realpath = path;
++	if (!realpath && dirfd != -1 && dirfd != AT_FDCWD) {
++		realpath = "";
++	}
++
++#ifdef PSEUDO_NO_REAL_AT_FUNCTIONS
+ 	if (flags & AT_SYMLINK_NOFOLLOW) {
+-		rc = real___lxstat(ver, path, buf);
++		rc = real___lxstat(ver, realpath, buf);
+ 	} else {
+-		rc = real___xstat(ver, path, buf);
++		rc = real___xstat(ver, realpath, buf);
+ 	}
+ #else
+-	real___fxstatat(ver, dirfd, path, buf, flags);
++	real___fxstatat(ver, dirfd, realpath, buf, flags);
+ #endif
+ 	/* obtain fake data */
+ 	rc = wrap___fxstatat64(ver, dirfd, path, &buf64, flags);
+diff --git a/ports/linux/guts/__fxstatat64.c b/ports/linux/guts/__fxstatat64.c
+index ecf2952..c125733 100644
+--- a/ports/linux/guts/__fxstatat64.c
++++ b/ports/linux/guts/__fxstatat64.c
+@@ -10,6 +10,7 @@
+  */
+ 	pseudo_msg_t *msg;
+ 	int save_errno;
++	char *realpath;
+ 
+ #ifdef PSEUDO_NO_REAL_AT_FUNCTIONS
+ 	if (dirfd != AT_FDCWD) {
+@@ -17,20 +18,36 @@
+ 		return -1;
+ 	}
+ #endif
++
++	/* This hack is needed when someone calls the *at() functions
++	 * for a file handle that is not *normally* linked to a path,
++	 * e.g., stdout when redirected. The problem occurs because
++	 * base_path then doesn't know about a path and turns this to
++	 * 0 from "", but the real function still wants to see the ""
++	 * or it returns an error that messes with the caller. So we
++	 * pretend "" for 0, just in case. This is ugly and
++	 * the handling of pseudo_root_path and base_path should be
++	 * updated, but that is a much more complex topic. FIX
++	 */
++	realpath = path;
++	if (!realpath && dirfd != -1 && dirfd != AT_FDCWD) {
++		realpath = "";
++	}
++
+ 	if (flags & AT_SYMLINK_NOFOLLOW) {
+ #ifdef PSEUDO_NO_REAL_AT_FUNCTIONS
+-		rc = real___lxstat64(ver, path, buf);
++		rc = real___lxstat64(ver, realpath, buf);
+ #else
+-		rc = real___fxstatat64(ver, dirfd, path, buf, flags);
++		rc = real___fxstatat64(ver, dirfd, realpath, buf, flags);
+ #endif
+ 		if (rc == -1) {
+ 			return rc;
+ 		}
+ 	} else {
+ #ifdef PSEUDO_NO_REAL_AT_FUNCTIONS
+-		rc = real___xstat64(ver, path, buf);
++		rc = real___xstat64(ver, realpath, buf);
+ #else
+-		rc = real___fxstatat64(ver, dirfd, path, buf, flags);
++		rc = real___fxstatat64(ver, dirfd, realpath, buf, flags);
+ #endif
+ 		if (rc == -1) {
+ 			return rc;
+diff --git a/pseudo_client.c b/pseudo_client.c
+index ee5c0c3..55fbce3 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -839,15 +839,40 @@ pseudo_client_chroot(const char *path) {
+ 	return 0;
+ }
+ 
++static char *
++fd_path(int fd) {
++	if (fd >= 0 && fd < nfds) {
++		return fd_paths[fd];
++	}
++	if (fd == AT_FDCWD) {
++		return pseudo_cwd;
++	}
++	return 0;
++}
++
+ char *
+ pseudo_root_path(const char *func, int line, int dirfd, const char *path, int leave_last) {
+ 	char *rc;
++
++	if (!path)
++		return 0;
++
+ 	pseudo_antimagic();
+ 	rc = base_path(dirfd, path, leave_last);
+ 	pseudo_magic();
+ 	if (!rc) {
+-		pseudo_diag("couldn't allocate absolute path for '%s'.\n",
+-			path ? path : "null");
++		/* Only print the diagnostics if we can reasonably
++		 * assume that base_path has really failed. This
++		 * needs work as we are second guessing. FIX!
++		 * The real problem is that, e.g., stdout can be probed
++		 * leading to rc==0. This later messes up __fxstatat64.c
++		 * returning an error when the path should have remained
++		 * non-0.
++		 */
++		if (path && *path && fd_path(dirfd)) {
++			pseudo_diag("couldn't allocate absolute path for '%s'.\n",
++				path ? path : "<nil>");
++		}
+ 	}
+ 	pseudo_debug(PDBGF_CHROOT, "root_path [%s, %d]: dirfd %d, '%s' from '%s'\n",
+ 		func, line,
+@@ -892,17 +917,6 @@ pseudo_client_getcwd(void) {
+ 	}
+ }
+ 
+-static char *
+-fd_path(int fd) {
+-	if (fd >= 0 && fd < nfds) {
+-		return fd_paths[fd];
+-	}
+-	if (fd == AT_FDCWD) {
+-		return pseudo_cwd;
+-	}
+-	return 0;
+-}
+-
+ static void
+ pseudo_client_path_set(int fd, const char *path, char ***patharray, int *len) {
+ 	if (fd < 0)
+-- 
+2.34.1
+

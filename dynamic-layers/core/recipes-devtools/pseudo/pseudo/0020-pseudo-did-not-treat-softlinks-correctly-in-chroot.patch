@@ -1,0 +1,119 @@
+From f907071c6526cd80f21839d0f0704b08335eeab9 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 8 Nov 2022 14:03:34 +0100
+Subject: [PATCH 20/20] pseudo did not treat softlinks correctly in chroot
+
+When decoding a softlink inside a chroot environment, the
+chroot exceptions were not taken into account. When, e.g.,
+/dev/null is an exception to chroot handling to get the host
+side null device, then a softlink pointing to such a target
+also needs to respect the configured exception.
+Turns out that we need to decode softlinks for an exec path
+differently than for a file path because exception handling
+is slightly different.
+This patch fixes running systemctl in image.bbclass for a
+complex rootfs and likely some other things.
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ pseudo_client.c | 75 +++++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 66 insertions(+), 9 deletions(-)
+
+diff --git a/pseudo_client.c b/pseudo_client.c
+index 171aa31..ee5c0c3 100644
+--- a/pseudo_client.c
++++ b/pseudo_client.c
+@@ -1571,16 +1571,73 @@ readlink_chroot(const char *path, char *buf, size_t bufsiz) {
+ 	pseudo_debug(PDBGF_CHROOT, "readlink_chroot(%s,...)\n", path);
+ 	linklen = readlink(path, buf, bufsiz);
+ 	/* symlinks within a chroot environment should be treated as such
+-	 * and need to be converted back into a full path if absolute! */
++	 * and need to be converted back into a full path if absolute unless
++	 * they are one of the exceptions to the rule! */
+ 	if (ischrootpath(path) && (linklen > 0) && (*buf == '/')) {
+-		if (pseudo_chroot_len + linklen < bufsiz) {
+-			memmove(buf + pseudo_chroot_len, buf, linklen);
+-			memcpy(buf, pseudo_chroot, pseudo_chroot_len);
+-			linklen += pseudo_chroot_len;
++		int addchroot = 1;
++		if (linklen < bufsiz) {
++			char c = buf[linklen];
++			buf[linklen] = 0;
++			/* This correlates to pseudo_exec_path() */
++			if (!patternlistmatchespath(getenv("PSEUDO_CHROOT_FORCED"), path, NULL, 0, 0) &&
++			    patternlistmatchespath(getenv("PSEUDO_CHROOT_EXCEPTIONS"), buf, NULL, 0, 0)) {
++				addchroot = 0;
++			}
++			buf[linklen] = c;
++		}
++		if (addchroot) {
++			if (pseudo_chroot_len + linklen < bufsiz) {
++				memmove(buf + pseudo_chroot_len, buf, linklen);
++				memcpy(buf, pseudo_chroot, pseudo_chroot_len);
++				linklen += pseudo_chroot_len;
++			}
++			else {
++				errno = ENAMETOOLONG;
++				linklen = -1;
++			}
++		}
++	}
++
++	return(linklen);
++}
++
++static ssize_t
++readlink_chroot_file(const char *path, char *buf, size_t bufsiz) {
++	ssize_t linklen;
++
++	pseudo_debug(PDBGF_CHROOT, "readlink_chroot_file(%s,...)\n", path);
++	linklen = readlink(path, buf, bufsiz);
++	/* symlinks within a chroot environment should be treated as such
++	 * and need to be converted back into a full path if absolute unless
++	 * they are one of the exceptions to the rule! */
++	if (ischrootpath(path) && (linklen > 0) && (*buf == '/')) {
++		int addchroot = 1;
++		if (linklen < bufsiz) {
++			char c = buf[linklen];
++			buf[linklen] = 0;
++			/* This correlates to pseudo_exec_path() but is not
++			 * identical in nature. For file access, default in
++			 * pseudo is to access chroot. So we access chroot by
++			 * default unless we have a specific exception.
++			 * Forcing something into chroot is meaningless here because
++			 * of the default to be in chroot anyway for files.
++			 */
++			if (/*!patternlistmatchespath(getenv("PSEUDO_CHROOT_FORCED"), path, NULL, 0, 0) &&*/
++			    patternlistmatchespath(getenv("PSEUDO_CHROOT_EXCEPTIONS"), buf, NULL, 0, 0)) {
++				addchroot = 0;
++			}
++			buf[linklen] = c;
+ 		}
+-		else {
+-			errno = ENAMETOOLONG;
+-			linklen = -1;
++		if (addchroot) {
++			if (pseudo_chroot_len + linklen < bufsiz) {
++				memmove(buf + pseudo_chroot_len, buf, linklen);
++				memcpy(buf, pseudo_chroot, pseudo_chroot_len);
++				linklen += pseudo_chroot_len;
++			}
++			else {
++				errno = ENAMETOOLONG;
++				linklen = -1;
++			}
+ 		}
+ 	}
+ 
+@@ -1643,7 +1700,7 @@ base_path(int dirfd, const char *path, int leave_last) {
+ 		}
+ 	}
+ 
+-	newpath = pseudo_fix_path(basepath, path, minlen, baselen, NULL, leave_last, readlink_chroot);
++	newpath = pseudo_fix_path(basepath, path, minlen, baselen, NULL, leave_last, readlink_chroot_file);
+ 	pseudo_debug(PDBGF_PATH, "base_path[%s]: %s</>%s => %s\n",
+ 		leave_last ? "nofollow" : "follow",
+ 		basepath ? basepath : "<nil>",
+-- 
+2.34.1
+

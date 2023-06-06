@@ -1,0 +1,29 @@
+From 79e3d1fc38d2acfba947aa0c6db734ee346df4f8 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Tue, 8 Nov 2022 11:31:55 +0100
+Subject: [PATCH 03/20] pseudo: proper compile of [f]stat[v]fs() wrappers.
+
+Ensure by adding the right headers that the [f]stat[v]fs() wrappers
+compile properly
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ pseudo_wrappers.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/pseudo_wrappers.c b/pseudo_wrappers.c
+index ab919cf..5986961 100644
+--- a/pseudo_wrappers.c
++++ b/pseudo_wrappers.c
+@@ -22,6 +22,8 @@
+ #include <unistd.h>
+ #include <fcntl.h>
+ #include <sys/stat.h>
++#include <sys/statfs.h>
++#include <sys/statvfs.h>
+ #include <sys/time.h>
+ #include <sys/wait.h>
+ #include <dlfcn.h>
+-- 
+2.34.1
+
