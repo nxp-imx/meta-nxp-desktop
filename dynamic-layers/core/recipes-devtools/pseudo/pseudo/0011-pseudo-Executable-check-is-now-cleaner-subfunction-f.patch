@@ -1,18 +1,18 @@
-From cb1cc109b91f616303a0ecda559ac3def2faf2ce Mon Sep 17 00:00:00 2001
+From ef08bb56d1bc275d437472693baf2e7c3179c403 Mon Sep 17 00:00:00 2001
 From: r39252 <Heinz.Wrobel@freescale.com>
 Date: Thu, 19 Oct 2017 07:23:49 +0200
-Subject: [PATCH] pseudo: Executable check is now cleaner subfunction for later
- use
+Subject: [PATCH 11/15] pseudo: Executable check is now cleaner subfunction for
+ later use
 
 ---
  pseudo_client.c | 36 +++++++++++++++++++++++++++++++++++-
  1 file changed, 35 insertions(+), 1 deletion(-)
 
 diff --git a/pseudo_client.c b/pseudo_client.c
-index 37f8e18..40e3152 100644
+index dcd1c3f..1036e57 100644
 --- a/pseudo_client.c
 +++ b/pseudo_client.c
-@@ -2229,6 +2229,40 @@ populate_path_segs(void) {
+@@ -1967,6 +1967,40 @@ populate_path_segs(void) {
  	path_lens[c] = 0;
  }
  
@@ -53,7 +53,7 @@ index 37f8e18..40e3152 100644
  const char *
  pseudo_exec_path(const char *filename, int search_path) {
      char *s;
-@@ -2302,7 +2336,7 @@ pseudo_exec_path(const char *filename, int search_path) {
+@@ -2040,7 +2074,7 @@ pseudo_exec_path(const char *filename, int search_path) {
  				candidate = NULL;
  			}
  		}
@@ -62,3 +62,6 @@ index 37f8e18..40e3152 100644
  			pseudo_debug(PDBGF_CLIENT, "exec_path: %s => %s\n", filename, candidate);
  			pseudo_magic();
  			return candidate;
+-- 
+1.8.3.1
+

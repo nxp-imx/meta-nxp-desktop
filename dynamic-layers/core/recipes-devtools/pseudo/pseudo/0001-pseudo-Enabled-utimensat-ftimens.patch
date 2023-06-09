@@ -1,20 +1,19 @@
-From 2b26aea07729733af6e034f1461bed0150b5c25f Mon Sep 17 00:00:00 2001
+From cd0f63efbef2f79c032abbee0dc8db84e46cb1d8 Mon Sep 17 00:00:00 2001
 From: r39252 <Heinz.Wrobel@freescale.com>
 Date: Thu, 19 Oct 2017 07:02:06 +0200
-Subject: [PATCH] pseudo: Enabled utimensat/ftimens
+Subject: [PATCH 01/15] pseudo: Enabled utimensat/ftimens
 
 This required a makewrappers change to permit array arguments to wrappers
-
 ---
  makewrappers            | 18 ++++++++++--------
  ports/unix/wrapfuncs.in |  2 ++
  2 files changed, 12 insertions(+), 8 deletions(-)
 
 diff --git a/makewrappers b/makewrappers
-index cf5ad60..88046a8 100755
+index e9191ed..d149b17 100755
 --- a/makewrappers
 +++ b/makewrappers
-@@ -121,27 +121,28 @@ class Argument:
+@@ -131,27 +131,28 @@ class Argument:
              else:
                  # nothing to do.
                  self.vararg_wraps = None
@@ -48,7 +47,7 @@ index cf5ad60..88046a8 100755
  
          # spacing between type and name, needed if type ends with a character
          # which could be part of an identifier
-@@ -149,12 +150,13 @@ class Argument:
+@@ -159,12 +160,13 @@ class Argument:
              self.spacer = ' '
  
      def decl(self, comment=False, wrap=False):
@@ -66,15 +65,18 @@ index cf5ad60..88046a8 100755
          if self.vararg:
              if self.vararg_wraps:
 diff --git a/ports/unix/wrapfuncs.in b/ports/unix/wrapfuncs.in
-index 7724fc7..4d7a887 100644
+index 5f30ae6..78fa855 100644
 --- a/ports/unix/wrapfuncs.in
 +++ b/ports/unix/wrapfuncs.in
-@@ -29,6 +29,8 @@ char *tmpnam(char *s);
+@@ -27,6 +27,8 @@ char *tmpnam(char *s);
  int truncate(const char *path, off_t length);
  int utime(const char *path, const struct utimbuf *buf);
  int utimes(const char *path, const struct timeval *times);
 +int utimensat(int dirfd, const char *path, const struct timespec times[2], int flags);
 +int futimens(int fd, const struct timespec times[2]);
  # needed because libc stdio does horrible things with inline asm syscalls
- FILE *fopen(const char *path, const char *mode); /* noignore_path=1 */
- int fclose(FILE *fp);  /* noignore_path=1 */
+ FILE *fopen(const char *path, const char *mode);
+ int fclose(FILE *fp);
+-- 
+1.8.3.1
+

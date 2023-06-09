@@ -1,23 +1,21 @@
-From e639172e06a3f935b48628259afbfbe8a7abe0cf Mon Sep 17 00:00:00 2001
+From 50b7eb01c3b8a8ff3f2d1b05006e2bc4a06c173a Mon Sep 17 00:00:00 2001
 From: r39252 <Heinz.Wrobel@freescale.com>
 Date: Thu, 19 Oct 2017 07:15:47 +0200
-Subject: [PATCH] pseudo: Added filename translation to exec path
-
+Subject: [PATCH 07/15] pseudo: Added filename translation to exec path
  handling
 
 This is required to map between host and chroot exe paths in somewhat
 arbitrary ways.
-
 ---
  pseudo_client.c | 12 ++++++++++++
  pseudo_util.c   |  1 +
  2 files changed, 13 insertions(+)
 
 diff --git a/pseudo_client.c b/pseudo_client.c
-index 355b4ef..f75ce1c 100644
+index 86ee5d2..dcdbdb6 100644
 --- a/pseudo_client.c
 +++ b/pseudo_client.c
-@@ -2235,6 +2235,8 @@ pseudo_exec_path(const char *filename, int search_path) {
+@@ -1973,6 +1973,8 @@ pseudo_exec_path(const char *filename, int search_path) {
  	char *candidate;
  	int i;
  	struct stat buf;
@@ -26,7 +24,7 @@ index 355b4ef..f75ce1c 100644
  
  	if (!filename)
  		return NULL;
-@@ -2251,6 +2253,16 @@ pseudo_exec_path(const char *filename, int search_path) {
+@@ -1989,6 +1991,16 @@ pseudo_exec_path(const char *filename, int search_path) {
  		populate_path_segs();
  	}
  
@@ -44,14 +42,17 @@ index 355b4ef..f75ce1c 100644
  	if (*filename == '/') {
  		candidate = pseudo_fix_path(NULL, filename, 0, 0, NULL, 0);
 diff --git a/pseudo_util.c b/pseudo_util.c
-index b58036f..766f5b6 100644
+index c81df5a..51ff456 100644
 --- a/pseudo_util.c
 +++ b/pseudo_util.c
-@@ -46,6 +46,7 @@ static struct pseudo_variables pseudo_env[] = {
- 	{ "PSEUDO_IGNORE_PATHS", 19, NULL },
+@@ -55,6 +55,7 @@ static struct pseudo_variables pseudo_env[] = {
+ 	{ "PSEUDO_LOCALSTATEDIR", 20, NULL },
  	{ "PSEUDO_PASSWD", 13, NULL },
  	{ "PSEUDO_CHROOT", 13, NULL },
 +	{ "PSEUDO_CHROOT_XTRANSLATION", 26, NULL },
  	{ "PSEUDO_UIDS", 11, NULL },
  	{ "PSEUDO_GIDS", 11, NULL },
  	{ "PSEUDO_OPTS", 11, NULL },
+-- 
+1.8.3.1
+
