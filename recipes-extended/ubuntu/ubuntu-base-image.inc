@@ -155,6 +155,7 @@ YOCTO-DEPENDS-LIST = " glib-2.0 libglib-2.0-0 libglib-2.0-utils python3-core pyt
                       libgtk-4.0  util-linux-lsblk util-linux-blkid \
                       update-rc.d \
                       init-system-helpers-service \
+                      at-spi2-core \
 "
 
 RCONFLICTS:${PN} += " ${YOCTO-DEPENDS-LIST} "
