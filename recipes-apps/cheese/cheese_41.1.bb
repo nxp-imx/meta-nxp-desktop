@@ -27,6 +27,7 @@ SRC_URI = "${GNOME_MIRROR}/${BPN}/${@gnome_verdir("${PV}")}/${BPN}-${PV}.tar.${G
            file://0001-Revert-Enable-cameras-with-only-MJPEG-output.patch \ 
            file://0002-Revert-Preserve-video-x-raw-over-image-jpeg.patch \ 
            file://0003-Revert-Support-camera-video-formats-with-MJPEG-outpu.patch \
+           file://0001-thumb-view-update-for-new-gnome-desktop-API.patch \
 "
 
 SRC_URI:append:imxdpu = " \
