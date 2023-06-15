@@ -2,13 +2,13 @@
 
 DESCRIPTION = "i.MX Verisilicon Software ISP"
 LICENSE = "Proprietary"
-LIC_FILES_CHKSUM = "file://COPYING;md5=ea25d099982d035af85d193c88a1b479"
+LIC_FILES_CHKSUM = "file://COPYING;md5=63a38e9f392d8813d6f1f4d0d6fbe657"
 
 DEPENDS = "boost libdrm virtual/libg2d libtinyxml2"
 
 SRC_URI = "${FSL_BIN_MIRROR}/${BP}.bin;fsl-eula=true"
-SRC_URI[md5sum] = "969d98cc377523407cc558c4943f748b"
-SRC_URI[sha256sum] = "82a13223cce726314cad8d37aae49a0a1355cccc89c063fa032c232189b41fd6"
+SRC_URI[md5sum] = "3e965f29d6c5331e2df2f42c9680e038"
+SRC_URI[sha256sum] = "2747b00ab7a718743e0647a8ba1ec657137fa767dce553e2194711f7c229973a"
 
 inherit fsl-eula-unpack cmake systemd use-imx-headers
 
