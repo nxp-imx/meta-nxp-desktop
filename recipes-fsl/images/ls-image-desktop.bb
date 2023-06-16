@@ -63,7 +63,7 @@ APTGET_EXTRA_PACKAGES += "\
        ${LAYERSCAPE_NETWORK_TOOLS} \
        iperf \
        libvirt-daemon-system \
-       makedev lm-sensors \
+       lm-sensors \
        ntpdate patchelf \
        weston \
 "
