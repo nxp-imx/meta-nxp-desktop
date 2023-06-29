@@ -41,6 +41,7 @@ IMAGE_INSTALL += "\
 	tensorflow-lite-vx-delegate \
 	${ML_NNSTREAMER_PKGS} \
 	opencv \
+        udev-extraconf \
 "
 APTGET_EXTRA_PACKAGES += "\
 	ntpdate patchelf \
