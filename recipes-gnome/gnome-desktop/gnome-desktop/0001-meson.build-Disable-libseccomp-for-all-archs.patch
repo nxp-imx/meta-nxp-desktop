@@ -1,0 +1,35 @@
+From 6cfc8bcd1a5ec0eed23d36c633bc9321357de22f Mon Sep 17 00:00:00 2001
+From: Chao Guo <chao.guo@nxp.com>
+Date: Thu, 6 Jul 2023 14:47:25 +0800
+Subject: [PATCH] meson.build: Disable libseccomp for all archs
+
+It does not seem mandatory and can cause unsatisfied dependency.
+This dependency--seccomp causes thumbnail generation fail in LDP.
+
+Upstream-Status: Inappropriate [i.MX-specific]
+Signed-off-by: Chao Guo <chao.guo@nxp.com>
+---
+ meson.build | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 0ef2e424..c6d0feae 100644
+--- a/meson.build
++++ b/meson.build
+@@ -65,12 +65,7 @@ udev_dep = dependency('libudev', required: get_option('udev'))
+ host_os = host_machine.system()
+ host_cpu = host_machine.cpu()
+ supported_os = ['linux']
+-unsupported_cpus = ['alpha', 'ia64', 'm68k', 'riscv32', 'sh4', 'sparc', 'sparc64']
+-if supported_os.contains(host_os) and not unsupported_cpus.contains(host_cpu)
+-  seccomp_dep = dependency('libseccomp')
+-else
+-  seccomp_dep = dependency('', required: false)
+-endif
++seccomp_dep = dependency('', required: false)
+ 
+ fontconfig_cache_path = fontconfig_dep.get_variable(pkgconfig: 'cachedir')
+ xkb_base = xkb_config_dep.get_variable(pkgconfig: 'xkb_base')
+-- 
+2.25.1
+
