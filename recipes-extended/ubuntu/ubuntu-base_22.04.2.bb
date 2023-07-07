@@ -8,6 +8,7 @@ APTGET_EXTRA_PACKAGES += " \
     python3.10 \
     freeglut3 \
     libglu1-mesa \
+    python3.11 \
 "
 
 APTGET_EXTRA_PACKAGES_DESKTOP = " \
