@@ -155,11 +155,6 @@ do_cleanup_rootfs() {
 	# to avoid login hang when load sdma firmware
 	rm -f ${IMAGE_ROOTFS}/usr/lib/udev/rules.d/50-firmware.rules
 
-	# remove libpython3.* to fix rhythmbox startup Fail
-	if [ -e ${IMAGE_ROOTFS}/usr/lib/libpython3.* ]; then
-		rm -f ${IMAGE_ROOTFS}/usr/lib/libpython3.*
-	fi
-
 	set +x
 }
 
