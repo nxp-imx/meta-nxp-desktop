@@ -63,9 +63,9 @@ APTGET_EXTRA_SOURCE_PACKAGES += "\
 "
 
 # Add user with password user and default shell bash
-USER_SHELL_BASH = "/bin/bash"
+USER_SHELL_BASH ?= "/bin/bash"
 # Password: user
-USER_PASSWD_USER = "zHipsIr46vtZk"
+USER_PASSWD_USER ?= "zHipsIr46vtZk"
 APTGET_ADD_USERS ?= "user:${USER_PASSWD_USER}:${USER_SHELL_BASH}"
 
 HOST_NAME = "${MACHINE_ARCH}"
