@@ -214,8 +214,8 @@ do_install () {
     # Handle backend specific drivers
     cp -r ${S}/gpu-core/usr/lib/${backend}/* ${D}${libdir}
     if [ "${IS_MX8}" = "1" ]; then
-        ln -sf libvulkan_VSI.so.1.2.1 ${D}${libdir}/libvulkan.so.1
-        ln -sf libvulkan_VSI.so.1.2.1 ${D}${libdir}/libvulkan.so
+        ln -sf libvulkan_VSI.so ${D}${libdir}/libvulkan.so.1
+        ln -sf libvulkan.so.1 ${D}${libdir}/libvulkan.so
     fi
     for header in ${GLES3_HEADER_REMOVALS}; do
         rm -f ${D}${includedir}/GLES3/${header}
@@ -262,6 +262,7 @@ do_install () {
 }
 
 ALLOW_EMPTY:${PN} = "1"
+INSANE_SKIP:libvulkan-imx += "dev-deps"
 
 FILES:libclc-imx = "${libdir}/libCLC${SOLIBS} ${includedir}/CL/cl_viv_vx_ext.h"
 FILES:libclc-imx-dev = "${includedir}/CL ${libdir}/libCLC${SOLIBSDEV}"
