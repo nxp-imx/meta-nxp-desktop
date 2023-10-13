@@ -12,7 +12,7 @@ APTGET_CHROOT_DIR = "${IMAGE_ROOTFS}"
 APTGET_SKIP_UPGRADE = "1"
 
 ROOTFS_POSTPROCESS_COMMAND:append = "do_fix_ldconfig; do_save_graphics; do_aptget_update; do_update_host; do_config_netplan;"
-IMAGE_PREPROCESS_COMMAND:append = " do_config_systemd_resolved; do_enable_graphics; do_cleanup_rootfs; "
+IMAGE_PREPROCESS_COMMAND:append = " do_config_systemd_resolved; do_enable_graphics; do_disable_gslice; do_cleanup_rootfs; "
 
 
 # Without the kernel, modules, and firmware we can't really use the Linux
@@ -138,6 +138,19 @@ do_enable_graphics() {
 		rm -f ${IMAGE_ROOTFS}/etc/systemd/system/default.target
 		ln /usr/lib/systemd/system/graphical.target -s ${IMAGE_ROOTFS}/etc/systemd/system/default.target
 	fi
+
+	set +x
+}
+
+do_disable_gslice() {
+	set -x
+
+	# Due to the gjs upgrade, the memory allocation and release through GSlice
+	# do not match in some application, Some memory allocated through the g_malloc()
+	# may be released through g_slice_free1(), resulting in running errors.
+	# Therefore, set G_SLICE as always-malloc, which forces GSlice memory function
+	# to use g_malloc() and g_free().
+	echo >>"${IMAGE_ROOTFS}/etc/environment" "G_SLICE=always-malloc"
 
 	set +x
 }
