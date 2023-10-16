@@ -5,6 +5,7 @@ SRC_URI += " \
     file://0001-v4l2videoenc-Set-encoder-output-mode-to-DMABUF_IMPOR.patch \
     file://0001-LF-9558-gtkgstbasewidget-default-set-ignore-alpha-to.patch \
     file://0001-LF-10264-v4l2-drop-frame-for-frames-that-cannot-be-d.patch \
+    file://0001-LF-10264-v4l2videodec-Add-protection-when-drop-frame.patch \
 "
 
 PACKAGECONFIG:append = " gtk"
