@@ -6,6 +6,7 @@ SRC_URI += " \
     file://0001-LF-9558-gtkgstbasewidget-default-set-ignore-alpha-to.patch \
     file://0001-LF-10264-v4l2-drop-frame-for-frames-that-cannot-be-d.patch \
     file://0001-LF-10264-v4l2videodec-Add-protection-when-drop-frame.patch \
+    file://0001-LF-10264-v4l2-fix-AV-unsync-after-seek.patch \
 "
 
 PACKAGECONFIG:append = " gtk"
