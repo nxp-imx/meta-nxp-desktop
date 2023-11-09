@@ -168,6 +168,7 @@ do_cleanup_rootfs() {
 	# to avoid login hang when load sdma firmware
 	rm -f ${IMAGE_ROOTFS}/usr/lib/udev/rules.d/50-firmware.rules
 
+       rm -f ${IMAGE_ROOTFS}/usr/lib/aarch64-linux-gnu/libOpenGL*
 	rm -f ${IMAGE_ROOTFS}/usr/lib/aarch64-linux-gnu/libvulkan*
 	set +x
 }
