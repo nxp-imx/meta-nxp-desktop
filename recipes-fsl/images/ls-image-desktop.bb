@@ -66,6 +66,7 @@ APTGET_EXTRA_PACKAGES += "\
        lm-sensors \
        ntpdate patchelf \
        weston \
+       libqt5gui5-gles libqt5quick5-gles qtwayland5 \
 "
 
 SOC_DEFAULT_IMAGE_FSTYPES:append = " wic.bmap wic.bz2 tar.gz"
