@@ -1,6 +1,6 @@
 DESCRIPTION = "A library to retrieve i.MX GPU performance data"
 LICENSE = "Proprietary"
-LIC_FILES_CHKSUM = "file://COPYING;md5=db4762b09b6bda63da103963e6e081de"
+LIC_FILES_CHKSUM = "file://COPYING;md5=2827219e81f28aba7c6a569f7c437fa7"
 
 SRC_URI[aarch64-wayland.md5sum] = "9c8a54345c5f9500bd237af6683e4e56"
 SRC_URI[aarch64-wayland.sha256sum] = "bdb90e7f62ce0a9c9c63d9e301bff0ce2612eac0dad0d33fddba0faf6816798c"
