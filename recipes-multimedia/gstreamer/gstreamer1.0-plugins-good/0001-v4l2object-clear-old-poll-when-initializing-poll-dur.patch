@@ -1,0 +1,42 @@
+From 79cf2c973cacd23dcbd34d79869033f88f20913d Mon Sep 17 00:00:00 2001
+From: Chao Guo <chao.guo@nxp.com>
+Date: Tue, 12 Dec 2023 11:47:10 +0900
+Subject: [PATCH] v4l2object: clear old poll when initializing poll during
+ opening v4l2 device
+
+When reopening a v4l2 device, the v4l2object->poll will include the old fd,
+which was assigned to this device last time. If the pipeline opens multiple
+v4l2 devices, the old fd may been assigned to other v4l2 devices when reopening
+devices.
+
+This will cause the timing of the pipeline become confusing when polling device,
+leading functional abnormalities.
+
+Therefore, when initializing poll, clear the old poll to ensure that the pipeline
+timing is normal.
+
+UpStream Status: Pending
+
+Signed-off-by: Chao Guo <chao.guo@nxp.com>
+---
+ sys/v4l2/gstv4l2object.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/sys/v4l2/gstv4l2object.c b/sys/v4l2/gstv4l2object.c
+index 44894b674..dbd75dcab 100755
+--- a/sys/v4l2/gstv4l2object.c
++++ b/sys/v4l2/gstv4l2object.c
+@@ -939,6 +939,10 @@ gst_v4l2_set_defaults (GstV4l2Object * v4l2object)
+ static void
+ gst_v4l2_object_init_poll (GstV4l2Object * v4l2object)
+ {
++  if (v4l2object->poll)
++    gst_poll_free (v4l2object->poll);
++  v4l2object->poll = gst_poll_new (TRUE);
++
+   gst_poll_fd_init (&v4l2object->pollfd);
+   v4l2object->pollfd.fd = v4l2object->video_fd;
+   gst_poll_add_fd (v4l2object->poll, &v4l2object->pollfd);
+-- 
+2.25.1
+
