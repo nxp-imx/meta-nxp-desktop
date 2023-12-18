@@ -1,25 +1,25 @@
 NXP Software Content Register
 
-Release - Desktop Release with Linux 6.1.36_2.1.0
-  July 2023
+Release - Desktop Release with Linux 6.1.55_2.2.0
+  January 2024
 
-Outgoing License: LA_OPT_NXP_Software_License v48 July 2023 - No distribution permitted, license in Section 2.2 applies
+Outgoing License: LA_OPT_NXP_Software_License v49 September 2023 - No distribution permitted, license in Section 2.2 applies
 License File: EULA.txt
 
 Yocto Project recipe manifest:
 i.MX
-    repo init -u https://github.com/nxp-imx/imx-manifest.git -b imx-linux-mickledore -m imx-6.1.36-2.1.0_desktop.xml
+    repo init -u https://github.com/nxp-imx/imx-manifest.git -b imx-linux-mickledore -m imx-6.1.55-2.2.0_desktop.xml
 Layerscape
-    repo init -u https://github.com/nxp-qoriq/yocto-sdk.git -b mickledore -m ls-6.1.36-2.1.0_distro.xml
+    repo init -u https://github.com/nxp-qoriq/yocto-sdk.git -b mickledore -m ls-6.1.55-2.2.0_distro.xml
 
-Release tag: rel_lf_6.1.36_2.1.0_ldp
+Release tag: rel_lf_6.1.55_2.2.0_ldp
 
 --------------------------------------------
 PACKAGES FOR META-NXP-DESKTOP_RELEASE
 --------------------------------------------
 
-Package:                     imx-gpu-viv-6.4.11.p2.0d-aarch64.bin
-Outgoing License:            LA_OPT_NXP_Software_License v48 July 2023 - No distribution permitted, license in Section 2.2 applies
+Package:                     imx-gpu-viv-6.4.11.p2.2d-aarch64.bin
+Outgoing License:            LA_OPT_NXP_Software_License v49 September 2023 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary and source
@@ -36,8 +36,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     imx-gpu-g2d-6.4.11.p2.0d-aarch64.bin
-Outgoing License:            LA_OPT_NXP_Software_License v48 July 2023 - No distribution permitted, license in Section 2.2 applies
+Package:                     imx-gpu-g2d-6.4.11.p2.2d-aarch64.bin
+Outgoing License:            LA_OPT_NXP_Software_License v49 September 2023 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary
@@ -58,8 +58,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     libgpuperfcnt-6.4.11.p2.0d-aarch64-wayland.bin
-Outgoing License:            LA_OPT_NXP_Software_License v48 July 2023 - No distribution permitted, license in Section 2.2 applies
+Package:                     libgpuperfcnt-6.4.11.p2.2d-aarch64-wayland.bin
+Outgoing License:            LA_OPT_NXP_Software_License v49 September 2023 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary
@@ -69,8 +69,8 @@ Origin:                      NXP (proprietary)
 
 --------------------------------------------
 
-Package:                     isp-imx-4.2.2.23.0d.bin
-Outgoing License:            LA_OPT_NXP_Software_License v48 July 2023 - No distribution permitted, license in Section 2.2 applies
+Package:                     isp-imx-4.2.2.24.0d.bin
+Outgoing License:            LA_OPT_NXP_Software_License v49 September 2023 - No distribution permitted, license in Section 2.2 applies
 License File:                COPYING
 Package Category:            Graphics
 Type of Content:             binary and source
